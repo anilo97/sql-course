@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>데이터베이스 & SQL 실습 허브 | 디지털재활 헬스케어 AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --font-sans: 'Noto Sans KR', 'Noto Sans', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+    html {
+      font-family: var(--font-sans);
+      font-size: 17px;
+      color: #111827;
+      background-color: #F9FAFB;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: var(--font-sans);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="bg-[#F9FAFB] text-[#111827] min-h-screen flex flex-col">
+
+  <!-- Top Minimal Bar -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-2 text-sm text-gray-500">
+      <span class="font-semibold text-gray-800 tracking-tight">DATABASE &amp; SQL PRACTICE HUB</span>
+      <span>교재 연계: 혼자 공부하는 SQL with AI</span>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="max-w-4xl w-full mx-auto px-4 sm:px-6 py-10 space-y-10 flex-1">
+
+    <!-- Header Section -->
+    <header class="bg-white border border-gray-200 rounded-lg p-6 sm:p-8">
+      <div class="inline-flex items-center gap-2 text-sm font-semibold text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded">
+        <span>디지털 재활·헬스케어 AI 개발자 양성 과정</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-4 tracking-tight">
+        데이터베이스 &amp; SQL 실습 허브
+      </h1>
+      <p class="text-base text-gray-600 mt-2.5 leading-relaxed">
+        <strong>《혼자 공부하는 SQL with AI》</strong> 커리큘럼과 연계된 도메인 특화 실습 워크시트 모음입니다. 각 챕터별 실습 링크를 클릭해 별도 프로그램 설치 없이 브라우저에서 바로 실습하고, 작성한 결과물을 노션(Notion) 정리용 마크다운(<code>.md</code>) 파일로 다운로드할 수 있습니다.
+      </p>
+
+      <!-- Usage Notice Box -->
+      <div class="mt-6 pt-5 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-sm">
+        <div class="p-3.5 rounded-md bg-gray-50 border border-gray-200/80">
+          <div class="font-bold text-gray-800 mb-1">01. 브라우저 즉시 실습</div>
+          <p class="text-gray-600">링크 접속 후 별도 로그인 없이 바로 테이블 설계 및 쿼리 실습을 진행합니다.</p>
+        </div>
+        <div class="p-3.5 rounded-md bg-gray-50 border border-gray-200/80">
+          <div class="font-bold text-gray-800 mb-1">02. 실시간 자동 저장</div>
+          <p class="text-gray-600">입력 중인 내용은 현재 사용 중인 브라우저(Local Storage)에 자동 저장됩니다.</p>
+        </div>
+        <div class="p-3.5 rounded-md bg-gray-50 border border-gray-200/80">
+          <div class="font-bold text-gray-800 mb-1">03. 문서화 및 AI 리뷰</div>
+          <p class="text-gray-600">실습 완료 후 <code>.md</code> 파일 다운로드 또는 AI 리뷰용 프롬프트를 복사해 활용합니다.</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- =====================================================================
+         SECTION 01: 현재 오픈된 실습 (Active Labs)
+    ====================================================================== -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900">현재 오픈된 실습 워크시트</h2>
+          <p class="text-sm text-gray-500 mt-0.5">수업 진도에 맞춰 바로 참여할 수 있는 실습 모듈입니다.</p>
+        </div>
+        <span class="text-sm font-medium text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
+          1개 실습 활성화됨
+        </span>
+      </div>
+
+      <!-- Active Labs Grid -->
+      <div class="space-y-4" id="active-labs-list">
+
+        <!-- [Chapter 02] Active Lab Card -->
+        <article class="bg-white border border-gray-200 hover:border-teal-700/60 rounded-lg p-6 transition">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold px-2.5 py-0.5 rounded bg-slate-800 text-white">Chapter 02</span>
+              <span class="text-sm font-semibold text-teal-800 bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded">
+                실습 가능
+              </span>
+            </div>
+            <span class="text-sm text-gray-500 font-medium">권장 소요시간: 약 20분</span>
+          </div>
+
+          <h3 class="text-lg font-bold text-gray-900 mt-3">
+            데이터베이스 모델링 실습 워크시트: AI 홈 재활 서비스
+          </h3>
+          <p class="text-base text-gray-600 mt-1.5 leading-relaxed">
+            현실 세계의 재활 센터 업무 시나리오를 분석하여 <strong>환자, 재활운동, 운동기록</strong> 3개의 테이블로 구조화하고, 열(Column) 정의와 기본 키(PK) 선정 및 예시 행(Row) 데이터 검증까지 4단계 프로세스로 실습합니다.
+          </p>
+
+          <!-- Keywords -->
+          <div class="flex flex-wrap items-center gap-2 mt-4">
+            <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2.5 py-1 rounded">#업무_분석</span>
+            <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2.5 py-1 rounded">#테이블_열_정의</span>
+            <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2.5 py-1 rounded">#기본키_PK</span>
+            <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2.5 py-1 rounded">#데이터_검증</span>
+          </div>
+
+          <!-- Action Button -->
+          <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
+            <span class="text-sm text-gray-400 font-mono">경로: ./ch02-db-modeling/index.html</span>
+            <a href="./ch02-db-modeling/index.html"
+               class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 rounded-md transition">
+              <span>실습 워크시트 열기</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- ===================================================================
+             [강사용 가이드: 새 실습 추가 방법]
+             추후 새로운 실습 HTML 파일을 GitHub 저장소 하위 폴더에 올린 뒤,
+             아래 템플릿 주석을 해제하고 폴더 경로와 제목만 수정하면 바로 오픈됩니다.
+        ====================================================================
+        <article class="bg-white border border-gray-200 hover:border-teal-700/60 rounded-lg p-6 transition">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-slate-800 text-white">Chapter 03</span>
+              <span class="text-xs font-semibold text-teal-800 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded">
+                실습 가능
+              </span>
+            </div>
+            <span class="text-xs text-gray-500 font-medium">권장 소요시간: 약 30분</span>
+          </div>
+
+          <h3 class="text-lg font-bold text-gray-900 mt-3">
+            기본 SQL 문법 (SELECT ~ FROM ~ WHERE) 실습
+          </h3>
+          <p class="text-sm text-gray-600 mt-1.5 leading-relaxed">
+            헬스케어 환자 및 운동 데이터를 조건별로 조회하고 정렬하는 기초 쿼리 실습입니다.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-1.5 mt-4">
+            <span class="text-[11px] font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded">#SELECT</span>
+            <span class="text-[11px] font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded">#WHERE_조건절</span>
+          </div>
+
+          <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
+            <span class="text-xs text-gray-400 font-mono">경로: ./ch03-select-practice/index.html</span>
+            <a href="./ch03-select-practice/index.html"
+               class="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-teal-700 hover:bg-teal-800 rounded-md transition">
+              <span>실습 워크시트 열기</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+        ==================================================================== -->
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 02: 향후 추가 예정 커리큘럼 로드맵 (Upcoming Labs)
+    ====================================================================== -->
+    <section class="space-y-4">
+      <div>
+        <h2 class="text-lg font-bold text-gray-900">커리큘럼 실습 로드맵 (예정)</h2>
+        <p class="text-xs text-gray-500 mt-0.5">강의 진도에 따라 순차적으로 오픈될 도메인 연계 실습 목록입니다.</p>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg divide-y divide-gray-100">
+
+        <!-- Chapter 03 (Upcoming) -->
+        <!-- [활성화 방법] 오픈 시 위 '현재 오픈된 실습' 영역으로 카드를 옮기고 href="./ch03-select-practice/index.html" 연결 -->
+        <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50/40">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700">Chapter 03</span>
+              <span class="text-xs font-medium text-gray-500 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded">오픈 예정</span>
+            </div>
+            <h3 class="text-sm font-bold text-gray-800 pt-1">
+              기본 SQL 문법 (SELECT ~ FROM ~ WHERE) — 헬스케어 환자·운동 데이터 조회 실습
+            </h3>
+            <p class="text-xs text-gray-500">
+              특정 재활 부위(어깨/무릎) 환자 필터링, 통증 점수 기준 정렬, 기간별 운동 수행 내역 추출 쿼리를 연습합니다.
+            </p>
+            <div class="text-[11px] text-gray-400 font-mono pt-0.5">예정 경로: ./ch03-select-practice/index.html</div>
+          </div>
+          <div class="shrink-0">
+            <span class="inline-block px-3.5 py-2 text-xs font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-md cursor-not-allowed select-none">
+              준비 중
+            </span>
+          </div>
+        </div>
+
+        <!-- Chapter 04 (Upcoming) -->
+        <!-- [활성화 방법] 오픈 시 위 '현재 오픈된 실습' 영역으로 카드를 옮기고 href="./ch04-join-practice/index.html" 연결 -->
+        <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50/40">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700">Chapter 04</span>
+              <span class="text-xs font-medium text-gray-500 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded">오픈 예정</span>
+            </div>
+            <h3 class="text-sm font-bold text-gray-800 pt-1">
+              고급 SQL 문법 (데이터 형식, JOIN) — 환자별 운동 수행 및 관절 각도(ROM) 통합 분석
+            </h3>
+            <p class="text-xs text-gray-500">
+              분리된 환자 테이블과 운동기록 테이블을 <code>INNER JOIN</code>으로 결합하여 AI 학습용 피처 데이터셋을 구성합니다.
+            </p>
+            <div class="text-[11px] text-gray-400 font-mono pt-0.5">예정 경로: ./ch04-join-practice/index.html</div>
+          </div>
+          <div class="shrink-0">
+            <span class="inline-block px-3.5 py-2 text-xs font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-md cursor-not-allowed select-none">
+              준비 중
+            </span>
+          </div>
+        </div>
+
+        <!-- Chapter 05 (Upcoming) -->
+        <!-- [활성화 방법] 오픈 시 위 '현재 오픈된 실습' 영역으로 카드를 옮기고 href="./ch05-table-constraints/index.html" 연결 -->
+        <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50/40">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700">Chapter 05</span>
+              <span class="text-xs font-medium text-gray-500 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded">오픈 예정</span>
+            </div>
+            <h3 class="text-sm font-bold text-gray-800 pt-1">
+              테이블과 제약조건 — 외래 키(FK) 연결 및 실제 MySQL DB 구축
+            </h3>
+            <p class="text-xs text-gray-500">
+              Chapter 02에서 스케치한 모델을 실제 MySQL <code>CREATE TABLE</code> DDL 문으로 변환하고 PK·FK 제약조건을 적용합니다.
+            </p>
+            <div class="text-[11px] text-gray-400 font-mono pt-0.5">예정 경로: ./ch05-table-constraints/index.html</div>
+          </div>
+          <div class="shrink-0">
+            <span class="inline-block px-3.5 py-2 text-xs font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-md cursor-not-allowed select-none">
+              준비 중
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 03: 학생용 이용 주의사항 및 저장소 안내
+    ====================================================================== -->
+    <section class="bg-white border border-gray-200 rounded-lg p-6 space-y-3 text-xs text-gray-600">
+      <h2 class="text-sm font-bold text-gray-900">실습 데이터 보관 및 이용 안내</h2>
+      <ul class="list-disc pl-4 space-y-1.5 leading-relaxed">
+        <li>
+          <strong>브라우저 임시 저장 주의:</strong> 본 실습 페이지들은 별도의 서버 DB 없이 여러분의 웹 브라우저(<code>localStorage</code>)에 작업 내용을 임시 저장합니다. 공용 PC를 사용하거나 브라우저 캐시(인터넷 사용 기록)를 삭제하면 작성 내용이 초기화됩니다.
+        </li>
+        <li>
+          <strong>결과물 백업 권장:</strong> 각 실습을 마친 후에는 반드시 하단의 <strong>[노션용 문서(.md) 다운로드]</strong> 버튼을 클릭해 개인 PC나 노션(Notion) 학습 노트에 기록을 백업해 두세요.
+        </li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="border-t border-gray-200 bg-white mt-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-5 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500">
+      <span>디지털 재활·헬스케어 AI 개발자 양성 과정 · 데이터베이스 실습 아카이브</span>
+      <span>Hosted on GitHub Pages</span>
+    </div>
+  </footer>
+
+</body>
+</html>

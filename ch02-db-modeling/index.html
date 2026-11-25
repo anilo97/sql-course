@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>데이터베이스 모델링 실습 워크시트 | 디지털재활 헬스케어 AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --font-sans: 'Noto Sans KR', 'Noto Sans', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+    html {
+      scroll-behavior: smooth;
+      font-family: var(--font-sans);
+      font-size: 17px;
+      color: #111827;
+      background-color: #F9FAFB;
+    }
+    body {
+      font-family: var(--font-sans);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F3F4F6;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D1D5DB;
+      border-radius: 3px;
+    }
+    /* Input focus ring */
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #0F766E;
+      box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.12);
+    }
+    /* Print optimization */
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
+      }
+      .print-card {
+        border: 1px solid #D1D5DB !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        margin-bottom: 1.5rem !important;
+      }
+      input, select, textarea {
+        border: none !important;
+        border-bottom: 1px solid #9CA3AF !important;
+        background: transparent !important;
+        padding-left: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#F9FAFB] text-[#111827] pb-28">
+
+  <!-- Top Sticky Process Stepper (Core Workflow Indicator) -->
+  <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-200 no-print">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between py-2.5 border-b border-gray-100 text-sm text-gray-500">
+        <span class="font-semibold text-gray-700">DATABASE MODELING WORKFLOW</span>
+        <span id="save-status" class="text-teal-700 font-semibold">자동 저장됨</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-1.5 py-2.5" id="stepper-nav">
+        <a href="#step-1" data-step="step-1" class="step-link flex items-center gap-2.5 px-3 py-2.5 rounded-md border border-teal-700 bg-teal-50/60 text-teal-900 transition">
+          <span class="text-sm font-bold px-2 py-0.5 rounded bg-teal-700 text-white">01</span>
+          <div class="truncate">
+            <div class="text-sm font-bold truncate">업무 분석</div>
+            <div class="text-xs text-gray-500 truncate">시나리오 및 대상 파악</div>
+          </div>
+        </a>
+        <a href="#step-2" data-step="step-2" class="step-link flex items-center gap-2.5 px-3 py-2.5 rounded-md border border-transparent hover:bg-gray-50 text-gray-600 transition">
+          <span class="text-sm font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700">02</span>
+          <div class="truncate">
+            <div class="text-sm font-bold truncate">테이블 · 열 정의</div>
+            <div class="text-xs text-gray-500 truncate">개체, 속성, 데이터 형식</div>
+          </div>
+        </a>
+        <a href="#step-3" data-step="step-3" class="step-link flex items-center gap-2.5 px-3 py-2.5 rounded-md border border-transparent hover:bg-gray-50 text-gray-600 transition">
+          <span class="text-sm font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700">03</span>
+          <div class="truncate">
+            <div class="text-sm font-bold truncate">PK 및 데이터 검증</div>
+            <div class="text-xs text-gray-500 truncate">기본 키 조건 · 예시 행 입력</div>
+          </div>
+        </a>
+        <a href="#step-4" data-step="step-4" class="step-link flex items-center gap-2.5 px-3 py-2.5 rounded-md border border-transparent hover:bg-gray-50 text-gray-600 transition">
+          <span class="text-sm font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700">04</span>
+          <div class="truncate">
+            <div class="text-sm font-bold truncate">설계 점검 · 문서화</div>
+            <div class="text-xs text-gray-500 truncate">핵심 개념 확인 · 내보내기</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Document Container -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-8 space-y-12">
+
+    <!-- Header Section -->
+    <header class="bg-white border border-gray-200 rounded-lg p-6 sm:p-8 print-card">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-gray-100">
+        <span class="text-sm font-semibold tracking-wide text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded">
+          디지털재활 헬스케어 AI 개발자 양성 과정 · Ch 02. 데이터베이스 모델링
+        </span>
+        <button type="button" onclick="openResetModal()" class="no-print text-sm text-gray-500 hover:text-red-600 underline underline-offset-4 transition">
+          작성 내용 초기화
+        </button>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-4 tracking-tight">
+        AI 홈 재활 서비스 데이터베이스 모델링 워크시트
+      </h1>
+      <p class="text-base text-gray-600 mt-2.5 leading-relaxed">
+        현실 세계의 재활 센터 업무를 데이터베이스의 <strong>테이블(Table), 열(Column), 행(Row), 기본 키(Primary Key)</strong> 구조로 변환하는 4단계 실습 문서입니다.
+      </p>
+
+      <!-- Student Metadata -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-5 border-t border-gray-100">
+        <div>
+          <label for="student-name" class="block text-sm font-semibold text-gray-700 mb-1.5">작성자 (이름 또는 조)</label>
+          <input type="text" id="student-name" placeholder="예: 홍길동 (1조)" class="w-full px-3.5 py-2.5 text-base border border-gray-300 rounded-md bg-white" />
+        </div>
+        <div>
+          <label for="work-date" class="block text-sm font-semibold text-gray-700 mb-1.5">작성일자</label>
+          <input type="date" id="work-date" class="w-full px-3.5 py-2.5 text-base border border-gray-300 rounded-md bg-white" />
+        </div>
+      </div>
+    </header>
+
+    <!-- =====================================================================
+         STEP 01: 업무 분석 및 요구사항 파악
+    ====================================================================== -->
+    <section id="step-1" class="scroll-mt-32 space-y-4">
+      <div class="flex items-baseline gap-3">
+        <span class="text-sm font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-slate-800 text-white">STEP 01</span>
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">업무 분석 및 데이터 대상 파악</h2>
+          <p class="text-base text-gray-600 mt-0.5">설계에 앞서 서비스 요구사항을 읽고, 관리해야 할 핵심 사물(개체)과 행위(로그)를 분리합니다.</p>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-6 space-y-5 print-card">
+        <div class="border-l-4 border-slate-700 pl-4 py-0.5">
+          <h3 class="text-base font-bold text-gray-900">서비스 시나리오: AI 홈 재활 운동 관리 시스템</h3>
+          <p class="text-sm text-gray-600 mt-1">환자가 집에서 AI 자세 추정 카메라를 보며 재활 운동을 수행하고, 치료사가 이 기록을 모니터링하는 서비스입니다.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-md bg-gray-50 border border-gray-200">
+            <div class="text-sm font-bold text-teal-800 mb-1.5">대상 ① 환자 (회원 정보)</div>
+            <p class="text-sm text-gray-700 leading-relaxed">
+              센터에 등록된 환자의 <strong>이름, 생년월일, 성별, 주요 재활 부위</strong>(어깨, 무릎, 허리 등)를 관리합니다. 동명이인이 있을 수 있으므로 환자마다 고유 식별 값이 필요합니다.
+            </p>
+          </div>
+          <div class="p-4 rounded-md bg-gray-50 border border-gray-200">
+            <div class="text-sm font-bold text-teal-800 mb-1.5">대상 ② 재활운동 (콘텐츠 정보)</div>
+            <p class="text-sm text-gray-700 leading-relaxed">
+              서비스에서 제공하는 <strong>운동 이름</strong>(스쿼트, 숄더 프레스 등), <strong>타겟 부위, 난이도</strong>(초급/중급/고급)를 관리합니다. 각 운동은 고유 코드로 구분합니다.
+            </p>
+          </div>
+          <div class="p-4 rounded-md bg-gray-50 border border-gray-200">
+            <div class="text-sm font-bold text-teal-800 mb-1.5">행위 ③ 운동기록 (수행 및 센서 로그)</div>
+            <p class="text-sm text-gray-700 leading-relaxed">
+              <strong>어떤 환자</strong>가 <strong>어떤 운동</strong>을 <strong>언제(수행 일시)</strong> 했는지와 AI가 측정한 <strong>평균 관절 각도(ROM)</strong>, 운동 후 <strong>통증 점수(1~10점)</strong>를 매번 기록합니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 1 Verification Checklist -->
+        <div class="pt-4 border-t border-gray-100 no-print">
+          <div class="text-sm font-semibold text-gray-700 mb-3">업무 분석 완료 체크 (아래 항목을 확인한 후 다음 단계로 이동하세요)</div>
+          <div class="flex flex-col sm:flex-row flex-wrap gap-4 text-sm text-gray-700">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" id="chk-entity-1" class="w-4 h-4 rounded border-gray-300 text-teal-700 focus:ring-teal-600" />
+              <span>관리할 대상이 3개의 표(환자, 재활운동, 운동기록)로 나뉨을 이해했습니다.</span>
+            </label>
+            <label class="inline-flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" id="chk-entity-2" class="w-4 h-4 rounded border-gray-300 text-teal-700 focus:ring-teal-600" />
+              <span>한 명의 환자가 여러 번 운동할 수 있으므로 '운동기록'이 별도 표로 분리됨을 확인했습니다.</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         STEP 02: 개체(테이블) 도출 및 속성(열) 정의
+    ====================================================================== -->
+    <section id="step-2" class="scroll-mt-32 space-y-4">
+      <div class="flex items-baseline gap-3">
+        <span class="text-sm font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-slate-800 text-white">STEP 02</span>
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">테이블(Table) 및 열(Column) 구조 설계</h2>
+          <p class="text-base text-gray-600 mt-0.5">각 테이블에 필요한 열 이름, 데이터 형식(문자/숫자/날짜)을 정의하고, 행을 유일하게 구분할 <strong>기본 키(PK)</strong>를 지정합니다.</p>
+        </div>
+      </div>
+
+      <!-- Guidelines Box -->
+      <div class="bg-white border border-gray-200 rounded-lg px-5 py-4 text-sm text-gray-700 flex flex-wrap gap-x-6 gap-y-2 print-card">
+        <span><strong class="text-gray-900">열 이름 규칙:</strong> 공백 대신 언더바(<code class="bg-gray-100 px-1.5 py-0.5 rounded">_</code>) 사용 권장 (예: <code class="bg-gray-100 px-1.5 py-0.5 rounded">생년월일</code>, <code class="bg-gray-100 px-1.5 py-0.5 rounded">재활_부위</code>)</span>
+        <span><strong class="text-gray-900">기본 키(PK) 조건:</strong> ① 중복 불가(Unique) ② 빈칸 불가(Not Null)</span>
+      </div>
+
+      <!-- Dynamic Schema Tables Container -->
+      <div id="schema-tables-container" class="space-y-6"></div>
+    </section>
+
+    <!-- =====================================================================
+         STEP 03: 예시 행(Row) 데이터 입력으로 설계 검증
+    ====================================================================== -->
+    <section id="step-3" class="scroll-mt-32 space-y-4">
+      <div class="flex items-baseline gap-3">
+        <span class="text-sm font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-slate-800 text-white">STEP 03</span>
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">예시 행(Row) 데이터 입력 및 설계 검증</h2>
+          <p class="text-base text-gray-600 mt-0.5">STEP 02에서 정의한 열 이름이 자동으로 표의 머리글(Header)에 반영됩니다. 실제 데이터를 2건씩 채워보며 형식과 PK가 적절한지 검증하세요.</p>
+        </div>
+      </div>
+
+      <div id="sample-data-container" class="space-y-6"></div>
+    </section>
+
+    <!-- =====================================================================
+         STEP 04: 핵심 개념 점검 및 결과물 문서화
+    ====================================================================== -->
+    <section id="step-4" class="scroll-mt-32 space-y-4">
+      <div class="flex items-baseline gap-3">
+        <span class="text-sm font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-slate-800 text-white">STEP 04</span>
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">핵심 개념 점검 및 결과물 문서화</h2>
+          <p class="text-base text-gray-600 mt-0.5">설계 과정에서 고민해야 할 핵심 질문에 답을 작성한 뒤, 노션 정리용 문서(.md)로 저장하거나 AI에게 설계 리뷰를 요청하세요.</p>
+        </div>
+      </div>
+
+      <!-- Reflection Questions -->
+      <div class="bg-white border border-gray-200 rounded-lg p-6 space-y-6 print-card">
+        <h3 class="text-base font-bold text-gray-900 border-b border-gray-100 pb-3">설계 개념 확인 질문</h3>
+
+        <div class="space-y-2">
+          <label for="q1-answer" class="block text-base font-semibold text-gray-800">
+            Q1. [환자] 테이블에서 '환자 이름'을 기본 키(PK)로 지정하면 안 되는 이유는 무엇인가요?
+          </label>
+          <textarea id="q1-answer" rows="2" placeholder="기본 키(PK)의 필수 조건과 연관 지어 작성해 보세요." class="w-full px-3.5 py-2.5 text-base border border-gray-300 rounded-md"></textarea>
+        </div>
+
+        <div class="space-y-2">
+          <label for="q2-answer" class="block text-base font-semibold text-gray-800">
+            Q2. [운동기록] 테이블에 환자의 '이름'과 '생년월일'을 매번 다시 적지 않고 '환자_아이디'만 기록하면 어떤 장점이 있을까요?
+          </label>
+          <textarea id="q2-answer" rows="2" placeholder="1장에서 배운 파일 시스템의 '데이터 불일치' 문제와 연결해 생각해 보세요." class="w-full px-3.5 py-2.5 text-base border border-gray-300 rounded-md"></textarea>
+        </div>
+
+        <!-- Reference Answer Toggle (Hidden until clicked) -->
+        <div class="pt-3 border-t border-gray-100 no-print">
+          <button type="button" id="toggle-answer-btn" onclick="toggleReferenceAnswer()" class="text-sm font-semibold text-slate-700 hover:text-teal-800 flex items-center gap-1.5 border border-gray-300 px-3.5 py-2 rounded-md bg-gray-50 hover:bg-gray-100 transition">
+            <span id="toggle-answer-label">모범 답안 및 해설 확인하기 (작성 후 클릭)</span>
+          </button>
+
+          <div id="reference-answer-box" class="hidden mt-4 p-5 rounded-md bg-slate-50 border border-slate-200 text-sm text-gray-700 space-y-3 leading-relaxed">
+            <div class="font-bold text-base text-slate-900">모범 설계 기준 및 해설</div>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>테이블 구성 예시:</strong>
+                <br/>• <code>환자</code>: <strong>환자_아이디(PK, 문자)</strong>, 이름(문자), 생년월일(날짜), 성별(문자), 재활_부위(문자)
+                <br/>• <code>재활운동</code>: <strong>운동_코드(PK, 문자)</strong>, 운동명(문자), 타겟_부위(문자), 난이도(문자)
+                <br/>• <code>운동기록</code>: <strong>기록_번호(PK, 숫자)</strong>, 환자_아이디(문자), 운동_코드(문자), 수행_일시(날짜), 평균_관절각도(숫자), 통증_점수(숫자)
+                <br/><span class="text-gray-500">* 주의: 한 환자가 운동을 여러 번 하므로 '운동기록' 테이블에서는 환자_아이디가 중복됩니다. 따라서 별도의 '기록_번호'가 PK가 되어야 합니다.</span>
+              </li>
+              <li><strong>Q1 해설:</strong> 동명이인이 발생할 수 있어 기본 키의 핵심 조건인 <strong>'중복 불가(Unique)'</strong>를 위반하기 때문입니다.</li>
+              <li><strong>Q2 해설:</strong> 동일한 환자 정보를 중복 입력하지 않아 저장 공간이 절약되며, 향후 환자 정보가 수정되어도 <code>환자</code> 테이블 한 곳만 고치면 되므로 <strong>데이터 불일치</strong>를 방지할 수 있습니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Fixed Bottom Export Action Bar -->
+  <div class="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-gray-200 shadow-sm no-print">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="text-sm text-gray-600 hidden sm:block">
+        작성한 내용은 브라우저에 자동 저장되며, 아래 버튼으로 문서화할 수 있습니다.
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto justify-end">
+        <button type="button" onclick="copyAIPrompt()" class="px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition">
+          AI 리뷰용 프롬프트 복사
+        </button>
+        <button type="button" onclick="window.print()" class="px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition">
+          인쇄 / PDF 저장
+        </button>
+        <button type="button" onclick="downloadMarkdown()" class="px-4 py-2 text-sm font-semibold text-white bg-teal-700 hover:bg-teal-800 rounded-md transition">
+          노션용 문서(.md) 다운로드
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-20 right-6 z-50 hidden bg-slate-900 text-white text-sm font-medium px-4 py-3 rounded-md shadow-lg transition-opacity">
+    알림 메시지
+  </div>
+
+  <!-- Custom Reset Confirmation Modal (No browser confirm() used) -->
+  <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4 no-print">
+    <div class="bg-white border border-gray-200 rounded-lg max-w-md w-full p-6 space-y-4">
+      <h3 class="text-lg font-bold text-gray-900">작성 내용을 초기화할까요?</h3>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        현재까지 입력한 모든 테이블 설계, 예시 데이터, 질문 답변이 삭제되며 초기 양식으로 되돌아갑니다.
+      </p>
+      <div class="flex justify-end gap-2.5 pt-2">
+        <button type="button" onclick="closeResetModal()" class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50">
+          취소
+        </button>
+        <button type="button" onclick="confirmReset()" class="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-md">
+          초기화 실행
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'rehab_db_modeling_worksheet_v1';
+
+    // Default Initial State
+    function getDefaultState() {
+      return {
+        studentName: '',
+        workDate: new Date().toISOString().split('T')[0],
+        chkEntity1: false,
+        chkEntity2: false,
+        q1Answer: '',
+        q2Answer: '',
+        tables: [
+          {
+            id: 'patient',
+            title: '테이블 1. 환자 (환자 마스터 정보)',
+            subtitle: '센터에 등록된 환자의 기본 인적 사항과 재활 부위를 저장합니다.',
+            columns: [
+              { name: '환자_아이디', type: '문자', isPk: true, pkReason: '중복되지 않고 비어 있을 수 없는 고유 식별값' },
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' }
+            ],
+            rows: [
+              ['patient_01', '', '', '', ''],
+              ['patient_02', '', '', '', '']
+            ]
+          },
+          {
+            id: 'exercise',
+            title: '테이블 2. 재활운동 (운동 콘텐츠 정보)',
+            subtitle: '시스템에서 제공하는 재활 운동 종목과 타겟 부위, 난이도를 저장합니다.',
+            columns: [
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' }
+            ],
+            rows: [
+              ['', '', '', ''],
+              ['', '', '', '']
+            ]
+          },
+          {
+            id: 'workout_log',
+            title: '테이블 3. 운동기록 (수행 및 센서 측정 로그)',
+            subtitle: '환자의 운동 수행 일시와 AI가 측정한 관절 각도, 통증 점수를 누적 기록합니다.',
+            columns: [
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: '', type: '', isPk: false, pkReason: '' }
+            ],
+            rows: [
+              ['', '', '', '', '', ''],
+              ['', '', '', '', '', '']
+            ]
+          }
+        ]
+      };
+    }
+
+    let state = loadState();
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          return JSON.parse(saved);
+        }
+      } catch (e) {
+        console.error('Failed to load state:', e);
+      }
+      return getDefaultState();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        const statusEl = document.getElementById('save-status');
+        statusEl.textContent = '저장 중...';
+        setTimeout(() => {
+          statusEl.textContent = '브라우저에 자동 저장됨';
+        }, 300);
+      } catch (e) {
+        console.error('Failed to save state:', e);
+      }
+    }
+
+    // Initialize Meta Inputs
+    function initMetaInputs() {
+      const nameInput = document.getElementById('student-name');
+      const dateInput = document.getElementById('work-date');
+      const chk1 = document.getElementById('chk-entity-1');
+      const chk2 = document.getElementById('chk-entity-2');
+      const q1 = document.getElementById('q1-answer');
+      const q2 = document.getElementById('q2-answer');
+
+      nameInput.value = state.studentName || '';
+      dateInput.value = state.workDate || new Date().toISOString().split('T')[0];
+      chk1.checked = !!state.chkEntity1;
+      chk2.checked = !!state.chkEntity2;
+      q1.value = state.q1Answer || '';
+      q2.value = state.q2Answer || '';
+
+      nameInput.addEventListener('input', (e) => { state.studentName = e.target.value; saveState(); });
+      dateInput.addEventListener('change', (e) => { state.workDate = e.target.value; saveState(); });
+      chk1.addEventListener('change', (e) => { state.chkEntity1 = e.target.checked; saveState(); });
+      chk2.addEventListener('change', (e) => { state.chkEntity2 = e.target.checked; saveState(); });
+      q1.addEventListener('input', (e) => { state.q1Answer = e.target.value; saveState(); });
+      q2.addEventListener('input', (e) => { state.q2Answer = e.target.value; saveState(); });
+    }
+
+    // Render STEP 02: Schema Definition Cards
+    function renderSchemaTables() {
+      const container = document.getElementById('schema-tables-container');
+      container.innerHTML = '';
+
+      state.tables.forEach((table, tIdx) => {
+        const card = document.createElement('div');
+        card.className = 'bg-white border border-gray-200 rounded-lg overflow-hidden print-card';
+
+        let rowsHtml = table.columns.map((col, cIdx) => {
+          const pkRowBg = col.isPk ? 'bg-teal-50/40' : 'bg-white';
+          const reasonDisabled = col.isPk ? '' : 'disabled';
+          const reasonPlaceholder = col.isPk ? '예: 중복되지 않고 비어 있을 수 없는 고유 값' : 'PK 선택 시 입력 가능';
+          const reasonBg = col.isPk ? 'bg-white' : 'bg-gray-50 text-gray-400 cursor-not-allowed';
+
+          return `
+            <tr class="${pkRowBg} border-b border-gray-100 last:border-b-0 transition-colors">
+              <td class="px-3 py-2.5 text-sm text-gray-400 font-mono text-center w-11">${cIdx + 1}</td>
+              <td class="px-3 py-2.5 w-52">
+                <input type="text"
+                  value="${escapeHtml(col.name)}"
+                  placeholder="열 이름 입력"
+                  oninput="updateColumn(${tIdx}, ${cIdx}, 'name', this.value)"
+                  class="w-full px-3 py-2 text-sm font-medium border border-gray-300 rounded bg-white" />
+              </td>
+              <td class="px-3 py-2.5 w-44">
+                <select onchange="updateColumn(${tIdx}, ${cIdx}, 'type', this.value)"
+                  class="w-full px-2.5 py-2 text-sm border border-gray-300 rounded bg-white">
+                  <option value="" ${col.type === '' ? 'selected' : ''}>형식 선택</option>
+                  <option value="문자" ${col.type === '문자' ? 'selected' : ''}>문자 (Text)</option>
+                  <option value="숫자" ${col.type === '숫자' ? 'selected' : ''}>숫자 (Number)</option>
+                  <option value="날짜" ${col.type === '날짜' ? 'selected' : ''}>날짜 (Date/Time)</option>
+                </select>
+              </td>
+              <td class="px-3 py-2.5 w-24 text-center">
+                <label class="inline-flex items-center gap-1.5 cursor-pointer select-none">
+                  <input type="checkbox"
+                    ${col.isPk ? 'checked' : ''}
+                    onchange="updateColumn(${tIdx}, ${cIdx}, 'isPk', this.checked)"
+                    class="w-4 h-4 rounded border-gray-300 text-teal-700 focus:ring-teal-600" />
+                  <span class="text-sm font-semibold ${col.isPk ? 'text-teal-800' : 'text-gray-500'}">PK</span>
+                </label>
+              </td>
+              <td class="px-3 py-2.5">
+                <input type="text"
+                  value="${escapeHtml(col.pkReason)}"
+                  placeholder="${reasonPlaceholder}"
+                  ${reasonDisabled}
+                  oninput="updateColumn(${tIdx}, ${cIdx}, 'pkReason', this.value)"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded ${reasonBg}" />
+              </td>
+              <td class="px-2 py-2.5 w-11 text-center no-print">
+                ${table.columns.length > 1 ? `
+                  <button type="button" onclick="removeColumn(${tIdx}, ${cIdx})" title="열 삭제" class="text-gray-400 hover:text-red-600 text-sm px-2 py-1">
+                    ✕
+                  </button>
+                ` : ''}
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="px-5 py-4 bg-gray-50/70 border-b border-gray-200 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="text-base font-bold text-gray-900">${table.title}</h3>
+              <p class="text-sm text-gray-500 mt-0.5">${table.subtitle}</p>
+            </div>
+            <button type="button" onclick="addColumn(${tIdx})" class="no-print text-sm font-semibold text-teal-800 bg-white border border-gray-300 hover:bg-gray-50 px-3.5 py-2 rounded-md transition">
+              + 열(Column) 추가
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[680px]">
+              <thead>
+                <tr class="border-b border-gray-200 bg-white text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th class="px-3 py-3 text-center w-11">#</th>
+                  <th class="px-3 py-3 w-52">열 이름 (Column)</th>
+                  <th class="px-3 py-3 w-44">데이터 형식</th>
+                  <th class="px-3 py-3 text-center w-24">기본 키(PK)</th>
+                  <th class="px-3 py-3">PK 선정 이유 (기본 키인 경우 작성)</th>
+                  <th class="px-2 py-3 w-11 no-print"></th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    // Render STEP 03: Live Synced Sample Data Tables
+    function renderSampleDataTables() {
+      const container = document.getElementById('sample-data-container');
+      container.innerHTML = '';
+
+      state.tables.forEach((table, tIdx) => {
+        const card = document.createElement('div');
+        card.className = 'bg-white border border-gray-200 rounded-lg overflow-hidden print-card';
+
+        // Build dynamic headers from STEP 02 columns
+        const headersHtml = table.columns.map((col, cIdx) => {
+          const displayName = col.name.trim() ? escapeHtml(col.name.trim()) : `(열 ${cIdx + 1} 미입력)`;
+          const typeBadge = col.type ? `<span class="text-xs font-normal text-gray-500 ml-1">[${col.type}]</span>` : '';
+          const pkBadge = col.isPk ? `<span class="text-xs font-bold text-teal-800 bg-teal-100 px-1.5 py-0.5 rounded ml-1">PK</span>` : '';
+          return `
+            <th class="px-3 py-3 text-sm font-bold text-gray-800 border-r border-gray-200 last:border-r-0 whitespace-nowrap">
+              ${displayName}${typeBadge}${pkBadge}
+            </th>
+          `;
+        }).join('');
+
+        // Build sample data rows
+        const bodyRowsHtml = table.rows.map((rowArr, rIdx) => {
+          const cellsHtml = table.columns.map((col, cIdx) => {
+            const val = rowArr[cIdx] !== undefined ? rowArr[cIdx] : '';
+            const placeholder = col.type === '날짜' ? 'YYYY-MM-DD' : (col.type === '숫자' ? '숫자 입력' : '예시 값');
+            return `
+              <td class="p-2 border-r border-gray-100 last:border-r-0">
+                <input type="text"
+                  value="${escapeHtml(val)}"
+                  placeholder="${placeholder}"
+                  oninput="updateSampleCell(${tIdx}, ${rIdx}, ${cIdx}, this.value)"
+                  class="w-full px-2.5 py-2 text-sm border border-gray-200 rounded bg-white" />
+              </td>
+            `;
+          }).join('');
+
+          return `
+            <tr class="border-b border-gray-100 last:border-b-0">
+              <td class="px-2 py-2 text-xs text-gray-400 font-mono text-center border-r border-gray-100 w-14">Row ${rIdx + 1}</td>
+              ${cellsHtml}
+              <td class="px-2 py-2 text-center w-11 no-print">
+                ${table.rows.length > 1 ? `
+                  <button type="button" onclick="removeSampleRow(${tIdx}, ${rIdx})" title="행 삭제" class="text-gray-400 hover:text-red-600 text-sm px-1.5">
+                    ✕
+                  </button>
+                ` : ''}
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="px-5 py-4 bg-gray-50/70 border-b border-gray-200 flex flex-wrap items-center justify-between gap-2">
+            <div class="text-base font-bold text-gray-900">${table.title} — 예시 데이터(Row)</div>
+            <button type="button" onclick="addSampleRow(${tIdx})" class="no-print text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 px-3 py-1.5 rounded-md transition">
+              + 예시 행 추가
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[680px]">
+              <thead>
+                <tr class="border-b border-gray-200 bg-gray-50/40">
+                  <th class="px-2 py-3 text-xs font-semibold text-gray-500 text-center border-r border-gray-200 w-14">행</th>
+                  ${headersHtml}
+                  <th class="w-11 no-print"></th>
+                </tr>
+              </thead>
+              <tbody>
+                ${bodyRowsHtml}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    // State Mutation Handlers
+    function updateColumn(tIdx, cIdx, field, value) {
+      state.tables[tIdx].columns[cIdx][field] = value;
+      if (field === 'isPk' && !value) {
+        state.tables[tIdx].columns[cIdx].pkReason = '';
+      }
+      saveState();
+      if (field === 'isPk') {
+        renderSchemaTables();
+      }
+      // Keep Step 3 table headers synchronized in real-time
+      renderSampleDataTables();
+    }
+
+    function addColumn(tIdx) {
+      state.tables[tIdx].columns.push({ name: '', type: '', isPk: false, pkReason: '' });
+      state.tables[tIdx].rows.forEach(row => row.push(''));
+      saveState();
+      renderSchemaTables();
+      renderSampleDataTables();
+    }
+
+    function removeColumn(tIdx, cIdx) {
+      state.tables[tIdx].columns.splice(cIdx, 1);
+      state.tables[tIdx].rows.forEach(row => row.splice(cIdx, 1));
+      saveState();
+      renderSchemaTables();
+      renderSampleDataTables();
+    }
+
+    function updateSampleCell(tIdx, rIdx, cIdx, value) {
+      state.tables[tIdx].rows[rIdx][cIdx] = value;
+      saveState();
+    }
+
+    function addSampleRow(tIdx) {
+      const colCount = state.tables[tIdx].columns.length;
+      state.tables[tIdx].rows.push(new Array(colCount).fill(''));
+      saveState();
+      renderSampleDataTables();
+    }
+
+    function removeSampleRow(tIdx, rIdx) {
+      state.tables[tIdx].rows.splice(rIdx, 1);
+      saveState();
+      renderSampleDataTables();
+    }
+
+    // Toggle Reference Answer
+    function toggleReferenceAnswer() {
+      const box = document.getElementById('reference-answer-box');
+      const label = document.getElementById('toggle-answer-label');
+      const isHidden = box.classList.contains('hidden');
+      if (isHidden) {
+        box.classList.remove('hidden');
+        label.textContent = '모범 답안 및 해설 접기';
+      } else {
+        box.classList.add('hidden');
+        label.textContent = '모범 답안 및 해설 확인하기 (작성 후 클릭)';
+      }
+    }
+
+    // Generate Clean Notion-Ready Markdown
+    function buildMarkdownDocument() {
+      const author = state.studentName.trim() || '미입력';
+      const date = state.workDate || '';
+
+      let md = `# AI 홈 재활 서비스 데이터베이스 모델링 실습 결과서\n\n`;
+      md += `- **과정명:** 디지털재활 헬스케어 AI 개발자 양성 교육\n`;
+      md += `- **작성자:** ${author}\n`;
+      md += `- **작성일:** ${date}\n\n`;
+      md += `---\n\n`;
+
+      md += `## 1. 테이블 및 열(Column) 구조 설계\n\n`;
+
+      state.tables.forEach((table) => {
+        md += `### ${table.title}\n\n`;
+        md += `| 열 이름 (Column) | 데이터 형식 | 기본 키(PK) | PK 선정 이유 |\n`;
+        md += `| :--- | :--- | :---: | :--- |\n`;
+
+        table.columns.forEach((col) => {
+          const cName = col.name.trim() || '-';
+          const cType = col.type || '-';
+          const cPk = col.isPk ? '**O (PK)**' : 'X';
+          const cReason = col.isPk ? (col.pkReason.trim() || '-') : '-';
+          md += `| \`${cName}\` | ${cType} | ${cPk} | ${cReason} |\n`;
+        });
+
+        md += `\n#### 예시 데이터 (Row)\n\n`;
+        const validCols = table.columns.map((c, idx) => c.name.trim() || `열_${idx + 1}`);
+        md += `| ${validCols.join(' | ')} |\n`;
+        md += `| ${validCols.map(() => ':---').join(' | ')} |\n`;
+
+        table.rows.forEach((row) => {
+          const formattedRow = validCols.map((_, cIdx) => {
+            const cellVal = (row[cIdx] || '').trim();
+            return cellVal ? cellVal : '-';
+          });
+          md += `| ${formattedRow.join(' | ')} |\n`;
+        });
+        md += `\n`;
+      });
+
+      md += `---\n\n`;
+      md += `## 2. 설계 개념 확인 질문\n\n`;
+      md += `**Q1. [환자] 테이블에서 '환자 이름'을 기본 키(PK)로 지정하면 안 되는 이유는 무엇인가요?**\n`;
+      md += `> ${state.q1Answer.trim() || '(작성된 답변 없음)'}\n\n`;
+      md += `**Q2. [운동기록] 테이블에 환자의 '이름'과 '생년월일'을 매번 다시 적지 않고 '환자_아이디'만 기록하면 어떤 장점이 있을까요?**\n`;
+      md += `> ${state.q2Answer.trim() || '(작성된 답변 없음)'}\n`;
+
+      return md;
+    }
+
+    function downloadMarkdown() {
+      const mdContent = buildMarkdownDocument();
+      const authorSlug = (state.studentName.trim() || '실습생').replace(/\s+/g, '_');
+      const filename = `DB모델링_워크시트_${authorSlug}.md`;
+
+      const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast(`'${filename}' 파일이 다운로드되었습니다.`);
+    }
+
+    function copyAIPrompt() {
+      const mdDesign = buildMarkdownDocument();
+      const promptText = `나는 '디지털재활 헬스케어 AI 개발자 양성 교육'을 수강 중인 학생이야.\n아래는 내가 'AI 홈 재활 서비스'를 가정하고 1차로 설계한 데이터베이스 모델링 결과야.\n\n[나의 설계안]\n${mdDesign}\n\n[요청 사항]\n1. 각 테이블의 기본 키(PK) 선정이 중복 불가 및 빈칸 불가 원칙에 맞는지 검토해 줘.\n2. 각 열(Column)의 데이터 형식(문자/숫자/날짜)이 적절한지 확인해 줘.\n3. 향후 AI 모델로 환자의 재활 호전도를 분석하기 위해 추가하면 좋을 컬럼이 있다면 초급자 눈높이에서 제안해 줘.`;
+
+      // Fallback-safe clipboard copy for iframe & standard browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = promptText;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('AI 리뷰용 프롬프트가 클립보드에 복사되었습니다. AI 채팅창에 붙여넣기 하세요.');
+      } catch (err) {
+        showToast('복사에 실패했습니다. 마크다운 다운로드를 이용해 주세요.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // Reset Modal Handlers
+    function openResetModal() {
+      const modal = document.getElementById('reset-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeResetModal() {
+      const modal = document.getElementById('reset-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function confirmReset() {
+      localStorage.removeItem(STORAGE_KEY);
+      state = getDefaultState();
+      initMetaInputs();
+      renderSchemaTables();
+      renderSampleDataTables();
+      closeResetModal();
+      showToast('모든 작성 내용이 초기화되었습니다.');
+    }
+
+    // Toast Utility
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.remove('hidden');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    // Escape HTML for safe value injection
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Scrollspy for Top Process Stepper
+    function setupScrollSpy() {
+      const sections = ['step-1', 'step-2', 'step-3', 'step-4'];
+      const links = document.querySelectorAll('.step-link');
+
+      window.addEventListener('scroll', () => {
+        let current = 'step-1';
+        const scrollPos = window.scrollY + 150;
+
+        sections.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el && el.offsetTop <= scrollPos) {
+            current = id;
+          }
+        });
+
+        links.forEach((link) => {
+          const badge = link.querySelector('span');
+          if (link.dataset.step === current) {
+            link.className = 'step-link flex items-center gap-2.5 px-3 py-2.5 rounded-md border border-teal-700 bg-teal-50/60 text-teal-900 transition';
+            badge.className = 'text-sm font-bold px-2 py-0.5 rounded bg-teal-700 text-white';
+          } else {
+            link.className = 'step-link flex items-center gap-2.5 px-3 py-2.5 rounded-md border border-transparent hover:bg-gray-50 text-gray-600 transition';
+            badge.className = 'text-sm font-bold px-2 py-0.5 rounded bg-gray-200 text-gray-700';
+          }
+        });
+      });
+    }
+
+    // Boot Application
+    window.addEventListener('DOMContentLoaded', () => {
+      initMetaInputs();
+      renderSchemaTables();
+      renderSampleDataTables();
+      setupScrollSpy();
+    });
+  </script>
+</body>
+</html>

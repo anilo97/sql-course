@@ -38,33 +38,58 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* 입력 폼 포커스 스타일 (선명한 코발트 블루 외곽선) */
+    /* 입력 폼 포커스 스타일: 과한 그림자 없이 선명한 보더 전환만 사용 */
     input[type="text"]:focus,
     input[type="date"]:focus,
     select:focus,
     textarea:focus {
       outline: none;
       border-color: #0052CC;
-      box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.14);
+      background-color: #FFFFFF;
     }
 
-    /* 상단 고정 프로세스 내비게이션 탭 */
-    .step-tab {
+    /* 상단 고정 5단계 셀 내비게이션 */
+    .step-nav-cell {
       border-bottom: 3px solid transparent;
-      color: #4B5563;
-      transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+      color: #475569;
+      background-color: #FFFFFF;
+      transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
     }
 
-    .step-tab:hover {
-      color: #111827;
+    .step-nav-cell:hover {
       background-color: #F8FAFC;
+      color: #111827;
     }
 
-    .step-tab.active {
+    .step-nav-cell.active {
+      background-color: #EFF6FF;
       border-bottom-color: #0052CC;
       color: #0052CC;
       font-weight: 700;
+    }
+
+    /* 각 단계(STEP) 컨테이너: 직각 테두리와 진한 상단 바 */
+    .step-section-box {
+      border: 1px solid #CBD5E1;
+      border-top: 3px solid #1E293B;
+      background-color: #FFFFFF;
+      margin-bottom: 36px;
+    }
+
+    /* 각 단계 상단 타이틀 밴드 */
+    .step-section-header {
       background-color: #F8FAFC;
+      border-bottom: 1px solid #CBD5E1;
+    }
+
+    /* 사각 단계 배지 */
+    .step-badge {
+      background-color: #1E293B;
+      color: #FFFFFF;
+      font-weight: 700;
+      padding: 6px 14px;
+      display: inline-block;
+      line-height: 1.2;
     }
 
     /* 인쇄 및 PDF 저장 최적화 */
@@ -76,17 +101,16 @@
         padding-bottom: 0 !important;
         font-size: 14px !important;
       }
-      section {
+      .step-section-box {
         break-inside: avoid;
-        margin-bottom: 2rem !important;
+        margin-bottom: 24px !important;
       }
       input[type="text"],
       input[type="date"],
       select,
       textarea {
         border: none !important;
-        border-bottom: 1px solid #9CA3AF !important;
-        border-radius: 0 !important;
+        border-bottom: 1px solid #94A3B8 !important;
         padding-left: 0 !important;
         background: transparent !important;
       }
@@ -95,43 +119,43 @@
 </head>
 <body class="bg-white text-[#111827] pb-28">
 
-  <!-- 상단 고정 5단계 데이터베이스 모델링 프로세스 내비게이션 -->
-  <header class="sticky top-0 z-30 bg-white border-b border-[#E5E7EB] no-print">
-    <div class="max-w-[1040px] mx-auto px-4 sm:px-8">
+  <!-- 1. 상단 고정 5단계 내비게이션 바 -->
+  <header class="sticky top-0 z-30 bg-white border-b border-[#CBD5E1] no-print">
+    <div class="max-w-[1060px] mx-auto px-4 sm:px-8">
       <!-- 상단 유틸리티 바 -->
-      <div class="flex items-center justify-between py-2.5 border-b border-[#E5E7EB] text-sm">
+      <div class="flex items-center justify-between py-2.5 border-b border-[#E2E8F0] text-sm">
         <div class="flex items-center gap-3">
-          <a href="../" class="font-bold text-[#0052CC] hover:underline underline-offset-4">&larr; 실습 아카이브 목록</a>
-          <span class="text-[#D1D5DB]">|</span>
-          <span class="text-[#4B5563] font-medium hidden sm:inline">CH 02 · 데이터베이스 모델링 표준 프로세스</span>
+          <a href="../index.html" class="font-bold text-[#0052CC] hover:underline underline-offset-4">&larr; 실습 아카이브 목록</a>
+          <span class="text-[#CBD5E1]">|</span>
+          <span class="text-[#475569] font-medium hidden sm:inline">CH 02 · 데이터베이스 모델링 표준 프로세스</span>
         </div>
         <div class="flex items-center gap-4">
           <span id="save-status" class="text-[#0052CC] font-bold tabular-nums">자동 저장됨</span>
-          <button type="button" onclick="openResetModal()" class="text-[#6B7280] hover:text-[#DC2626] underline underline-offset-4 cursor-pointer">
+          <button type="button" onclick="openResetModal()" class="text-[#64748B] hover:text-[#DC2626] underline underline-offset-4 cursor-pointer">
             초기화
           </button>
         </div>
       </div>
 
-      <!-- 5단계 프로세스 탭 목록 -->
-      <nav aria-label="데이터베이스 모델링 5단계" class="grid grid-cols-2 sm:grid-cols-5">
-        <a href="#step-01" data-target="step-01" class="step-tab active px-3 py-3 text-left block">
+      <!-- 5단계 셀 내비게이션 -->
+      <nav aria-label="데이터베이스 모델링 5단계" class="grid grid-cols-2 sm:grid-cols-5 divide-x divide-[#E2E8F0] border-x border-[#E2E8F0]">
+        <a href="#step-01" data-target="step-01" class="step-nav-cell active px-3.5 py-3 text-left block">
           <div class="font-mono text-xs font-bold tabular-nums">STEP 01</div>
           <div class="text-sm font-bold truncate">업무 분석</div>
         </a>
-        <a href="#step-02" data-target="step-02" class="step-tab px-3 py-3 text-left block">
+        <a href="#step-02" data-target="step-02" class="step-nav-cell px-3.5 py-3 text-left block">
           <div class="font-mono text-xs font-bold tabular-nums">STEP 02</div>
           <div class="text-sm font-bold truncate">논리적 표 설계</div>
         </a>
-        <a href="#step-03" data-target="step-03" class="step-tab px-3 py-3 text-left block">
+        <a href="#step-03" data-target="step-03" class="step-nav-cell px-3.5 py-3 text-left block">
           <div class="font-mono text-xs font-bold tabular-nums">STEP 03</div>
           <div class="text-sm font-bold truncate">예시 데이터 검증</div>
         </a>
-        <a href="#step-04" data-target="step-04" class="step-tab px-3 py-3 text-left block">
+        <a href="#step-04" data-target="step-04" class="step-nav-cell px-3.5 py-3 text-left block">
           <div class="font-mono text-xs font-bold tabular-nums">STEP 04</div>
           <div class="text-sm font-bold truncate">Workbench ERD 실습</div>
         </a>
-        <a href="#step-05" data-target="step-05" class="step-tab px-3 py-3 text-left block col-span-2 sm:col-span-1">
+        <a href="#step-05" data-target="step-05" class="step-nav-cell px-3.5 py-3 text-left block col-span-2 sm:col-span-1 border-t sm:border-t-0 border-[#E2E8F0]">
           <div class="font-mono text-xs font-bold tabular-nums">STEP 05</div>
           <div class="text-sm font-bold truncate">점검 및 문서화</div>
         </a>
@@ -139,265 +163,378 @@
     </div>
   </header>
 
-  <!-- 메인 워크시트 컨테이너 -->
-  <main class="max-w-[1040px] mx-auto px-4 sm:px-8 pt-10 space-y-14">
-
-    <!-- 문서 타이틀 및 작성자 메타 정보 -->
-    <section class="pb-8 border-b-2 border-[#111827]">
-      <div class="text-sm font-bold text-[#0052CC]">
+  <!-- 2. 문서 타이틀 헤더 블록 (본문과 명확히 분리된 풀와이드 헤더 영역) -->
+  <div class="w-full bg-[#F8FAFC] border-b-2 border-[#1E293B]">
+    <div class="max-w-[1060px] mx-auto px-4 sm:px-8 py-9">
+      <div class="text-sm font-bold text-[#0052CC] tracking-tight">
         디지털 재활 헬스케어 AI 개발자 양성 과정 · CH 02
       </div>
-      <h1 class="text-2xl sm:text-3xl font-bold text-[#111827] mt-2 tracking-tight">
+      <h1 class="text-2xl sm:text-3xl font-bold text-[#111827] mt-1.5 tracking-tight">
         AI 홈 재활 서비스 데이터베이스 모델링 실습
       </h1>
-      <p class="text-[#4B5563] mt-2">
-        현실의 재활 의료 업무를 분석해 논리적 데이터 표(Table)를 설계하고, MySQL Workbench 모델링 툴에서 EER 다이어그램으로 직접 구현하는 5단계 실습 워크시트입니다.
+      <p class="text-[#334155] mt-2.5 max-w-3xl">
+        현실의 재활 의료 업무를 분석해 논리적 데이터 표(Table)와 기본 키(PK)를 설계하고, MySQL Workbench에서 EER 다이어그램으로 구축하는 5단계 실습 워크시트입니다.
       </p>
 
-      <!-- 작성자 / 날짜 입력 -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-[#E5E7EB]">
+      <!-- 작성자 및 실습 일자 메타 입력 블록 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-[#CBD5E1]">
         <div>
-          <label for="meta-student" class="block text-sm font-bold text-[#111827] mb-1.5">작성자 (이름 또는 조)</label>
-          <input type="text" id="meta-student" placeholder="예: 홍길동 (1조)" class="w-full px-3.5 py-2 border border-[#D1D5DB] rounded-[4px] bg-white text-base" />
+          <label for="meta-student" class="block text-sm font-bold text-[#1E293B] mb-1.5">작성자 (이름 또는 조)</label>
+          <input type="text" id="meta-student" placeholder="예: 홍길동 (1조)" class="w-full px-3.5 py-2 border border-[#CBD5E1] rounded-[2px] bg-white text-base" />
         </div>
         <div>
-          <label for="meta-date" class="block text-sm font-bold text-[#111827] mb-1.5">실습 일자</label>
-          <input type="date" id="meta-date" class="w-full px-3.5 py-2 border border-[#D1D5DB] rounded-[4px] bg-white text-base tabular-nums" />
+          <label for="meta-date" class="block text-sm font-bold text-[#1E293B] mb-1.5">실습 일자</label>
+          <input type="date" id="meta-date" class="w-full px-3.5 py-2 border border-[#CBD5E1] rounded-[2px] bg-white text-base tabular-nums" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 메인 5단계 워크시트 본문 컨테이너 -->
+  <main class="max-w-[1060px] mx-auto px-4 sm:px-8 pt-10">
+
+    <!-- =======================================================================
+         STEP 01: 업무 분석 — 서비스 시나리오 및 관리 대상 파악
+    ======================================================================== -->
+    <section id="step-01" class="step-section-box scroll-mt-32">
+      <div class="step-section-header px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3.5">
+          <span class="step-badge font-mono text-sm tabular-nums">STEP 01</span>
+          <h2 class="text-lg sm:text-xl font-bold text-[#111827]">업무 분석 — 서비스 시나리오 및 관리 대상 파악</h2>
+        </div>
+        <span class="text-sm font-medium text-[#475569] tabular-nums">소요시간: 약 5분</span>
+      </div>
+
+      <div class="p-5 sm:p-7 space-y-6">
+        <p class="text-[#1E293B]">
+          모델링의 첫 번째 단계는 서비스 시나리오를 읽고 <strong>고정적인 기준 정보(마스터 테이블)</strong>와 <strong>반복적으로 누적되는 행위 데이터(로그 테이블)</strong>를 구분하는 것입니다.
+        </p>
+
+        <!-- 시나리오 명세 박스 -->
+        <div class="border border-[#CBD5E1] bg-[#F8FAFC] p-5">
+          <div class="text-sm font-bold text-[#1E293B] uppercase tracking-wider pb-2.5 mb-3 border-b border-[#CBD5E1]">
+            [서비스 시나리오] AI 기반 홈 재활 운동 관리 플랫폼
+          </div>
+          <ul class="space-y-2 text-[#1E293B] text-[0.98rem]">
+            <li><strong>1) 환자 등록:</strong> 병원에서 퇴원 후 재택 재활이 필요한 환자가 가입하며, <strong>이름, 생년월일, 성별, 주요 재활 부위</strong>(어깨, 무릎, 허리 등)를 관리합니다.</li>
+            <li><strong>2) 재활 운동 처방 목록:</strong> 물리치료사가 배정할 수 있는 표준 운동 종목으로 <strong>운동명, 타겟 부위, 난이도</strong>(초급·중급·고급) 정보를 관리합니다.</li>
+            <li><strong>3) AI 모션 트래킹 기록:</strong> 환자가 집에서 스마트폰 카메라로 운동을 수행할 때마다 <strong>수행 일시, AI가 측정한 평균 관절 가동범위(ROM 각도), 통증 점수(1~10점)</strong>가 누적 저장됩니다.</li>
+          </ul>
+        </div>
+
+        <!-- 관리 대상(테이블) 도출 체크 및 분류 메모 -->
+        <div class="space-y-3">
+          <div class="font-bold text-[#111827]">도출된 3개 핵심 테이블 확인 및 분리 이유 기록</div>
+          <div class="border border-[#CBD5E1] divide-y divide-[#CBD5E1]">
+            <!-- 엔티티 1 -->
+            <div class="p-4 bg-white flex flex-col md:flex-row md:items-center gap-3">
+              <label class="inline-flex items-center gap-2.5 md:w-64 shrink-0 cursor-pointer select-none">
+                <input type="checkbox" id="entity-chk-0" class="w-4 h-4 border-[#94A3B8] text-[#0052CC]" />
+                <span class="font-bold text-[#111827]">1. 환자 (<code class="font-mono text-sm text-[#0052CC]">patient</code>)</span>
+              </label>
+              <input type="text" id="entity-note-0" placeholder="분리 이유 메모 (예: 환자 고유 인적 사항을 관리하는 마스터 테이블)" class="w-full px-3 py-1.5 text-[0.95rem] border border-[#CBD5E1] rounded-[2px] bg-[#F8FAFC]" />
+            </div>
+            <!-- 엔티티 2 -->
+            <div class="p-4 bg-white flex flex-col md:flex-row md:items-center gap-3">
+              <label class="inline-flex items-center gap-2.5 md:w-64 shrink-0 cursor-pointer select-none">
+                <input type="checkbox" id="entity-chk-1" class="w-4 h-4 border-[#94A3B8] text-[#0052CC]" />
+                <span class="font-bold text-[#111827]">2. 재활운동 (<code class="font-mono text-sm text-[#0052CC]">rehab_exercise</code>)</span>
+              </label>
+              <input type="text" id="entity-note-1" placeholder="분리 이유 메모 (예: 표준 운동 종목 기준 정보를 관리하는 마스터 테이블)" class="w-full px-3 py-1.5 text-[0.95rem] border border-[#CBD5E1] rounded-[2px] bg-[#F8FAFC]" />
+            </div>
+            <!-- 엔티티 3 -->
+            <div class="p-4 bg-white flex flex-col md:flex-row md:items-center gap-3">
+              <label class="inline-flex items-center gap-2.5 md:w-64 shrink-0 cursor-pointer select-none">
+                <input type="checkbox" id="entity-chk-2" class="w-4 h-4 border-[#94A3B8] text-[#0052CC]" />
+                <span class="font-bold text-[#111827]">3. 운동기록 (<code class="font-mono text-sm text-[#0052CC]">exercise_log</code>)</span>
+              </label>
+              <input type="text" id="entity-note-2" placeholder="분리 이유 메모 (예: 환자별 일일 운동 수행 및 ROM 측정 이력이 누적되는 로그 테이블)" class="w-full px-3 py-1.5 text-[0.95rem] border border-[#CBD5E1] rounded-[2px] bg-[#F8FAFC]" />
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- =======================================================================
-         STEP 01: 업무 분석 (시나리오 확인)
+         STEP 02: 논리적 표 설계 — 테이블, 열(Column), 데이터 형식 및 기본 키(PK) 정의
     ======================================================================== -->
-    <section id="step-01" class="scroll-mt-32 space-y-5">
-      <div class="border-b border-[#111827] pb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <div>
-          <span class="font-mono text-sm font-bold text-[#0052CC] mr-2">STEP 01</span>
-          <h2 class="inline text-xl sm:text-2xl font-bold text-[#111827]">업무 분석: 서비스 시나리오 및 관리 대상 파악</h2>
+    <section id="step-02" class="step-section-box scroll-mt-32">
+      <div class="step-section-header px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3.5">
+          <span class="step-badge font-mono text-sm tabular-nums">STEP 02</span>
+          <h2 class="text-lg sm:text-xl font-bold text-[#111827]">논리적 표 설계 — 테이블, 열(Column), 데이터 형식 및 기본 키(PK) 정의</h2>
         </div>
-        <span class="text-sm text-[#6B7280]">예상 소요: 5분</span>
+        <span class="text-sm font-medium text-[#475569] tabular-nums">소요시간: 약 10분</span>
       </div>
 
-      <p class="text-[#374151]">
-        데이터베이스 모델링의 첫 단계는 개발하려는 서비스의 요구사항을 읽고, <strong>독립적으로 관리해야 할 사물(마스터)</strong>과 <strong>반복적으로 누적되는 행위(로그)</strong>를 구분하는 것입니다.
-      </p>
+      <div class="p-5 sm:p-7 space-y-6">
+        <div class="border-l-4 border-[#0052CC] bg-[#F8FAFC] px-4 py-3 text-[0.95rem] text-[#1E293B] space-y-1">
+          <div><strong>설계 규칙 ① 열 이름:</strong> 띄어쓰기 없이 영문 소문자와 언더바(<code class="bg-white border border-[#CBD5E1] px-1.5 py-0.5 font-mono text-sm">_</code>) 사용을 권장합니다. (예: <code class="bg-white border border-[#CBD5E1] px-1.5 py-0.5 font-mono text-sm">patient_id</code>, <code class="bg-white border border-[#CBD5E1] px-1.5 py-0.5 font-mono text-sm">birth_date</code>)</div>
+          <div><strong>설계 규칙 ② 기본 키(PK):</strong> 테이블의 각 행을 유일하게 식별하는 열 1개를 체크하세요. (<strong>중복 불가</strong> 및 <strong>빈칸(NULL) 불가</strong> 원칙)</div>
+        </div>
 
-      <div class="border border-[#E5E7EB] bg-[#F8FAFC] p-5 sm:p-6 rounded-[4px] space-y-4">
-        <div class="font-bold text-[#111827] border-b border-[#E5E7EB] pb-2.5">
-          [요구사항 명세] AI 기반 홈 재활 운동 관리 시스템
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-[0.95rem]">
-          <div class="bg-white border border-[#E5E7EB] p-4 rounded-[4px]">
-            <div class="font-mono text-xs font-bold text-[#0052CC] mb-1">ENTITY 01 · 마스터</div>
-            <div class="font-bold text-[#111827] mb-2">환자 (patient)</div>
-            <p class="text-[#4B5563] leading-relaxed">
-              센터에 등록된 환자의 <strong>이름, 생년월일, 성별, 주요 재활 부위</strong>(어깨, 무릎, 허리 등)를 관리합니다. 동명이인을 구분하기 위한 고유 식별 값이 필요합니다.
-            </p>
-          </div>
-          <div class="bg-white border border-[#E5E7EB] p-4 rounded-[4px]">
-            <div class="font-mono text-xs font-bold text-[#0052CC] mb-1">ENTITY 02 · 마스터</div>
-            <div class="font-bold text-[#111827] mb-2">재활운동 (rehab_exercise)</div>
-            <p class="text-[#4B5563] leading-relaxed">
-              서비스에서 제공하는 <strong>운동명</strong>(스쿼트, 숄더 프레스 등), <strong>타겟 부위, 난이도</strong>(초급/중급/고급)를 관리합니다. 각 운동은 고유 코드로 구분합니다.
-            </p>
-          </div>
-          <div class="bg-white border border-[#E5E7EB] p-4 rounded-[4px]">
-            <div class="font-mono text-xs font-bold text-[#0052CC] mb-1">ENTITY 03 · 시계열 로그</div>
-            <div class="font-bold text-[#111827] mb-2">운동기록 (exercise_log)</div>
-            <p class="text-[#4B5563] leading-relaxed">
-              <strong>어떤 환자</strong>가 <strong>어떤 운동</strong>을 <strong>언제(수행 일시)</strong> 수행했는지와 AI 카메라가 측정한 <strong>평균 관절 각도(ROM)</strong>, <strong>통증 점수(1~10점)</strong>를 매번 기록합니다.
-            </p>
-          </div>
-        </div>
+        <!-- 동적 스키마 테이블 렌더링 영역 -->
+        <div id="schema-builder-container" class="space-y-8"></div>
       </div>
     </section>
 
     <!-- =======================================================================
-         STEP 02: 논리적 설계 (테이블 · 열 · 기본 키 정의)
+         STEP 03: 예시 데이터 검증 — 실제 행(Row) 데이터 입력 및 무결성 확인
     ======================================================================== -->
-    <section id="step-02" class="scroll-mt-32 space-y-6">
-      <div class="border-b border-[#111827] pb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <div>
-          <span class="font-mono text-sm font-bold text-[#0052CC] mr-2">STEP 02</span>
-          <h2 class="inline text-xl sm:text-2xl font-bold text-[#111827]">논리적 설계: 테이블(Table), 열(Column), 기본 키(PK) 정의</h2>
+    <section id="step-03" class="step-section-box scroll-mt-32">
+      <div class="step-section-header px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3.5">
+          <span class="step-badge font-mono text-sm tabular-nums">STEP 03</span>
+          <h2 class="text-lg sm:text-xl font-bold text-[#111827]">예시 데이터 검증 — 실제 행(Row) 데이터 입력 및 무결성 확인</h2>
         </div>
-        <span class="text-sm text-[#6B7280]">예상 소요: 10분</span>
+        <span class="text-sm font-medium text-[#475569] tabular-nums">소요시간: 약 5분</span>
       </div>
 
-      <div class="border-l-4 border-[#0052CC] bg-[#F8FAFC] px-4 py-3 text-sm text-[#374151] space-y-1">
-        <div><strong>작성 규칙 ① 열 이름:</strong> 띄어쓰기 대신 언더바(<code class="bg-white border border-[#E5E7EB] px-1.5 py-0.5 font-mono">_</code>)를 사용합니다. (예: <code class="bg-white border border-[#E5E7EB] px-1.5 py-0.5 font-mono">생년월일</code>, <code class="bg-white border border-[#E5E7EB] px-1.5 py-0.5 font-mono">재활_부위</code>)</div>
-        <div><strong>작성 규칙 ② 기본 키(PK):</strong> 각 행을 유일하게 구분할 수 있도록 <strong>중복 불가(Unique)</strong> 및 <strong>빈칸 불가(Not Null)</strong> 조건을 만족하는 열 1개를 체크합니다.</div>
-      </div>
+      <div class="p-5 sm:p-7 space-y-6">
+        <p class="text-[#1E293B]">
+          STEP 02에서 작성한 열 이름과 데이터 형식, <code class="font-mono text-sm font-bold text-[#0052CC]">[PK]</code> 표시가 아래 표의 머리글에 즉시 반영됩니다. 실제 데이터를 2건씩 입력하면서 기본 키가 중복되지 않는지, <code class="font-mono text-sm">exercise_log</code>가 유효한 환자·운동 ID를 참조하는지 검증하세요.
+        </p>
 
-      <!-- 동적 스키마 테이블 렌더링 영역 -->
-      <div id="schema-builder-container" class="space-y-8"></div>
+        <!-- 동적 예시 데이터 테이블 렌더링 영역 -->
+        <div id="sample-data-container" class="space-y-8"></div>
+      </div>
     </section>
 
     <!-- =======================================================================
-         STEP 03: 데이터 검증 (예시 행 입력)
+         STEP 04: 물리적 구현 — MySQL Workbench EER 다이어그램 실습
     ======================================================================== -->
-    <section id="step-03" class="scroll-mt-32 space-y-6">
-      <div class="border-b border-[#111827] pb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <div>
-          <span class="font-mono text-sm font-bold text-[#0052CC] mr-2">STEP 03</span>
-          <h2 class="inline text-xl sm:text-2xl font-bold text-[#111827]">데이터 검증: 예시 행(Row) 입력으로 구조 확인</h2>
+    <section id="step-04" class="step-section-box scroll-mt-32">
+      <div class="step-section-header px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3.5">
+          <span class="step-badge font-mono text-sm tabular-nums">STEP 04</span>
+          <h2 class="text-lg sm:text-xl font-bold text-[#111827]">물리적 구현 — MySQL Workbench EER 다이어그램 실습</h2>
         </div>
-        <span class="text-sm text-[#6B7280]">예상 소요: 5분</span>
+        <span class="text-sm font-medium text-[#475569] tabular-nums">소요시간: 약 15분</span>
       </div>
 
-      <p class="text-[#374151]">
-        STEP 02에서 정의한 열 이름과 데이터 형식이 아래 표의 머리글(Header)에 실시간으로 반영됩니다. 실제 데이터를 2건씩 채워보며 선택한 데이터 형식과 PK가 자연스러운지 검증하세요.
-      </p>
+      <div class="p-5 sm:p-7 space-y-6">
+        <p class="text-[#1E293B]">
+          논리적으로 검증한 3개의 테이블 구조를 <strong>MySQL Workbench</strong> 모델링 툴에 옮겨 실제 물리 데이터 타입과 <code class="font-mono text-sm">1:N</code> 관계선(외래 키)을 구현합니다. 각 단계를 완료할 때마다 좌측 체크박스를 표시하세요.
+        </p>
 
-      <!-- 동적 예시 데이터 테이블 렌더링 영역 -->
-      <div id="sample-data-container" class="space-y-8"></div>
-    </section>
-
-    <!-- =======================================================================
-         STEP 04: 물리적 구현 (MySQL Workbench EER 다이어그램 실습)
-    ======================================================================== -->
-    <section id="step-04" class="scroll-mt-32 space-y-6">
-      <div class="border-b border-[#111827] pb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <div>
-          <span class="font-mono text-sm font-bold text-[#0052CC] mr-2">STEP 04</span>
-          <h2 class="inline text-xl sm:text-2xl font-bold text-[#111827]">물리적 구현: MySQL Workbench EER 다이어그램 실습</h2>
-        </div>
-        <span class="text-sm text-[#6B7280]">예상 소요: 15분</span>
-      </div>
-
-      <p class="text-[#374151]">
-        앞 단계에서 검증한 3개의 논리적 테이블 설계안을 실제 모델링 툴인 <strong>MySQL Workbench(EER Diagram)</strong>에 옮겨 시각적인 ERD로 구축합니다. 아래 절차를 순서대로 따라 한 뒤 우측 체크박스를 완료 표시하세요.
-      </p>
-
-      <!-- Workbench 단계별 실습 가이드 테이블 -->
-      <div class="border border-[#E5E7EB] rounded-[4px] overflow-hidden">
-        <div class="bg-[#F8FAFC] px-5 py-3.5 border-b border-[#E5E7EB] flex items-center justify-between">
-          <span class="font-bold text-[#111827]">MySQL Workbench 모델링 실습 가이드</span>
-          <span id="wb-progress-text" class="font-mono text-sm font-bold text-[#0052CC] tabular-nums">0 / 4 완료</span>
-        </div>
-
-        <div class="divide-y divide-[#E5E7EB]">
-          <!-- 가이드 1 -->
-          <div class="p-5 flex items-start gap-4">
-            <input type="checkbox" id="wb-chk-1" class="wb-checkbox mt-1.5 w-5 h-5 border-[#D1D5DB] rounded-[4px] text-[#0052CC] cursor-pointer" />
-            <label for="wb-chk-1" class="flex-1 cursor-pointer">
-              <div class="font-bold text-[#111827]">1. 새 모델(New Model) 및 EER 다이어그램 캔버스 열기</div>
-              <p class="text-[0.95rem] text-[#4B5563] mt-1">
-                MySQL Workbench를 실행하고 상단 메뉴에서 <code class="bg-[#F8FAFC] border border-[#E5E7EB] px-1.5 py-0.5 font-mono text-sm">File &rarr; New Model</code>을 클릭합니다. 이어서 모델 탭 상단의 <strong>Add Diagram</strong> 아이콘을 더블클릭하여 빈 ERD 캔버스를 엽니다.
-              </p>
-            </label>
+        <!-- Workbench 4단계 체크리스트 -->
+        <div class="border border-[#CBD5E1]">
+          <div class="bg-[#F8FAFC] px-5 py-3 border-b border-[#CBD5E1] flex items-center justify-between">
+            <span class="font-bold text-[#111827]">MySQL Workbench EER 다이어그램 구축 절차</span>
+            <span id="wb-progress-text" class="font-mono text-sm font-bold text-[#0052CC] tabular-nums">0 / 4 완료</span>
           </div>
 
-          <!-- 가이드 2 -->
-          <div class="p-5 flex items-start gap-4">
-            <input type="checkbox" id="wb-chk-2" class="wb-checkbox mt-1.5 w-5 h-5 border-[#D1D5DB] rounded-[4px] text-[#0052CC] cursor-pointer" />
-            <label for="wb-chk-2" class="flex-1 cursor-pointer">
-              <div class="font-bold text-[#111827]">2. 3개 테이블 생성 및 컬럼 · 데이터 타입 매핑</div>
-              <p class="text-[0.95rem] text-[#4B5563] mt-1">
-                좌측 툴바의 <strong>Place a New Table</strong>(단축키 <code class="bg-[#F8FAFC] border border-[#E5E7EB] px-1.5 py-0.5 font-mono text-sm">T</code>) 아이콘을 클릭해 캔버스에 테이블 3개(<code class="font-mono text-sm">patient</code>, <code class="font-mono text-sm">rehab_exercise</code>, <code class="font-mono text-sm">exercise_log</code>)를 배치합니다. 각 테이블을 더블클릭해 STEP 02에서 정의한 열과 실제 MySQL 데이터 타입을 입력합니다.
-              </p>
-              <div class="mt-2.5 bg-[#F8FAFC] border border-[#E5E7EB] px-3.5 py-2.5 text-sm text-[#374151] font-mono">
-                • 문자 &rarr; VARCHAR(45) 또는 CHAR(1) &nbsp;|&nbsp; • 숫자 &rarr; INT (정수) 또는 FLOAT (관절 각도 등 소수) &nbsp;|&nbsp; • 날짜 &rarr; DATE 또는 DATETIME
-              </div>
-            </label>
-          </div>
+          <div class="divide-y divide-[#CBD5E1]">
+            <!-- 절차 1 -->
+            <div class="p-4 sm:p-5 flex items-start gap-3.5">
+              <input type="checkbox" id="wb-chk-0" class="wb-checkbox mt-1.5 w-4 h-4 border-[#94A3B8] text-[#0052CC] cursor-pointer" />
+              <label for="wb-chk-0" class="flex-1 cursor-pointer">
+                <div class="font-bold text-[#111827]">1. 새 모델 생성 및 EER 다이어그램 캔버스 열기</div>
+                <p class="text-[0.95rem] text-[#334155] mt-1">
+                  MySQL Workbench 상단 메뉴에서 <code class="bg-[#F8FAFC] border border-[#CBD5E1] px-1.5 py-0.5 font-mono text-sm">File &rarr; New Model</code>을 클릭한 뒤, 모델 화면 상단의 <strong>Add Diagram</strong> 아이콘을 더블클릭하여 빈 EER 다이어그램 캔버스를 엽니다.
+                </p>
+              </label>
+            </div>
 
-          <!-- 가이드 3 -->
-          <div class="p-5 flex items-start gap-4">
-            <input type="checkbox" id="wb-chk-3" class="wb-checkbox mt-1.5 w-5 h-5 border-[#D1D5DB] rounded-[4px] text-[#0052CC] cursor-pointer" />
-            <label for="wb-chk-3" class="flex-1 cursor-pointer">
-              <div class="font-bold text-[#111827]">3. 기본 키(PK) 및 필수 입력(NN) 제약조건 설정</div>
-              <p class="text-[0.95rem] text-[#4B5563] mt-1">
-                각 테이블의 기본 키 열(<code class="font-mono text-sm">patient_id</code>, <code class="font-mono text-sm">exercise_code</code>, <code class="font-mono text-sm">log_id</code>) 좌측의 <strong>PK</strong>와 <strong>NN(Not Null)</strong> 체크박스를 선택합니다. (<code class="font-mono text-sm">log_id</code>는 숫자형으로 두고 <strong>AI(Auto Increment)</strong>를 체크하면 번호가 자동 증가합니다.)
-              </p>
-            </label>
-          </div>
+            <!-- 절차 2 -->
+            <div class="p-4 sm:p-5 flex items-start gap-3.5">
+              <input type="checkbox" id="wb-chk-1" class="wb-checkbox mt-1.5 w-4 h-4 border-[#94A3B8] text-[#0052CC] cursor-pointer" />
+              <label for="wb-chk-1" class="flex-1 cursor-pointer">
+                <div class="font-bold text-[#111827]">2. 3개 테이블 객체 생성 및 영문 테이블명 지정</div>
+                <p class="text-[0.95rem] text-[#334155] mt-1">
+                  캔버스 좌측 툴바의 <strong>Place a New Table</strong>(단축키 <code class="bg-[#F8FAFC] border border-[#CBD5E1] px-1.5 py-0.5 font-mono text-sm">T</code>) 아이콘으로 테이블 3개를 배치하고, 각각 더블클릭하여 Table Name을 <code class="font-mono text-sm font-bold">patient</code>, <code class="font-mono text-sm font-bold">rehab_exercise</code>, <code class="font-mono text-sm font-bold">exercise_log</code>로 지정합니다.
+                </p>
+              </label>
+            </div>
 
-          <!-- 가이드 4 -->
-          <div class="p-5 flex items-start gap-4">
-            <input type="checkbox" id="wb-chk-4" class="wb-checkbox mt-1.5 w-5 h-5 border-[#D1D5DB] rounded-[4px] text-[#0052CC] cursor-pointer" />
-            <label for="wb-chk-4" class="flex-1 cursor-pointer">
-              <div class="font-bold text-[#111827]">4. 1:N 관계선 연결로 외래 키(FK) 자동 생성 확인</div>
-              <p class="text-[0.95rem] text-[#4B5563] mt-1">
-                좌측 툴바에서 점선으로 표시된 <strong>1:n Non-Identifying Relationship</strong> 아이콘을 선택한 뒤, <strong>① 자식 테이블(<code class="font-mono text-sm">exercise_log</code>)을 먼저 클릭</strong>하고 <strong>② 부모 테이블(<code class="font-mono text-sm">patient</code>)을 클릭</strong>합니다. 같은 방식으로 <code class="font-mono text-sm">exercise_log</code>와 <code class="font-mono text-sm">rehab_exercise</code>를 연결해 외래 키(FK) 컬럼이 자동으로 생성되는지 확인합니다.
-              </p>
-              <div class="mt-2.5 text-sm text-[#4B5563]">
-                * 작성한 모델 파일은 Workbench 메뉴의 <code class="bg-[#F8FAFC] border border-[#E5E7EB] px-1.5 py-0.5 font-mono text-xs">File &rarr; Save Model</code>을 눌러 <code class="font-mono text-xs">ai_rehab_erd.mwb</code> 파일로 저장해 두세요.
-              </div>
-            </label>
+            <!-- 절차 3 -->
+            <div class="p-4 sm:p-5 flex items-start gap-3.5">
+              <input type="checkbox" id="wb-chk-2" class="wb-checkbox mt-1.5 w-4 h-4 border-[#94A3B8] text-[#0052CC] cursor-pointer" />
+              <label for="wb-chk-2" class="flex-1 cursor-pointer">
+                <div class="font-bold text-[#111827]">3. 물리 데이터 타입 매핑 및 PK · NN · AI 제약조건 체크</div>
+                <p class="text-[0.95rem] text-[#334155] mt-1">
+                  각 테이블의 <strong>Columns</strong> 탭에서 열 이름과 MySQL 물리 데이터 타입(<code class="font-mono text-sm">VARCHAR</code>, <code class="font-mono text-sm">INT</code>, <code class="font-mono text-sm">FLOAT</code>, <code class="font-mono text-sm">DATE</code>, <code class="font-mono text-sm">DATETIME</code>)을 입력하고, 기본 키 열에 <strong>PK</strong>와 <strong>NN(Not Null)</strong>을 체크합니다. (<code class="font-mono text-sm">log_id</code>는 <strong>AI</strong> 체크)
+                </p>
+              </label>
+            </div>
+
+            <!-- 절차 4 -->
+            <div class="p-4 sm:p-5 flex items-start gap-3.5">
+              <input type="checkbox" id="wb-chk-3" class="wb-checkbox mt-1.5 w-4 h-4 border-[#94A3B8] text-[#0052CC] cursor-pointer" />
+              <label for="wb-chk-3" class="flex-1 cursor-pointer">
+                <div class="font-bold text-[#111827]">4. 1:N 비식별 관계선 연결로 외래 키(FK) 자동 생성 확인</div>
+                <p class="text-[0.95rem] text-[#334155] mt-1">
+                  좌측 툴바에서 점선 아이콘인 <strong>1:n Non-Identifying Relationship</strong>을 선택한 뒤, <strong>① 자식 테이블(<code class="font-mono text-sm">exercise_log</code>)을 먼저 클릭</strong>하고 <strong>② 부모 테이블(<code class="font-mono text-sm">patient</code>)을 클릭</strong>합니다. 이어서 <code class="font-mono text-sm">exercise_log</code> &rarr; <code class="font-mono text-sm">rehab_exercise</code>도 동일하게 연결하여 외래 키(FK) 열이 자동 추가되는지 확인하고, <code class="bg-[#F8FAFC] border border-[#CBD5E1] px-1.5 py-0.5 font-mono text-xs">File &rarr; Save Model</code>로 저장합니다.
+                </p>
+              </label>
+            </div>
           </div>
         </div>
+
+        <!-- 접기/펼치기: Workbench 물리 컬럼 명세 표준 레퍼런스 표 -->
+        <details class="border border-[#CBD5E1] bg-[#F8FAFC]">
+          <summary class="px-5 py-3.5 font-bold text-[#111827] cursor-pointer select-none hover:text-[#0052CC]">
+            [참고 표] MySQL Workbench 물리 컬럼 타입 및 제약조건 표준 명세 보기
+          </summary>
+          <div class="p-5 bg-white border-t border-[#CBD5E1] overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm min-w-[640px]">
+              <thead>
+                <tr class="bg-[#F8FAFC] border-b border-[#CBD5E1] text-[#475569]">
+                  <th class="py-2.5 px-3 font-bold">테이블명</th>
+                  <th class="py-2.5 px-3 font-bold">컬럼명 (Column)</th>
+                  <th class="py-2.5 px-3 font-bold">Datatype</th>
+                  <th class="py-2.5 px-3 font-bold">제약조건</th>
+                  <th class="py-2.5 px-3 font-bold">설명</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#E2E8F0]">
+                <tr>
+                  <td class="py-2 px-3 font-mono font-bold text-[#0052CC]" rowspan="5">patient</td>
+                  <td class="py-2 px-3 font-mono">patient_id</td>
+                  <td class="py-2 px-3 font-mono">VARCHAR(20)</td>
+                  <td class="py-2 px-3 font-mono font-bold">PK, NN</td>
+                  <td class="py-2 px-3">환자 고유 식별 코드 (예: P001)</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">name</td>
+                  <td class="py-2 px-3 font-mono">VARCHAR(30)</td>
+                  <td class="py-2 px-3 font-mono">NN</td>
+                  <td class="py-2 px-3">환자 성명</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">birth_date</td>
+                  <td class="py-2 px-3 font-mono">DATE</td>
+                  <td class="py-2 px-3 font-mono">-</td>
+                  <td class="py-2 px-3">생년월일</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">gender</td>
+                  <td class="py-2 px-3 font-mono">CHAR(1)</td>
+                  <td class="py-2 px-3 font-mono">-</td>
+                  <td class="py-2 px-3">성별 (M / F)</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">rehab_part</td>
+                  <td class="py-2 px-3 font-mono">VARCHAR(30)</td>
+                  <td class="py-2 px-3 font-mono">-</td>
+                  <td class="py-2 px-3">주요 재활 부위</td>
+                </tr>
+
+                <tr class="border-t-2 border-[#CBD5E1]">
+                  <td class="py-2 px-3 font-mono font-bold text-[#0052CC]" rowspan="4">rehab_exercise</td>
+                  <td class="py-2 px-3 font-mono">exercise_id</td>
+                  <td class="py-2 px-3 font-mono">VARCHAR(20)</td>
+                  <td class="py-2 px-3 font-mono font-bold">PK, NN</td>
+                  <td class="py-2 px-3">운동 종목 고유 코드 (예: EX01)</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">exercise_name</td>
+                  <td class="py-2 px-3 font-mono">VARCHAR(50)</td>
+                  <td class="py-2 px-3 font-mono">NN</td>
+                  <td class="py-2 px-3">재활 운동 명칭</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">target_part</td>
+                  <td class="py-2 px-3 font-mono">VARCHAR(30)</td>
+                  <td class="py-2 px-3 font-mono">-</td>
+                  <td class="py-2 px-3">타겟 신체 부위</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">difficulty</td>
+                  <td class="py-2 px-3 font-mono">VARCHAR(10)</td>
+                  <td class="py-2 px-3 font-mono">-</td>
+                  <td class="py-2 px-3">운동 난이도 (초급/중급/고급)</td>
+                </tr>
+
+                <tr class="border-t-2 border-[#CBD5E1]">
+                  <td class="py-2 px-3 font-mono font-bold text-[#0052CC]" rowspan="6">exercise_log</td>
+                  <td class="py-2 px-3 font-mono">log_id</td>
+                  <td class="py-2 px-3 font-mono">INT</td>
+                  <td class="py-2 px-3 font-mono font-bold">PK, NN, AI</td>
+                  <td class="py-2 px-3">운동 세션 일련번호 (자동 증가)</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">performed_at</td>
+                  <td class="py-2 px-3 font-mono">DATETIME</td>
+                  <td class="py-2 px-3 font-mono">NN</td>
+                  <td class="py-2 px-3">운동 수행 일시</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">avg_rom</td>
+                  <td class="py-2 px-3 font-mono">FLOAT</td>
+                  <td class="py-2 px-3 font-mono">-</td>
+                  <td class="py-2 px-3">AI 측정 평균 관절 가동범위(도)</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">pain_score</td>
+                  <td class="py-2 px-3 font-mono">INT</td>
+                  <td class="py-2 px-3 font-mono">-</td>
+                  <td class="py-2 px-3">환자 입력 통증 점수 (1~10)</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">patient_patient_id</td>
+                  <td class="py-2 px-3 font-mono">VARCHAR(20)</td>
+                  <td class="py-2 px-3 font-mono font-bold text-[#0052CC]">FK, NN</td>
+                  <td class="py-2 px-3">1:N 관계선 연결 시 자동 생성</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono">rehab_exercise_exercise_id</td>
+                  <td class="py-2 px-3 font-mono">VARCHAR(20)</td>
+                  <td class="py-2 px-3 font-mono font-bold text-[#0052CC]">FK, NN</td>
+                  <td class="py-2 px-3">1:N 관계선 연결 시 자동 생성</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
       </div>
     </section>
 
     <!-- =======================================================================
          STEP 05: 설계 점검 및 문서화
     ======================================================================== -->
-    <section id="step-05" class="scroll-mt-32 space-y-6">
-      <div class="border-b border-[#111827] pb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <div>
-          <span class="font-mono text-sm font-bold text-[#0052CC] mr-2">STEP 05</span>
-          <h2 class="inline text-xl sm:text-2xl font-bold text-[#111827]">설계 점검 및 결과 문서화</h2>
+    <section id="step-05" class="step-section-box scroll-mt-32">
+      <div class="step-section-header px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3.5">
+          <span class="step-badge font-mono text-sm tabular-nums">STEP 05</span>
+          <h2 class="text-lg sm:text-xl font-bold text-[#111827]">설계 점검 및 결과 문서화</h2>
         </div>
-        <span class="text-sm text-[#6B7280]">예상 소요: 5분</span>
+        <span class="text-sm font-medium text-[#475569] tabular-nums">소요시간: 약 5분</span>
       </div>
 
-      <div class="space-y-6">
+      <div class="p-5 sm:p-7 space-y-6">
         <div>
           <label for="q1-answer" class="block font-bold text-[#111827] mb-2">
-            Q1. [환자] 테이블에서 '환자 이름'을 기본 키(PK)로 지정하면 안 되는 이유는 무엇인가요?
+            Q1. <code class="font-mono text-[#0052CC]">환자</code> 테이블에서 '환자 이름'을 기본 키(PK)로 지정하면 안 되는 이유는 무엇인가요?
           </label>
-          <textarea id="q1-answer" rows="2" placeholder="기본 키(PK)의 필수 조건(중복 불가, 빈칸 불가)과 연관 지어 작성하세요." class="w-full px-3.5 py-2.5 border border-[#D1D5DB] rounded-[4px] bg-white text-base"></textarea>
+          <textarea id="q1-answer" rows="3" placeholder="기본 키(PK)의 필수 조건(중복 불가, 빈칸 불가)과 연관 지어 설명해 보세요." class="w-full px-3.5 py-2.5 border border-[#CBD5E1] rounded-[2px] bg-white text-base"></textarea>
         </div>
 
         <div>
           <label for="q2-answer" class="block font-bold text-[#111827] mb-2">
-            Q2. [운동기록] 테이블에 환자의 '이름'과 '생년월일'을 매번 다시 적지 않고 '환자_아이디'만 연결(FK)하면 어떤 장점이 있을까요?
+            Q2. <code class="font-mono text-[#0052CC]">운동기록</code> 테이블에 환자의 '이름'과 '생년월일'을 매번 중복해서 적지 않고 <code class="font-mono text-[#0052CC]">patient_id</code>만 저장하는 장점은 무엇인가요?
           </label>
-          <textarea id="q2-answer" rows="2" placeholder="데이터 중복 저장 및 정보 변경 시 데이터 불일치 문제와 연결해 적어보세요." class="w-full px-3.5 py-2.5 border border-[#D1D5DB] rounded-[4px] bg-white text-base"></textarea>
+          <textarea id="q2-answer" rows="3" placeholder="데이터 중복 저장 방지 및 데이터 수정 시 일관성 유지 관점에서 작성해 보세요." class="w-full px-3.5 py-2.5 border border-[#CBD5E1] rounded-[2px] bg-white text-base"></textarea>
         </div>
-
-        <!-- 모범 답안 및 해설 접기/펼치기 (기본 HTML details 사용) -->
-        <details class="border border-[#E5E7EB] bg-[#F8FAFC] rounded-[4px] no-print">
-          <summary class="px-5 py-3.5 font-bold text-[#111827] cursor-pointer select-none hover:text-[#0052CC]">
-            [자습 및 강사용] 모범 설계 기준 및 해설 확인하기
-          </summary>
-          <div class="px-5 pb-5 pt-2 border-t border-[#E5E7EB] text-[0.95rem] text-[#374151] space-y-3">
-            <div>
-              <div class="font-bold text-[#111827] mb-1">1. 테이블별 권장 컬럼 및 물리 타입 구성</div>
-              <ul class="list-disc pl-5 space-y-1">
-                <li><strong>환자 (patient):</strong> <code class="font-mono text-sm">patient_id</code>(VARCHAR, <strong>PK</strong>), <code class="font-mono text-sm">name</code>(VARCHAR), <code class="font-mono text-sm">birth_date</code>(DATE), <code class="font-mono text-sm">gender</code>(CHAR), <code class="font-mono text-sm">target_part</code>(VARCHAR)</li>
-                <li><strong>재활운동 (rehab_exercise):</strong> <code class="font-mono text-sm">exercise_code</code>(VARCHAR, <strong>PK</strong>), <code class="font-mono text-sm">exercise_name</code>(VARCHAR), <code class="font-mono text-sm">target_part</code>(VARCHAR), <code class="font-mono text-sm">difficulty</code>(VARCHAR)</li>
-                <li><strong>운동기록 (exercise_log):</strong> <code class="font-mono text-sm">log_id</code>(INT, <strong>PK</strong>), <code class="font-mono text-sm">patient_id</code>(VARCHAR, <strong>FK</strong>), <code class="font-mono text-sm">exercise_code</code>(VARCHAR, <strong>FK</strong>), <code class="font-mono text-sm">performed_at</code>(DATETIME), <code class="font-mono text-sm">avg_rom</code>(FLOAT), <code class="font-mono text-sm">pain_score</code>(INT)</li>
-              </ul>
-            </div>
-            <div>
-              <div class="font-bold text-[#111827] mb-1">2. 핵심 질문 해설</div>
-              <p><strong>Q1:</strong> 동명이인이 발생할 수 있어 기본 키의 핵심 조건인 <strong>중복 불가(Unique)</strong>를 위반하기 때문입니다.</p>
-              <p class="mt-1"><strong>Q2:</strong> 동일한 환자 인적 사항을 매 기록마다 중복 저장하지 않아 저장 공간을 아끼며, 환자 정보가 바뀌어도 <code class="font-mono text-sm">patient</code> 테이블 한 곳만 수정하면 되므로 <strong>데이터 불일치</strong>를 예방할 수 있습니다.</p>
-            </div>
-          </div>
-        </details>
       </div>
     </section>
 
   </main>
 
-  <!-- 하단 고정 문서화 및 내보내기 액션 바 -->
-  <footer class="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-[#E5E7EB] no-print">
-    <div class="max-w-[1040px] mx-auto px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
-      <span class="text-sm text-[#4B5563] hidden md:inline">
+  <!-- 4. 하단 고정 내보내기 및 문서화 바 -->
+  <footer class="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-[#CBD5E1] no-print">
+    <div class="max-w-[1060px] mx-auto px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      <span class="text-sm text-[#475569] hidden md:inline">
         실습 완료 후 마크다운(.md) 파일로 다운로드하여 노션 강의 노트에 보관하세요.
       </span>
       <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
-        <button type="button" onclick="copyAIPrompt()" class="px-4 py-2 text-sm font-bold text-[#111827] bg-white border border-[#D1D5DB] rounded-[4px] hover:bg-[#F8FAFC] cursor-pointer">
-          AI 리뷰용 프롬프트 복사
+        <button type="button" onclick="copyAIPrompt()" class="px-4 py-2 text-sm font-bold text-[#1E293B] bg-white border border-[#CBD5E1] rounded-[2px] hover:bg-[#F8FAFC] cursor-pointer">
+          AI 리뷰 프롬프트 복사
         </button>
-        <button type="button" onclick="window.print()" class="px-4 py-2 text-sm font-bold text-[#111827] bg-white border border-[#D1D5DB] rounded-[4px] hover:bg-[#F8FAFC] cursor-pointer">
+        <button type="button" onclick="window.print()" class="px-4 py-2 text-sm font-bold text-[#1E293B] bg-white border border-[#CBD5E1] rounded-[2px] hover:bg-[#F8FAFC] cursor-pointer">
           인쇄 / PDF 저장
         </button>
-        <button type="button" onclick="downloadMarkdown()" class="px-4 py-2 text-sm font-bold text-white bg-[#0052CC] hover:bg-[#003E99] rounded-[4px] cursor-pointer">
+        <button type="button" onclick="downloadMarkdown()" class="px-4 py-2 text-sm font-bold text-white bg-[#0052CC] hover:bg-[#003E99] rounded-[2px] cursor-pointer">
           마크다운(.md) 다운로드
         </button>
       </div>
@@ -405,22 +542,22 @@
   </footer>
 
   <!-- 알림 토스트 -->
-  <div id="toast" class="fixed bottom-20 right-6 z-50 hidden bg-[#111827] text-white text-sm font-medium px-4 py-3 rounded-[4px]">
+  <div id="toast" class="fixed bottom-20 right-6 z-50 hidden bg-[#1E293B] text-white text-sm font-medium px-4 py-3 border border-[#0F172A]">
     메시지
   </div>
 
-  <!-- 초기화 확인 모달 (브라우저 confirm() 미사용) -->
+  <!-- 초기화 확인 모달 -->
   <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4 no-print">
-    <div class="bg-white border border-[#E5E7EB] rounded-[4px] max-w-md w-full p-6 space-y-4">
+    <div class="bg-white border border-[#1E293B] max-w-md w-full p-6 space-y-4">
       <h3 class="text-lg font-bold text-[#111827]">작성 내용을 모두 초기화할까요?</h3>
-      <p class="text-sm text-[#4B5563]">
-        입력한 테이블 설계, 예시 데이터, Workbench 체크리스트, 질문 답변이 삭제되며 초기 상태로 돌아갑니다.
+      <p class="text-sm text-[#475569]">
+        입력한 업무 분석 메모, 테이블 설계, 예시 데이터, Workbench 체크리스트, 점검 답변이 모두 삭제됩니다.
       </p>
       <div class="flex justify-end gap-2.5 pt-2">
-        <button type="button" onclick="closeResetModal()" class="px-4 py-2 text-sm font-bold text-[#374151] border border-[#D1D5DB] rounded-[4px] hover:bg-[#F8FAFC] cursor-pointer">
+        <button type="button" onclick="closeResetModal()" class="px-4 py-2 text-sm font-bold text-[#334155] border border-[#CBD5E1] rounded-[2px] hover:bg-[#F8FAFC] cursor-pointer">
           취소
         </button>
-        <button type="button" onclick="confirmReset()" class="px-4 py-2 text-sm font-bold text-white bg-[#DC2626] hover:bg-[#B91C1C] rounded-[4px] cursor-pointer">
+        <button type="button" onclick="confirmReset()" class="px-4 py-2 text-sm font-bold text-white bg-[#DC2626] hover:bg-[#B91C1C] rounded-[2px] cursor-pointer">
           초기화 실행
         </button>
       </div>
@@ -428,13 +565,14 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'ai_rehab_db_modeling_worksheet_v2';
+    const STORAGE_KEY = 'rehab_sql_ch02_v3';
 
-    // 초기 기본 데이터 상태
     function getDefaultState() {
       return {
         studentName: '',
         workDate: new Date().toISOString().split('T')[0],
+        entityChecks: [false, false, false],
+        entityNotes: ['', '', ''],
         wbChecks: [false, false, false, false],
         q1Answer: '',
         q2Answer: '',
@@ -444,30 +582,27 @@
             title: '테이블 1. 환자 (patient)',
             subtitle: '센터에 등록된 환자의 인적 사항과 주요 재활 부위를 저장합니다.',
             columns: [
-              { name: '환자_아이디', type: '문자 (VARCHAR)', isPk: true, pkReason: '동명이인을 구분하고 비어 있을 수 없는 고유 식별값' },
-              { name: '', type: '', isPk: false, pkReason: '' },
-              { name: '', type: '', isPk: false, pkReason: '' },
+              { name: 'patient_id', type: '문자', isPk: true, pkReason: '동명이인을 구분하고 비어 있을 수 없는 환자 고유 식별자' },
               { name: '', type: '', isPk: false, pkReason: '' },
               { name: '', type: '', isPk: false, pkReason: '' }
             ],
             rows: [
-              ['patient_01', '', '', '', ''],
-              ['patient_02', '', '', '', '']
+              ['P001', '', ''],
+              ['P002', '', '']
             ]
           },
           {
             id: 'rehab_exercise',
             title: '테이블 2. 재활운동 (rehab_exercise)',
-            subtitle: '시스템에서 제공하는 재활 운동 종목과 타겟 부위, 난이도를 저장합니다.',
+            subtitle: '서비스에서 제공하는 재활 운동 종목과 타겟 부위, 난이도를 저장합니다.',
             columns: [
-              { name: '', type: '', isPk: false, pkReason: '' },
               { name: '', type: '', isPk: false, pkReason: '' },
               { name: '', type: '', isPk: false, pkReason: '' },
               { name: '', type: '', isPk: false, pkReason: '' }
             ],
             rows: [
-              ['', '', '', ''],
-              ['', '', '', '']
+              ['', '', ''],
+              ['', '', '']
             ]
           },
           {
@@ -477,14 +612,11 @@
             columns: [
               { name: '', type: '', isPk: false, pkReason: '' },
               { name: '', type: '', isPk: false, pkReason: '' },
-              { name: '', type: '', isPk: false, pkReason: '' },
-              { name: '', type: '', isPk: false, pkReason: '' },
-              { name: '', type: '', isPk: false, pkReason: '' },
               { name: '', type: '', isPk: false, pkReason: '' }
             ],
             rows: [
-              ['', '', '', '', '', ''],
-              ['', '', '', '', '', '']
+              ['', '', ''],
+              ['', '', '']
             ]
           }
         ]
@@ -498,9 +630,9 @@
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (!Array.isArray(parsed.wbChecks) || parsed.wbChecks.length !== 4) {
-            parsed.wbChecks = [false, false, false, false];
-          }
+          if (!Array.isArray(parsed.entityChecks)) parsed.entityChecks = [false, false, false];
+          if (!Array.isArray(parsed.entityNotes)) parsed.entityNotes = ['', '', ''];
+          if (!Array.isArray(parsed.wbChecks)) parsed.wbChecks = [false, false, false, false];
           return parsed;
         }
       } catch (err) {
@@ -522,7 +654,6 @@
       }
     }
 
-    // 메타 정보 및 체크리스트 초기화
     function initStaticInputs() {
       const studentInput = document.getElementById('meta-student');
       const dateInput = document.getElementById('meta-date');
@@ -538,6 +669,26 @@
       dateInput.addEventListener('change', (e) => { state.workDate = e.target.value; saveState(); });
       q1Input.addEventListener('input', (e) => { state.q1Answer = e.target.value; saveState(); });
       q2Input.addEventListener('input', (e) => { state.q2Answer = e.target.value; saveState(); });
+
+      // STEP 01 엔티티 체크박스 및 메모 바인딩
+      for (let i = 0; i < 3; i++) {
+        const chk = document.getElementById(`entity-chk-${i}`);
+        const note = document.getElementById(`entity-note-${i}`);
+        if (chk) {
+          chk.checked = !!state.entityChecks[i];
+          chk.addEventListener('change', (e) => {
+            state.entityChecks[i] = e.target.checked;
+            saveState();
+          });
+        }
+        if (note) {
+          note.value = state.entityNotes[i] || '';
+          note.addEventListener('input', (e) => {
+            state.entityNotes[i] = e.target.value;
+            saveState();
+          });
+        }
+      }
 
       // STEP 04 Workbench 체크박스 바인딩
       const wbCheckboxes = document.querySelectorAll('.wb-checkbox');
@@ -557,42 +708,42 @@
       document.getElementById('wb-progress-text').textContent = `${doneCount} / 4 완료`;
     }
 
-    // STEP 02: 논리적 테이블 설계 UI 렌더링
+    // STEP 02: 논리적 표 설계 렌더링
     function renderSchemaBuilder() {
       const container = document.getElementById('schema-builder-container');
       container.innerHTML = '';
 
       state.tables.forEach((table, tIdx) => {
         const wrapper = document.createElement('div');
-        wrapper.className = 'border border-[#E5E7EB] rounded-[4px] overflow-hidden';
+        wrapper.className = 'border border-[#CBD5E1] overflow-hidden';
 
         const rowsHtml = table.columns.map((col, cIdx) => {
-          const rowBg = col.isPk ? 'bg-[#F8FAFC]' : 'bg-white';
+          const rowBg = col.isPk ? 'bg-[#EFF6FF]/60' : 'bg-white';
           const reasonDisabled = col.isPk ? '' : 'disabled';
           const reasonClass = col.isPk
-            ? 'bg-white text-[#111827] border-[#D1D5DB]'
-            : 'bg-[#F8FAFC] text-[#9CA3AF] border-[#E5E7EB] cursor-not-allowed';
+            ? 'bg-white text-[#111827] border-[#CBD5E1]'
+            : 'bg-[#F8FAFC] text-[#94A3B8] border-[#E2E8F0] cursor-not-allowed';
           const reasonPlaceholder = col.isPk
-            ? '예: 중복 불가 및 빈칸 불가 조건을 만족하는 고유 식별자'
-            : 'PK 체크 시 입력 가능';
+            ? '예: 중복 불가 및 빈칸 불가 조건을 만족하는 고유 식별값'
+            : 'PK 체크 시 활성화';
 
           return `
-            <tr class="${rowBg} border-b border-[#E5E7EB] last:border-b-0">
-              <td class="px-3 py-2.5 text-center font-mono text-sm text-[#6B7280] tabular-nums w-12">${cIdx + 1}</td>
+            <tr class="${rowBg} border-b border-[#E2E8F0] last:border-b-0">
+              <td class="px-3 py-2.5 text-center font-mono text-sm text-[#64748B] tabular-nums w-12">${cIdx + 1}</td>
               <td class="px-3 py-2.5 w-52">
                 <input type="text"
                   value="${escapeHtml(col.name)}"
                   placeholder="열 이름 입력"
                   oninput="handleColumnChange(${tIdx}, ${cIdx}, 'name', this.value)"
-                  class="w-full px-3 py-1.5 text-[0.95rem] font-medium border border-[#D1D5DB] rounded-[4px] bg-white" />
+                  class="w-full px-3 py-1.5 text-[0.95rem] font-medium border border-[#CBD5E1] rounded-[2px] bg-white" />
               </td>
-              <td class="px-3 py-2.5 w-52">
+              <td class="px-3 py-2.5 w-44">
                 <select onchange="handleColumnChange(${tIdx}, ${cIdx}, 'type', this.value)"
-                  class="w-full px-2.5 py-1.5 text-[0.95rem] border border-[#D1D5DB] rounded-[4px] bg-white">
-                  <option value="" ${col.type === '' ? 'selected' : ''}>데이터 형식 선택</option>
-                  <option value="문자 (VARCHAR)" ${col.type === '문자 (VARCHAR)' ? 'selected' : ''}>문자 (VARCHAR)</option>
-                  <option value="숫자 (INT/FLOAT)" ${col.type === '숫자 (INT/FLOAT)' ? 'selected' : ''}>숫자 (INT/FLOAT)</option>
-                  <option value="날짜 (DATE/DATETIME)" ${col.type === '날짜 (DATE/DATETIME)' ? 'selected' : ''}>날짜 (DATE/DATETIME)</option>
+                  class="w-full px-2.5 py-1.5 text-[0.95rem] border border-[#CBD5E1] rounded-[2px] bg-white">
+                  <option value="" ${col.type === '' ? 'selected' : ''}>형식 선택</option>
+                  <option value="문자" ${col.type === '문자' ? 'selected' : ''}>문자</option>
+                  <option value="숫자" ${col.type === '숫자' ? 'selected' : ''}>숫자</option>
+                  <option value="날짜" ${col.type === '날짜' ? 'selected' : ''}>날짜</option>
                 </select>
               </td>
               <td class="px-3 py-2.5 w-24 text-center">
@@ -600,8 +751,8 @@
                   <input type="checkbox"
                     ${col.isPk ? 'checked' : ''}
                     onchange="handleColumnChange(${tIdx}, ${cIdx}, 'isPk', this.checked)"
-                    class="w-4 h-4 border-[#D1D5DB] rounded-[4px] text-[#0052CC]" />
-                  <span class="font-mono text-sm font-bold ${col.isPk ? 'text-[#0052CC]' : 'text-[#6B7280]'}">PK</span>
+                    class="w-4 h-4 border-[#94A3B8] text-[#0052CC]" />
+                  <span class="font-mono text-sm font-bold ${col.isPk ? 'text-[#0052CC]' : 'text-[#64748B]'}">PK</span>
                 </label>
               </td>
               <td class="px-3 py-2.5">
@@ -610,11 +761,11 @@
                   placeholder="${reasonPlaceholder}"
                   ${reasonDisabled}
                   oninput="handleColumnChange(${tIdx}, ${cIdx}, 'pkReason', this.value)"
-                  class="w-full px-3 py-1.5 text-[0.95rem] border rounded-[4px] ${reasonClass}" />
+                  class="w-full px-3 py-1.5 text-[0.95rem] border rounded-[2px] ${reasonClass}" />
               </td>
               <td class="px-2 py-2.5 w-11 text-center no-print">
                 ${table.columns.length > 1 ? `
-                  <button type="button" onclick="removeColumn(${tIdx}, ${cIdx})" title="열 삭제" class="text-[#9CA3AF] hover:text-[#DC2626] text-sm px-2 py-1 cursor-pointer">
+                  <button type="button" onclick="removeColumn(${tIdx}, ${cIdx})" title="열 삭제" class="text-[#94A3B8] hover:text-[#DC2626] text-sm px-2 py-1 cursor-pointer">
                     ✕
                   </button>
                 ` : ''}
@@ -624,22 +775,22 @@
         }).join('');
 
         wrapper.innerHTML = `
-          <div class="bg-[#F8FAFC] px-5 py-3.5 border-b border-[#E5E7EB] flex flex-wrap items-center justify-between gap-2">
+          <div class="bg-[#F8FAFC] px-5 py-3.5 border-b border-[#CBD5E1] flex flex-wrap items-center justify-between gap-2">
             <div>
               <h3 class="font-bold text-[#111827]">${table.title}</h3>
-              <p class="text-sm text-[#4B5563]">${table.subtitle}</p>
+              <p class="text-sm text-[#475569]">${table.subtitle}</p>
             </div>
-            <button type="button" onclick="addColumn(${tIdx})" class="no-print text-sm font-bold text-[#0052CC] bg-white border border-[#D1D5DB] hover:bg-[#F8FAFC] px-3.5 py-1.5 rounded-[4px] cursor-pointer">
-              + 열(Column) 추가
+            <button type="button" onclick="addColumn(${tIdx})" class="no-print text-sm font-bold text-[#0052CC] bg-white border border-[#CBD5E1] hover:bg-[#EFF6FF] px-3.5 py-1.5 rounded-[2px] cursor-pointer">
+              + 열 추가
             </button>
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse min-w-[720px]">
+            <table class="w-full text-left border-collapse min-w-[700px]">
               <thead>
-                <tr class="border-b border-[#E5E7EB] bg-white text-xs font-bold uppercase tracking-wider text-[#6B7280]">
+                <tr class="border-b border-[#CBD5E1] bg-white text-xs font-bold uppercase tracking-wider text-[#475569]">
                   <th class="px-3 py-3 text-center w-12">#</th>
                   <th class="px-3 py-3 w-52">열 이름 (Column)</th>
-                  <th class="px-3 py-3 w-52">데이터 형식</th>
+                  <th class="px-3 py-3 w-44">데이터 형식</th>
                   <th class="px-3 py-3 text-center w-24">기본 키</th>
                   <th class="px-3 py-3">PK 선정 이유 (기본 키 체크 시 작성)</th>
                   <th class="px-2 py-3 w-11 no-print"></th>
@@ -656,23 +807,22 @@
       });
     }
 
-    // STEP 03: 실시간 동기화 예시 데이터 테이블 렌더링
+    // STEP 03: 예시 데이터 검증 테이블 렌더링
     function renderSampleDataTables() {
       const container = document.getElementById('sample-data-container');
       container.innerHTML = '';
 
       state.tables.forEach((table, tIdx) => {
         const wrapper = document.createElement('div');
-        wrapper.className = 'border border-[#E5E7EB] rounded-[4px] overflow-hidden';
+        wrapper.className = 'border border-[#CBD5E1] overflow-hidden';
 
         const headersHtml = table.columns.map((col, cIdx) => {
           const nameText = col.name.trim() ? escapeHtml(col.name.trim()) : `(열 ${cIdx + 1} 미입력)`;
-          const shortType = col.type ? col.type.split(' ')[0] : '';
-          const typeText = shortType ? `<span class="text-xs font-normal text-[#6B7280] ml-1">[${shortType}]</span>` : '';
+          const typeText = col.type ? `<span class="text-xs font-normal text-[#64748B] ml-1">[${col.type}]</span>` : '';
           const pkText = col.isPk ? `<span class="font-mono text-xs font-bold text-[#0052CC] ml-1">[PK]</span>` : '';
 
           return `
-            <th class="px-3 py-3 text-sm font-bold text-[#111827] border-r border-[#E5E7EB] last:border-r-0 whitespace-nowrap">
+            <th class="px-3 py-3 text-sm font-bold text-[#111827] border-r border-[#CBD5E1] last:border-r-0 whitespace-nowrap">
               ${nameText}${typeText}${pkText}
             </th>
           `;
@@ -682,27 +832,27 @@
           const cellsHtml = table.columns.map((col, cIdx) => {
             const val = rowArr[cIdx] !== undefined ? rowArr[cIdx] : '';
             let ph = '예시 값';
-            if (col.type.startsWith('날짜')) ph = 'YYYY-MM-DD';
-            else if (col.type.startsWith('숫자')) ph = '숫자 입력';
+            if (col.type === '날짜') ph = 'YYYY-MM-DD';
+            else if (col.type === '숫자') ph = '숫자 입력';
 
             return `
-              <td class="p-2 border-r border-[#E5E7EB] last:border-r-0">
+              <td class="p-2 border-r border-[#E2E8F0] last:border-r-0">
                 <input type="text"
                   value="${escapeHtml(val)}"
                   placeholder="${ph}"
                   oninput="handleSampleCellChange(${tIdx}, ${rIdx}, ${cIdx}, this.value)"
-                  class="w-full px-2.5 py-1.5 text-[0.95rem] border border-[#D1D5DB] rounded-[4px] bg-white" />
+                  class="w-full px-2.5 py-1.5 text-[0.95rem] border border-[#CBD5E1] rounded-[2px] bg-white" />
               </td>
             `;
           }).join('');
 
           return `
-            <tr class="border-b border-[#E5E7EB] last:border-b-0">
-              <td class="px-2 py-2 text-center font-mono text-xs text-[#6B7280] border-r border-[#E5E7EB] w-16 tabular-nums">ROW ${rIdx + 1}</td>
+            <tr class="border-b border-[#E2E8F0] last:border-b-0">
+              <td class="px-2 py-2 text-center font-mono text-xs text-[#64748B] border-r border-[#E2E8F0] w-16 tabular-nums">ROW ${rIdx + 1}</td>
               ${cellsHtml}
               <td class="px-2 py-2 text-center w-11 no-print">
                 ${table.rows.length > 1 ? `
-                  <button type="button" onclick="removeSampleRow(${tIdx}, ${rIdx})" title="행 삭제" class="text-[#9CA3AF] hover:text-[#DC2626] text-sm px-1.5 cursor-pointer">
+                  <button type="button" onclick="removeSampleRow(${tIdx}, ${rIdx})" title="행 삭제" class="text-[#94A3B8] hover:text-[#DC2626] text-sm px-1.5 cursor-pointer">
                     ✕
                   </button>
                 ` : ''}
@@ -712,17 +862,17 @@
         }).join('');
 
         wrapper.innerHTML = `
-          <div class="bg-[#F8FAFC] px-5 py-3 border-b border-[#E5E7EB] flex flex-wrap items-center justify-between gap-2">
+          <div class="bg-[#F8FAFC] px-5 py-3 border-b border-[#CBD5E1] flex flex-wrap items-center justify-between gap-2">
             <div class="font-bold text-[#111827]">${table.title} — 예시 데이터</div>
-            <button type="button" onclick="addSampleRow(${tIdx})" class="no-print text-sm font-bold text-[#374151] bg-white border border-[#D1D5DB] hover:bg-[#F8FAFC] px-3 py-1 rounded-[4px] cursor-pointer">
-              + 예시 행 추가
+            <button type="button" onclick="addSampleRow(${tIdx})" class="no-print text-sm font-bold text-[#1E293B] bg-white border border-[#CBD5E1] hover:bg-[#EFF6FF] px-3 py-1 rounded-[2px] cursor-pointer">
+              + 행 추가
             </button>
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse min-w-[720px]">
+            <table class="w-full text-left border-collapse min-w-[700px]">
               <thead>
-                <tr class="border-b border-[#E5E7EB] bg-white">
-                  <th class="px-2 py-3 text-center font-mono text-xs font-bold text-[#6B7280] border-r border-[#E5E7EB] w-16">구분</th>
+                <tr class="border-b border-[#CBD5E1] bg-white">
+                  <th class="px-2 py-3 text-center font-mono text-xs font-bold text-[#64748B] border-r border-[#CBD5E1] w-16">구분</th>
                   ${headersHtml}
                   <th class="w-11 no-print"></th>
                 </tr>
@@ -738,7 +888,6 @@
       });
     }
 
-    // 스키마 및 예시 행 변경 핸들러
     function handleColumnChange(tIdx, cIdx, field, value) {
       state.tables[tIdx].columns[cIdx][field] = value;
       if (field === 'isPk' && !value) {
@@ -748,7 +897,6 @@
       if (field === 'isPk') {
         renderSchemaBuilder();
       }
-      // STEP 03 머리글 즉시 동기화
       renderSampleDataTables();
     }
 
@@ -786,18 +934,31 @@
       renderSampleDataTables();
     }
 
-    // 마크다운(.md) 내보내기 문서 생성
+    // 마크다운(.md) 결과서 생성
     function buildMarkdownReport() {
       const author = state.studentName.trim() || '미입력';
       const date = state.workDate || '';
 
       let md = `# AI 홈 재활 서비스 데이터베이스 모델링 실습 결과서\n\n`;
-      md += `- **교육 과정:** 디지털 재활 헬스케어 AI 개발자 양성 과정\n`;
+      md += `- **교육 과정:** 디지털 재활 헬스케어 AI 개발자 양성 과정 (CH 02)\n`;
       md += `- **작성자:** ${author}\n`;
       md += `- **실습 일자:** ${date}\n\n`;
       md += `---\n\n`;
 
-      md += `## 1. 논리적 테이블 및 열(Column) 설계\n\n`;
+      md += `## STEP 01. 업무 분석 및 관리 대상 테이블 도출\n\n`;
+      const entityTitles = [
+        '환자 (`patient`)',
+        '재활운동 (`rehab_exercise`)',
+        '운동기록 (`exercise_log`)'
+      ];
+      entityTitles.forEach((title, idx) => {
+        const mark = state.entityChecks[idx] ? 'x' : ' ';
+        const note = (state.entityNotes[idx] || '').trim() || '메모 없음';
+        md += `- [${mark}] **${title}**: ${note}\n`;
+      });
+      md += `\n---\n\n`;
+
+      md += `## STEP 02 & 03. 논리적 테이블 설계 및 예시 데이터 검증\n\n`;
       state.tables.forEach((table) => {
         md += `### ${table.title}\n\n`;
         md += `| 열 이름 (Column) | 데이터 형식 | 기본 키(PK) | PK 선정 이유 |\n`;
@@ -822,12 +983,12 @@
       });
 
       md += `---\n\n`;
-      md += `## 2. MySQL Workbench EER 다이어그램 실습 체크리스트\n\n`;
+      md += `## STEP 04. MySQL Workbench EER 다이어그램 실습 체크리스트\n\n`;
       const wbLabels = [
-        '새 모델(New Model) 및 EER 다이어그램 캔버스 열기',
-        '3개 테이블 생성 및 컬럼 · 데이터 타입 매핑 (VARCHAR, INT, FLOAT, DATETIME)',
-        '기본 키(PK) 및 필수 입력(NN) 제약조건 설정',
-        '1:N 관계선 연결로 외래 키(FK) 자동 생성 확인'
+        '새 모델 생성 및 EER 다이어그램 캔버스 열기',
+        '3개 테이블 객체 생성 및 영문 테이블명 지정 (patient, rehab_exercise, exercise_log)',
+        '물리 데이터 타입 매핑 및 PK · NN · AI 제약조건 체크',
+        '1:N 비식별 관계선 연결로 외래 키(FK) 자동 생성 확인'
       ];
       wbLabels.forEach((label, idx) => {
         const mark = state.wbChecks[idx] ? 'x' : ' ';
@@ -835,10 +996,10 @@
       });
       md += `\n---\n\n`;
 
-      md += `## 3. 설계 개념 점검 질문\n\n`;
-      md += `**Q1. [환자] 테이블에서 '환자 이름'을 기본 키(PK)로 지정하면 안 되는 이유는 무엇인가요?**\n`;
+      md += `## STEP 05. 설계 개념 점검 질문\n\n`;
+      md += `**Q1. \`환자\` 테이블에서 '환자 이름'을 기본 키(PK)로 지정하면 안 되는 이유는 무엇인가요?**\n`;
       md += `> ${state.q1Answer.trim() || '(작성된 답변 없음)'}\n\n`;
-      md += `**Q2. [운동기록] 테이블에 환자의 '이름'과 '생년월일'을 매번 다시 적지 않고 '환자_아이디'만 연결(FK)하면 어떤 장점이 있을까요?**\n`;
+      md += `**Q2. \`운동기록\` 테이블에 환자의 '이름'과 '생년월일'을 매번 중복해서 적지 않고 \`patient_id\`만 저장하는 장점은 무엇인가요?**\n`;
       md += `> ${state.q2Answer.trim() || '(작성된 답변 없음)'}\n`;
 
       return md;
@@ -864,7 +1025,7 @@
 
     function copyAIPrompt() {
       const report = buildMarkdownReport();
-      const prompt = `나는 '디지털 재활 헬스케어 AI 개발자 양성 과정'을 수강 중인 학생이야.\n아래는 내가 'AI 홈 재활 서비스'를 대상으로 작성한 데이터베이스 모델링 실습 결과야.\n\n[나의 설계 결과]\n${report}\n\n[요청 사항]\n1. 각 테이블의 기본 키(PK) 선정이 중복 불가 및 빈칸 불가 원칙에 맞는지 검토해 줘.\n2. MySQL Workbench에서 구축할 때 각 열의 데이터 타입(VARCHAR, INT, FLOAT, DATE, DATETIME 등)을 어떻게 지정하면 좋을지 조언해 줘.\n3. 향후 AI 모델로 환자의 재활 경과를 분석하기 위해 추가하면 좋을 컬럼이 있다면 입문자 눈높이에서 제안해 줘.`;
+      const prompt = `나는 '디지털 재활 헬스케어 AI 개발자 양성 과정'을 수강 중인 학생이야.\n아래는 내가 'AI 홈 재활 서비스'를 대상으로 작성한 데이터베이스 모델링 실습 결과야.\n\n[나의 설계 결과]\n${report}\n\n[요청 사항]\n1. 각 테이블의 기본 키(PK) 선정이 중복 불가 및 빈칸 불가 원칙에 맞는지 검토해 줘.\n2. MySQL Workbench에서 구축할 때 각 열의 물리 데이터 타입(VARCHAR, INT, FLOAT, DATE, DATETIME 등)과 외래 키(FK) 연결이 적절한지 피드백해 줘.\n3. 향후 AI 모델로 환자의 재활 경과를 예측·분석하기 위해 추가하면 좋을 컬럼이 있다면 입문자 눈높이에서 제안해 줘.`;
 
       const ta = document.createElement('textarea');
       ta.value = prompt;
@@ -874,7 +1035,7 @@
       ta.select();
       try {
         document.execCommand('copy');
-        showToast('AI 리뷰용 프롬프트가 클립보드에 복사되었습니다.');
+        showToast('AI 리뷰 프롬프트가 클립보드에 복사되었습니다.');
       } catch (err) {
         showToast('복사에 실패했습니다. 마크다운 다운로드를 이용해 주세요.');
       }
@@ -925,14 +1086,14 @@
         .replace(/'/g, '&#39;');
     }
 
-    // 스크롤 위치에 따른 상단 5단계 탭 활성화
+    // 스크롤 스파이: 현재 보고 있는 STEP 셀 강조
     function initScrollSpy() {
       const sectionIds = ['step-01', 'step-02', 'step-03', 'step-04', 'step-05'];
-      const tabs = document.querySelectorAll('.step-tab');
+      const tabs = document.querySelectorAll('.step-nav-cell');
 
       window.addEventListener('scroll', () => {
         let activeId = 'step-01';
-        const offset = window.scrollY + 160;
+        const offset = window.scrollY + 180;
 
         sectionIds.forEach((id) => {
           const sec = document.getElementById(id);

@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>데이터베이스와 SQL 실습 아카이브 | 디지털 재활 헬스케어 AI 개발자 양성 과정</title>
-  <!-- Tailwind CSS 로드 -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Noto Sans KR & Noto Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -26,12 +24,10 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 챕터 번호 및 시간 정렬을 위한 등폭 숫자 설정 */
     .tabular-nums {
       font-variant-numeric: tabular-nums;
     }
 
-    /* 활성화된 실습 링크 스타일: 장식 없이 선명한 코발트 블루와 밑줄만 사용 */
     .syllabus-link {
       color: #0052CC;
       font-weight: 700;
@@ -48,7 +44,6 @@
       text-underline-offset: 4px;
     }
 
-    /* 행 호버 시 미세한 배경 음영만 적용 */
     .syllabus-row {
       transition: background-color 0.12s ease;
     }
@@ -60,7 +55,6 @@
 </head>
 <body class="bg-white text-[#111827] min-h-screen flex flex-col">
 
-  <!-- 메인 컨테이너 (최대 폭 980px, 여백 중심 레이아웃) -->
   <div class="max-w-[980px] w-full mx-auto px-5 sm:px-8 pt-12 pb-16 flex-1">
 
     <!-- 상단 강의 헤더 -->
@@ -78,7 +72,6 @@
 
     <!-- 실라버스 인덱스 테이블 영역 -->
     <main class="mt-2">
-      <!-- 데스크톱 열 머리글 (모바일에서는 숨김) -->
       <div class="hidden sm:grid sm:grid-cols-12 gap-4 py-3.5 px-2 border-b border-[#E5E7EB] text-xs font-bold uppercase tracking-wider text-[#6B7280]">
         <div class="col-span-2">챕터</div>
         <div class="col-span-7">실습 주제 및 학습 내용</div>
@@ -86,12 +79,9 @@
         <div class="col-span-2 text-right">실습 링크</div>
       </div>
 
-      <!-- 실습 행 목록 (15~20개 이상 늘어나도 한눈에 스캔 가능한 1줄 행 구조) -->
       <div class="divide-y divide-[#E5E7EB] border-b border-[#E5E7EB]">
 
-<!-- =================================================================
-             [CH 02-1] 활성화된 실습 항목 1: 핵심 용어 스피드 퀴즈
-        ================================================================== -->
+        <!-- [CH 02-1] 1. 핵심 용어 스피드 퀴즈 -->
         <div class="syllabus-row is-active py-5 px-2 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-4 items-baseline">
           <div class="sm:col-span-2 font-mono text-sm font-bold text-[#0052CC] tabular-nums">
             CH 02-1
@@ -115,9 +105,7 @@
           </div>
         </div>
 
-        <!-- =================================================================
-             [CH 02-1] 활성화된 실습 항목 2: DB 모델링 실습
-        ================================================================== -->
+        <!-- [CH 02-1] 2. AI 홈 재활 서비스 데이터베이스 모델링 실습 -->
         <div class="syllabus-row is-active py-5 px-2 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-4 items-baseline">
           <div class="sm:col-span-2 font-mono text-sm font-bold text-[#0052CC] tabular-nums">
             CH 02-1
@@ -141,15 +129,53 @@
           </div>
         </div>
 
-        <!-- =================================================================
-             [강사용 새 챕터 추가 및 활성화 안내]
-             추후 새로운 실습 폴더(예: ch03-select/index.html)를 업로드한 후:
-             1. 아래 예정 항목 블록(<div class="syllabus-row ...">...</div>)을 복사하거나 수정합니다.
-             2. 바깥 div에 'is-active' 클래스를 추가합니다.
-             3. 챕터 번호 색상을 'text-[#9CA3AF]'에서 'text-[#0052CC]'로 변경합니다.
-             4. 제목 <span>을 <a href="./폴더명/" class="text-lg font-bold text-[#111827] hover:text-[#0052CC] transition-colors">제목</a>으로 변경합니다.
-             5. 우측 '준비 중' <span>을 <a href="./폴더명/" class="syllabus-link text-base"><span>실습 시작</span><span aria-hidden="true">&rarr;</span></a>으로 교체합니다.
-        ================================================================== -->
+        <!-- [CH 02-2] 1. 실전 용어 & 데이터 형식 스피드 퀴즈 -->
+        <div class="syllabus-row is-active py-5 px-2 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-4 items-baseline">
+          <div class="sm:col-span-2 font-mono text-sm font-bold text-[#0052CC] tabular-nums">
+            CH 02-2
+          </div>
+          <div class="sm:col-span-7">
+            <a href="./ch02-2-quiz/" class="text-lg font-bold text-[#111827] hover:text-[#0052CC] transition-colors">
+              1. 실전 용어 & 데이터 형식 스피드 퀴즈
+            </a>
+            <p class="text-[0.95rem] text-[#4B5563] mt-1">
+              스키마, 문자형(CHAR), 정수형(INT), NN, Null과 CRUD 핵심 SQL 명령어 12문항을 2열 한 화면에서 빠르게 복습합니다.
+            </p>
+          </div>
+          <div class="sm:col-span-1 text-sm text-[#4B5563] sm:text-right tabular-nums mt-1 sm:mt-0 whitespace-nowrap">
+            약 10분
+          </div>
+          <div class="sm:col-span-2 sm:text-right mt-2 sm:mt-0">
+            <a href="./ch02-2-quiz/" class="syllabus-link text-base">
+              <span>퀴즈 시작</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- [CH 02-2] 2. SQL 에러 5대장 트러블슈팅 실습 -->
+        <div class="syllabus-row is-active py-5 px-2 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-4 items-baseline">
+          <div class="sm:col-span-2 font-mono text-sm font-bold text-[#0052CC] tabular-nums">
+            CH 02-2
+          </div>
+          <div class="sm:col-span-7">
+            <a href="./ch02-2-debug/" class="text-lg font-bold text-[#111827] hover:text-[#0052CC] transition-colors">
+              2. SQL 에러 5대장 트러블슈팅 실습
+            </a>
+            <p class="text-[0.95rem] text-[#4B5563] mt-1">
+              DB 미선택, CHAR 길이 초과, INT 형식 불일치, PK 중복, 세미콜론 누락 등 대표 에러 5가지를 직접 일으키고 해결합니다.
+            </p>
+          </div>
+          <div class="sm:col-span-1 text-sm text-[#4B5563] sm:text-right tabular-nums mt-1 sm:mt-0 whitespace-nowrap">
+            약 20분
+          </div>
+          <div class="sm:col-span-2 sm:text-right mt-2 sm:mt-0">
+            <a href="./ch02-2-debug/" class="syllabus-link text-base">
+              <span>실습 시작</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </div>
 
         <!-- [CH 03] 예정 항목 -->
         <div class="syllabus-row py-5 px-2 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-4 items-baseline">
@@ -217,7 +243,6 @@
       </div>
     </main>
 
-    <!-- 하단 미니멀 안내 푸터 -->
     <footer class="mt-10 text-sm text-[#6B7280]">
       모든 실습 워크시트는 브라우저에 자동 저장되며, 작성 완료 후 마크다운(.md) 문서로 다운로드하여 노션에 보관할 수 있습니다.
     </footer>

@@ -403,14 +403,13 @@
     <script>
       const missions = [
         {
-          id: 1,
-          tag: '열 선택 · 별칭 · 주석',
-          title: '미션 1. 필요한 열만 골라 한글 별칭(Alias)으로 출력하기',
-          desc: '회원(member) 테이블에서 모든 열(*) 대신 <strong>이름(mem_name), 주소(addr), 키(height)</strong>만 조회하되, 결과 컬럼명이 각각 <strong>"회원명", "거주지", "신장"</strong>으로 출력되도록 작성하세요. 쿼리 첫 줄에는 <code>-- 미션 1</code> 주석을 함께 적습니다.',
-          hint: '열 이름 뒤에 한 칸 띄우거나 AS 키워드를 붙여 별칭을 지정합니다. 공백이 없는 한글 별칭은 따옴표 없이 써도 되며, 공백이 있을 때는 큰따옴표(" ")로 감쌉니다.',
-          solution:
-            '-- 미션 1: 회원 이름, 주소, 키 조회\nUSE market_db;\nSELECT mem_name AS "회원명", addr AS "거주지", height AS "신장"\nFROM member;',
-        },
+        id: 1,
+        tag: "열 선택 · 별칭 · 주석",
+        title: "미션 1. 필요한 열만 골라 한글 별칭(Alias)으로 출력하기",
+        desc: "회원(member) 테이블에서 모든 열(*) 대신 <strong>이름(mem_name), 주소(addr), 키(height)</strong>만 조회하되, 결과 컬럼명이 각각 <strong>\"회원명\", \"거주지\", \"신장\"</strong>으로 출력되도록 작성하세요. 쿼리 첫 줄에는 <code>-- 미션 1</code> 주석을 함께 적습니다.",
+        hint: "열 이름 뒤에 한 칸 띄우고 별칭을 바로 적습니다. 별칭에 공백이 있을 때는 큰따옴표(\" \")로 감싸야 합니다.",
+        solution: "-- 미션 1: 회원 이름, 주소, 키 조회\nUSE market_db;\nSELECT mem_name 회원명, addr 거주지, height 신장\nFROM member;"
+      },
         {
           id: 2,
           tag: '관계 & 논리 연산자',

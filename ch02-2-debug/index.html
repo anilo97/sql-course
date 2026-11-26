@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CH 02-2 SQL 에러 5대장 트러블슈팅 실습</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-page: #ffffff;
+        --bg-subtle: #f8fafc;
+        --bg-code: #0f172a;
+        --text-main: #0f172a;
+        --text-sub: #334155;
+        --text-muted: #64748b;
+        --border-light: #cbd5e1;
+        --border-dark: #1e293b;
+        --primary: #1d4ed8;
+        --primary-hover: #1e40af;
+        --danger: #dc2626;
+        --danger-bg: #fef2f2;
+        --success: #15803d;
+        --success-bg: #f0fdf4;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          'Noto Sans KR',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        font-size: 17px;
+        line-height: 1.65;
+        color: var(--text-main);
+        background-color: var(--bg-page);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background-color: #ffffff;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .nav-inner {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .back-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14.5px;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .chapter-badge {
+        background-color: #dbeafe;
+        color: var(--primary);
+        font-family: 'Consolas', monospace;
+        font-size: 13.5px;
+        font-weight: 700;
+        padding: 2px 8px;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .save-status {
+        font-size: 13.5px;
+        color: var(--text-muted);
+      }
+
+      .btn {
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        padding: 8px 16px;
+        border: 1px solid var(--border-dark);
+        background-color: #ffffff;
+        color: var(--text-main);
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background-color: #f1f5f9;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: #ffffff;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .page-container {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 32px 24px 80px;
+      }
+
+      .doc-header {
+        margin-bottom: 28px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--border-dark);
+      }
+
+      .doc-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: -0.02em;
+      }
+
+      .help-callout {
+        background-color: var(--bg-subtle);
+        border: 1px solid var(--border-light);
+        border-left: 4px solid var(--primary);
+        padding: 14px 18px;
+        font-size: 15.5px;
+        color: var(--text-sub);
+      }
+
+      .meta-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      @media (max-width: 640px) {
+        .meta-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .field-group label {
+        display: block;
+        font-size: 14.5px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: var(--text-sub);
+      }
+
+      input[type='text'],
+      textarea {
+        width: 100%;
+        font-family: inherit;
+        font-size: 16px;
+        padding: 10px 12px;
+        border: 1px solid var(--border-light);
+        color: var(--text-main);
+        background-color: #ffffff;
+      }
+
+      input[type='text']:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      /* Mission Card */
+      .mission-block {
+        border: 1px solid var(--border-light);
+        border-top: 3px solid var(--border-dark);
+        margin-bottom: 28px;
+        background-color: #ffffff;
+      }
+
+      .mission-header {
+        padding: 14px 20px;
+        background-color: var(--bg-subtle);
+        border-bottom: 1px solid var(--border-light);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .mission-title {
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .check-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--success);
+        cursor: pointer;
+      }
+
+      .check-label input[type='checkbox'] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--success);
+      }
+
+      .mission-body {
+        padding: 20px;
+      }
+
+      .step-desc {
+        margin-bottom: 14px;
+        color: var(--text-sub);
+        font-size: 16px;
+      }
+
+      .code-box {
+        background-color: var(--bg-code);
+        color: #f8fafc;
+        padding: 14px 16px;
+        font-family: 'Consolas', monospace;
+        font-size: 15px;
+        line-height: 1.55;
+        margin-bottom: 16px;
+        position: relative;
+        overflow-x: auto;
+      }
+
+      .btn-copy {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 12.5px;
+        font-weight: 600;
+        padding: 4px 10px;
+        background-color: #334155;
+        color: #ffffff;
+        border: 1px solid #475569;
+        cursor: pointer;
+      }
+
+      .btn-copy:hover {
+        background-color: #475569;
+      }
+
+      .answer-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      @media (max-width: 720px) {
+        .answer-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .hint-toggle {
+        margin-top: 12px;
+        font-size: 14.5px;
+        color: var(--primary);
+        background: none;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      .hint-box {
+        display: none;
+        margin-top: 10px;
+        padding: 12px 14px;
+        background-color: var(--success-bg);
+        border: 1px solid #bbf7d0;
+        font-size: 15px;
+        color: var(--text-main);
+      }
+
+      .hint-box.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div class="nav-inner">
+        <div class="nav-left">
+          <a href="../index.html" class="back-link"
+            >&larr; 실습 아카이브 목록</a
+          >
+          <span class="chapter-badge">CH 02-2</span>
+        </div>
+        <div class="nav-actions">
+          <span class="save-status" id="saveStatus">브라우저 자동 저장됨</span>
+          <button type="button" class="btn" onclick="resetWorksheet()">
+            초기화
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="downloadMarkdown()"
+          >
+            마크다운(.md) 다운로드
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="page-container">
+      <header class="doc-header">
+        <h1 class="doc-title">2. SQL 에러 5대장 트러블슈팅 실습</h1>
+        <div class="help-callout">
+          초보자가 MySQL Workbench에서 가장 자주 만나는
+          <strong>5가지 대표 에러</strong>를 일부러 발생시켜 보고, 하단 Output
+          창에 뜨는 에러 메시지와 해결 방법을 직접 기록해 봅니다. (기존
+          <code>shop_db</code>의 <code>member</code>,
+          <code>product</code> 테이블을 그대로 사용합니다.)
+        </div>
+      </header>
+
+      <div class="meta-row">
+        <div class="field-group">
+          <label for="studentName">교육생 성명</label>
+          <input
+            type="text"
+            id="studentName"
+            placeholder="예: 홍길동"
+            oninput="saveData()"
+          />
+        </div>
+        <div class="field-group">
+          <label for="practiceDate">실습 일자</label>
+          <input
+            type="text"
+            id="practiceDate"
+            placeholder="예: 2026-11-26"
+            oninput="saveData()"
+          />
+        </div>
+      </div>
+
+      <div id="missionsContainer"></div>
+    </main>
+
+    <script>
+      const missions = [
+        {
+          id: 1,
+          title: '미션 1. 데이터베이스(Schema) 미선택 에러',
+          desc: 'MySQL Workbench를 새로 열었을 때 사용할 데이터베이스를 지정하지 않고 바로 테이블을 조회하면 발생하는 가장 흔한 에러입니다. 아래 쿼리를 실행해 보세요.',
+          sql: 'SELECT * FROM member;',
+          hint: "에러 코드 1046 (No database selected)가 발생합니다. 쿼리 맨 위에 'USE shop_db;'를 추가해 먼저 실행하거나, 좌측 Schemas 패널에서 'shop_db'를 더블클릭(진하게 표시)한 뒤 다시 실행하면 해결됩니다.",
+        },
+        {
+          id: 2,
+          title: '미션 2. 문자형(CHAR) 길이 초과 에러',
+          desc: 'product 테이블의 product_name 열은 CHAR(4)로 설정되어 있습니다. 4글자를 넘는 제품명을 입력하면 어떻게 되는지 실행해 보세요.',
+          sql: "USE shop_db;\nINSERT INTO product VALUES ('허니버터아몬드', 3500, '2026-11-01', '해태', 10);",
+          hint: "에러 코드 1406 (Data too long for column 'product_name')이 발생합니다. ALTER TABLE product MODIFY product_name VARCHAR(20) NOT NULL; 으로 열 길이를 늘리거나 4글자 이내 이름으로 입력해야 합니다.",
+        },
+        {
+          id: 3,
+          title: '미션 3. 정수형(INT) 데이터 형식 불일치 에러',
+          desc: "숫자만 들어가야 하는 정수형(INT) 열인 cost(가격)에 '원' 글자까지 함께 입력하면 어떻게 되는지 실행해 보세요.",
+          sql: "USE shop_db;\nINSERT INTO product VALUES ('초코파이', '4000원', '2026-11-01', '오리온', 15);",
+          hint: "에러 코드 1366 (Incorrect integer value: '4000원')이 발생합니다. INT 열에는 홑따옴표와 한글 단위('원')를 뺀 순수 숫자 4000만 입력해야 합니다.",
+        },
+        {
+          id: 4,
+          title: '미션 4. 기본 키(PK) 중복 및 널 허용 안함(NN) 위반 에러',
+          desc: "이미 존재하는 회원 아이디('jisoo')로 한 번 더 입력하거나, NN(Not Null)이 설정된 이름에 NULL을 넣으면 제약 조건이 어떻게 작동하는지 확인해 보세요.",
+          sql: "USE shop_db;\nINSERT INTO member VALUES ('jisoo', '김지수', '서울 강남구');",
+          hint: "에러 코드 1062 (Duplicate entry 'jisoo' for key 'member.PRIMARY')가 발생합니다. 기본 키(PK)는 각 행을 구분하는 고유 값이므로 중복되지 않는 새 아이디(예: 'jennie2' 또는 'mina')를 사용해야 합니다.",
+        },
+        {
+          id: 5,
+          title: '미션 5. 세미콜론(;) 누락 및 예약어 구문 오류',
+          desc: '두 개의 SQL 문장 사이에 끝을 알리는 세미콜론(;)을 빼먹거나, 예약어(SELECT) 철자를 틀리게 적었을 때 인텔리센스 경고와 실행 에러를 확인해 보세요.',
+          sql: 'USE shop_db\nSELEC * FROM member;',
+          hint: '에러 코드 1064 (You have an error in your SQL syntax)가 발생합니다. 각 문장 끝에 세미콜론(;)을 붙이고 예약어 철자를 SELECT로 수정하면 정상 조회됩니다.',
+        },
+      ];
+
+      const STORAGE_KEY = 'ch02_2_debug_worksheet_v1';
+
+      function renderMissions() {
+        const container = document.getElementById('missionsContainer');
+        container.innerHTML = missions
+          .map(
+            (m) => `
+        <section class="mission-block">
+          <div class="mission-header">
+            <h2 class="mission-title">${m.title}</h2>
+            <label class="check-label">
+              <input type="checkbox" id="chk_${m.id}" onchange="saveData()" />
+              <span>에러 재현 및 해결 완료</span>
+            </label>
+          </div>
+          <div class="mission-body">
+            <p class="step-desc">${m.desc}</p>
+            <div class="code-box"><button type="button" class="btn-copy" onclick="copySql(${m.id})">쿼리 복사</button><pre id="sql_${m.id}">${m.sql}</pre></div>
+
+            <div class="answer-grid">
+              <div class="field-group">
+                <label for="err_${m.id}">1) 발생한 에러 코드 및 핵심 메시지 기록</label>
+                <textarea id="err_${m.id}" rows="2" placeholder="예: Error Code: 1046. No database selected" oninput="saveData()"></textarea>
+              </div>
+              <div class="field-group">
+                <label for="fix_${m.id}">2) 내가 수정한 원인 및 해결 SQL 기록</label>
+                <textarea id="fix_${m.id}" rows="2" placeholder="원인과 수정한 쿼리를 간단히 적어보세요." oninput="saveData()"></textarea>
+              </div>
+            </div>
+
+            <button type="button" class="hint-toggle" onclick="toggleHint(${m.id})">정답 및 해결 가이드 보기 / 숨기기</button>
+            <div class="hint-box" id="hint_${m.id}">${m.hint}</div>
+          </div>
+        </section>
+      `
+          )
+          .join('');
+      }
+
+      function copySql(id) {
+        const text = document.getElementById(`sql_${id}`).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          alert(
+            '에러 테스트용 SQL 쿼리가 복사되었습니다. Workbench에 붙여넣어 실행해 보세요!'
+          );
+        });
+      }
+
+      function toggleHint(id) {
+        document.getElementById(`hint_${id}`).classList.toggle('show');
+      }
+
+      function saveData() {
+        const data = {
+          studentName: document.getElementById('studentName').value,
+          practiceDate: document.getElementById('practiceDate').value,
+          items: {},
+        };
+        missions.forEach((m) => {
+          data.items[m.id] = {
+            checked: document.getElementById(`chk_${m.id}`).checked,
+            err: document.getElementById(`err_${m.id}`).value,
+            fix: document.getElementById(`fix_${m.id}`).value,
+          };
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        document.getElementById('saveStatus').textContent =
+          '저장 완료 (' + new Date().toLocaleTimeString() + ')';
+      }
+
+      function loadData() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          document.getElementById('practiceDate').value = new Date()
+            .toISOString()
+            .slice(0, 10);
+          return;
+        }
+        try {
+          const data = JSON.parse(raw);
+          document.getElementById('studentName').value = data.studentName || '';
+          document.getElementById('practiceDate').value =
+            data.practiceDate || '';
+          missions.forEach((m) => {
+            if (data.items && data.items[m.id]) {
+              document.getElementById(`chk_${m.id}`).checked =
+                !!data.items[m.id].checked;
+              document.getElementById(`err_${m.id}`).value =
+                data.items[m.id].err || '';
+              document.getElementById(`fix_${m.id}`).value =
+                data.items[m.id].fix || '';
+            }
+          });
+        } catch (e) {}
+      }
+
+      function resetWorksheet() {
+        if (!confirm('작성한 실습 기록을 모두 초기화할까요?')) return;
+        localStorage.removeItem(STORAGE_KEY);
+        renderMissions();
+        document.getElementById('studentName').value = '';
+        document.getElementById('practiceDate').value = new Date()
+          .toISOString()
+          .slice(0, 10);
+      }
+
+      function downloadMarkdown() {
+        const name =
+          document.getElementById('studentName').value.trim() || '미입력';
+        const date = document.getElementById('practiceDate').value.trim() || '';
+        let md = `# [CH 02-2] SQL 에러 5대장 트러블슈팅 실습 결과\n\n`;
+        md += `- **교육생:** ${name}\n- **실습일:** ${date}\n\n---\n\n`;
+
+        missions.forEach((m) => {
+          const chk = document.getElementById(`chk_${m.id}`).checked
+            ? '완료'
+            : '미완료';
+          const err =
+            document.getElementById(`err_${m.id}`).value.trim() ||
+            '(기록 없음)';
+          const fix =
+            document.getElementById(`fix_${m.id}`).value.trim() ||
+            '(기록 없음)';
+          md += `## ${m.title} (${chk})\n`;
+          md += `- **발생한 에러 메시지:** ${err}\n`;
+          md += `- **원인 및 해결 방법:** ${fix}\n\n`;
+        });
+
+        const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `CH02-2_SQL_에러_트러블슈팅_${name}.md`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      renderMissions();
+      loadData();
+    </script>
+  </body>
+</html>

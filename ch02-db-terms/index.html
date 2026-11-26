@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>데이터베이스 핵심 용어 마스터 퀴즈</title>
+  <title>데이터베이스 핵심 용어 스피드 퀴즈</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Supabase JS Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
@@ -31,128 +30,69 @@
 
     body {
       font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 17px;
-      line-height: 1.65;
+      font-size: 16.5px;
+      line-height: 1.5;
       color: var(--text-main);
       background-color: var(--bg-page);
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Sticky Top Bar */
-    .top-nav {
+    /* Sticky Top Bar (네비게이션 + 도전자 등록 + 보기를 한 줄에 컴팩트 배치) */
+    .top-bar {
       position: sticky;
       top: 0;
       z-index: 100;
       background-color: #FFFFFF;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: 2px solid var(--border-dark);
     }
 
-    .nav-inner {
-      max-width: 1120px;
+    .top-inner {
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 12px 24px;
+      padding: 10px 20px;
+    }
+
+    .control-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px 16px;
+    }
+
+    .title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
     .back-link {
       color: var(--primary);
       text-decoration: none;
-      font-weight: 600;
-      font-size: 14.5px;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
     }
 
     .back-link:hover { text-decoration: underline; }
 
-    .timer-box {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 15.5px;
+    .page-title {
+      font-size: 19px;
       font-weight: 700;
-    }
-
-    .timer-display {
-      background-color: var(--border-dark);
-      color: #FFFFFF;
-      padding: 4px 12px;
-      font-family: 'Consolas', monospace;
-      font-size: 16px;
-    }
-
-    /* Main Container */
-    .page-container {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 32px 24px 80px;
-    }
-
-    .doc-header { margin-bottom: 28px; }
-    .doc-title {
-      font-size: 23px;
-      font-weight: 700;
-      margin-bottom: 12px;
       letter-spacing: -0.02em;
     }
 
-    .help-callout {
-      background-color: var(--bg-subtle);
-      border: 1px solid var(--border-light);
-      border-left: 4px solid var(--primary);
-      padding: 14px 18px;
-      font-size: 15.5px;
-      color: var(--text-sub);
-    }
-
-    /* Layout Grid: Quiz Left + Leaderboard Right */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 28px;
-      align-items: start;
-    }
-
-    @media (max-width: 920px) {
-      .main-grid { grid-template-columns: 1fr; }
-    }
-
-    .section-block {
-      border: 1px solid var(--border-light);
-      border-top: 3px solid var(--border-dark);
-      background-color: #FFFFFF;
-      margin-bottom: 24px;
-    }
-
-    .section-header {
-      padding: 14px 20px;
-      background-color: var(--bg-subtle);
-      border-bottom: 1px solid var(--border-light);
+    .player-controls {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-    }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .section-body { padding: 20px; }
-
-    /* Start Gate */
-    .start-row {
-      display: flex;
-      gap: 12px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
     input[type="text"] {
       font-family: inherit;
-      font-size: 16px;
-      padding: 10px 12px;
+      font-size: 15.5px;
+      padding: 7px 11px;
       border: 1px solid var(--border-light);
       color: var(--text-main);
       background-color: #FFFFFF;
@@ -165,13 +105,14 @@
 
     .btn {
       font-family: inherit;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
-      padding: 10px 20px;
+      padding: 7px 14px;
       border: 1px solid var(--border-dark);
       background-color: #FFFFFF;
       color: var(--text-main);
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .btn:hover { background-color: #F1F5F9; }
@@ -184,72 +125,146 @@
 
     .btn-primary:hover { background-color: var(--primary-hover); }
 
-    /* Word Bank */
-    .word-bank {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 14px;
+    .timer-display {
+      background-color: var(--border-dark);
+      color: #FFFFFF;
+      padding: 6px 12px;
+      font-family: 'Consolas', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      min-width: 78px;
+      text-align: center;
+    }
+
+    /* Sticky Word Bank Strip */
+    .word-bank-strip {
+      margin-top: 8px;
+      padding: 7px 12px;
       background-color: var(--bg-callout);
       border: 1px solid #BFDBFE;
-      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .bank-label {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-right: 4px;
     }
 
     .word-chip {
       background-color: #FFFFFF;
       border: 1px solid #93C5FD;
       color: #1E3A8A;
-      font-size: 14.5px;
+      font-size: 13.5px;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 2px 8px;
     }
 
-    /* Quiz Table */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 15.5px;
+    /* Main Workspace Grid */
+    .main-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 20px 32px;
+      display: grid;
+      grid-template-columns: 1fr 290px;
+      gap: 20px;
+      align-items: start;
     }
 
-    th, td {
+    @media (max-width: 980px) {
+      .main-container { grid-template-columns: 1fr; }
+    }
+
+    /* 2-Column Compact Quiz Cards */
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 680px) {
+      .quiz-grid { grid-template-columns: 1fr; }
+    }
+
+    .q-card {
       border: 1px solid var(--border-light);
-      padding: 12px;
-      text-align: left;
-      vertical-align: middle;
+      background-color: #FFFFFF;
+      padding: 11px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
     }
 
-    th {
-      background-color: #F1F5F9;
+    .q-card.card-correct {
+      border-color: var(--success);
+      background-color: var(--success-bg);
+    }
+
+    .q-card.card-wrong {
+      border-color: var(--danger);
+      background-color: var(--danger-bg);
+    }
+
+    .q-top {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 15px;
+      color: var(--text-main);
+    }
+
+    .q-num {
+      display: inline-block;
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-light);
       font-weight: 700;
+      font-size: 13px;
+      padding: 1px 7px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .q-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .quiz-input {
+      flex: 1;
       width: 100%;
-      font-size: 15.5px !important;
-      padding: 8px 10px !important;
+      font-size: 15px !important;
+      padding: 6px 10px !important;
     }
 
     .quiz-input.correct {
       border-color: var(--success);
-      background-color: var(--success-bg);
+      background-color: #FFFFFF;
       color: var(--success);
       font-weight: 700;
     }
 
     .quiz-input.wrong {
       border-color: var(--danger);
-      background-color: var(--danger-bg);
+      background-color: #FFFFFF;
     }
 
     .status-badge {
-      display: inline-block;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 4px 8px;
+      white-space: nowrap;
+      border: 1px solid transparent;
     }
 
-    .badge-ok { background-color: var(--success-bg); color: var(--success); }
-    .badge-err { background-color: var(--danger-bg); color: var(--danger); }
+    .badge-wait { color: var(--text-muted); border-color: #E2E8F0; background: var(--bg-subtle); }
+    .badge-ok { background-color: var(--success); color: #FFFFFF; }
+    .badge-err { background-color: var(--danger); color: #FFFFFF; }
 
     .locked-overlay {
       opacity: 0.45;
@@ -257,29 +272,66 @@
       user-select: none;
     }
 
-    /* Result Banner */
-    .result-banner {
-      display: none;
-      margin-top: 20px;
-      padding: 18px 20px;
-      border: 2px solid var(--success);
-      background-color: var(--success-bg);
+    /* Bottom Submit Row */
+    .submit-bar {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px 14px;
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-light);
     }
 
-    .result-banner.show { display: block; }
+    .result-inline {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--success);
+    }
 
-    /* Leaderboard */
+    /* Right Compact Leaderboard */
+    .rank-panel {
+      border: 1px solid var(--border-light);
+      border-top: 3px solid var(--border-dark);
+      background-color: #FFFFFF;
+    }
+
+    .rank-header {
+      padding: 10px 14px;
+      background-color: var(--bg-subtle);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rank-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .btn-refresh {
+      font-size: 12.5px;
+      padding: 3px 8px;
+      border: 1px solid var(--border-light);
+      background: #FFFFFF;
+      cursor: pointer;
+    }
+
     .rank-list {
       list-style: none;
+      padding: 4px 10px;
     }
 
     .rank-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 12px;
-      border-bottom: 1px solid #E2E8F0;
-      font-size: 15px;
+      padding: 7px 6px;
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 14.5px;
     }
 
     .rank-item:last-child { border-bottom: none; }
@@ -287,7 +339,7 @@
 
     .rank-num {
       display: inline-block;
-      width: 26px;
+      width: 34px;
       font-weight: 700;
       color: var(--primary);
     }
@@ -297,97 +349,55 @@
       font-weight: 700;
       color: var(--text-sub);
     }
-
-    .btn-refresh {
-      font-size: 13.5px;
-      padding: 4px 10px;
-      border: 1px solid var(--border-light);
-      background: #FFFFFF;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
 
-  <nav class="top-nav">
-    <div class="nav-inner">
-      <a href="../index.html" class="back-link">&larr; 실습 아카이브 목록</a>
-      <div class="timer-box">
-        <span id="playerLabel" style="color: var(--text-sub);">도전자: 미입력</span>
-        <span class="timer-display" id="timerDisplay">00.0초</span>
+  <!-- Compact Sticky Header + Controls + Word Bank -->
+  <header class="top-bar">
+    <div class="top-inner">
+      <div class="control-strip">
+        <div class="title-group">
+          <a href="../index.html" class="back-link">&larr; 목록</a>
+          <h1 class="page-title">데이터베이스 핵심 용어 스피드 퀴즈</h1>
+        </div>
+
+        <div class="player-controls">
+          <input type="text" id="nicknameInput" placeholder="별명 입력 (예: 재활왕)" style="width: 185px;" />
+          <button type="button" class="btn btn-primary" id="startBtn" onclick="startQuiz()">퀴즈 시작</button>
+          <button type="button" class="btn" onclick="resetQuiz()">다시 풀기 (섞기)</button>
+          <span class="timer-display" id="timerDisplay">00.0초</span>
+        </div>
+      </div>
+
+      <!-- Always-visible Word Bank -->
+      <div class="word-bank-strip">
+        <span class="bank-label">[보기]</span>
+        <div id="wordBank" style="display: flex; flex-wrap: wrap; gap: 5px;"></div>
       </div>
     </div>
-  </nav>
+  </header>
 
-  <main class="page-container">
-    <header class="doc-header">
-      <h1 class="doc-title">데이터베이스 핵심 용어 스피드 퀴즈</h1>
-      <div class="help-callout">
-        별명을 입력하고 <strong>[퀴즈 시작]</strong>을 누르면 타이머가 작동합니다. 상단 <strong>[보기]</strong>를 참고해 9개 개념의 용어를 직접 입력하고, 모두 맞혀 실시간 순위표에 기록을 등록해 보세요!
+  <!-- Main Content: 2-Col Quiz Left + Leaderboard Right -->
+  <main class="main-container">
+    <section id="quizSection" class="locked-overlay">
+      <div class="quiz-grid" id="quizGrid"></div>
+
+      <div class="submit-bar">
+        <div id="resultInline" class="result-inline">별명을 입력하고 [퀴즈 시작]을 누르면 문제가 활성화됩니다.</div>
+        <button type="button" class="btn btn-primary" onclick="checkAnswers()">채점 및 기록 제출하기</button>
       </div>
-    </header>
+    </section>
 
-    <div class="main-grid">
-      <!-- Left: Quiz Area -->
-      <div>
-        <!-- Step 1: Nickname & Start -->
-        <section class="section-block">
-          <div class="section-header">
-            <h2 class="section-title">1. 도전자 등록 및 시작</h2>
-          </div>
-          <div class="section-body">
-            <div class="start-row">
-              <input type="text" id="nicknameInput" placeholder="별명 입력 (예: 재활왕김민수)" style="flex: 1; min-width: 200px;" />
-              <button type="button" class="btn btn-primary" id="startBtn" onclick="startQuiz()">퀴즈 시작</button>
-              <button type="button" class="btn" onclick="resetQuiz()">다시 풀기</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- Step 2: Quiz Table -->
-        <section class="section-block locked-overlay" id="quizSection">
-          <div class="section-header">
-            <h2 class="section-title">2. 개념 설명을 읽고 핵심 용어 입력하기</h2>
-            <span style="font-size: 14px; color: var(--text-muted);">한글 또는 영문/약어 입력 가능</span>
-          </div>
-          <div class="section-body">
-            <div style="font-size: 14.5px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">[보기 목록]</div>
-            <div class="word-bank" id="wordBank"></div>
-
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 7%;">번호</th>
-                  <th style="width: 55%;">개념 및 역할 설명</th>
-                  <th style="width: 26%;">용어 입력</th>
-                  <th style="width: 12%; text-align: center;">결과</th>
-                </tr>
-              </thead>
-              <tbody id="quizBody"></tbody>
-            </table>
-
-            <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 12px;">
-              <button type="button" class="btn btn-primary" onclick="checkAnswers()">채점 및 기록 제출하기</button>
-            </div>
-
-            <div class="result-banner" id="resultBanner"></div>
-          </div>
-        </section>
+    <aside class="rank-panel">
+      <div class="rank-header">
+        <h2 class="rank-title">실시간 Top 10 순위</h2>
+        <button type="button" class="btn-refresh" onclick="fetchLeaderboard()">새로고침</button>
       </div>
-
-      <!-- Right: Realtime Leaderboard -->
-      <aside class="section-block">
-        <div class="section-header">
-          <h2 class="section-title">실시간 Top 10 순위</h2>
-          <button type="button" class="btn-refresh" onclick="fetchLeaderboard()">새로고침</button>
-        </div>
-        <div class="section-body" style="padding: 8px 12px;">
-          <ul class="rank-list" id="rankList">
-            <li class="rank-item" style="color: var(--text-muted);">순위 데이터를 불러오는 중...</li>
-          </ul>
-        </div>
-      </aside>
-    </div>
+      <ul class="rank-list" id="rankList">
+        <li class="rank-item" style="color: var(--text-muted);">순위 데이터를 불러오는 중...</li>
+      </ul>
+    </aside>
   </main>
 
   <script>
@@ -402,7 +412,7 @@
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
-    const quizData = [
+    const baseQuizData = [
       {
         id: 1,
         desc: "하나하나의 단편적인 정보 값 (예: '홍길동', 2500, '2026-09-07')",
@@ -441,7 +451,7 @@
       {
         id: 8,
         desc: "테이블에서 각 행을 유일하게 구분하기 위해 지정하는 열 (중복 불가, 필수 입력)",
-        answers: ['기본키', 'pk', 'primarykey']
+        answers: ['기본키', '기본키pk', 'pk', 'primarykey', 'primarykeypk']
       },
       {
         id: 9,
@@ -455,10 +465,20 @@
       '열 (컬럼)', '데이터 형식', '행 (로우)', '기본 키 (PK)', 'SQL'
     ];
 
+    let activeQuizList = [];
     let startTime = null;
     let timerInterval = null;
     let isRunning = false;
     let isCompleted = false;
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
 
     function normalize(str) {
       return String(str || '')
@@ -466,21 +486,26 @@
         .replace(/[\s\(\)\-_]/g, '');
     }
 
-    function initRender() {
+    function renderBoard(shouldShuffle = true) {
+      activeQuizList = shouldShuffle ? shuffleArray(baseQuizData) : [...baseQuizData];
+      const shuffledBank = shouldShuffle ? shuffleArray(wordBankItems) : [...wordBankItems];
+
       const bankEl = document.getElementById('wordBank');
-      bankEl.innerHTML = wordBankItems.map(w => `<span class="word-chip">${w}</span>`).join('');
+      bankEl.innerHTML = shuffledBank.map(w => `<span class="word-chip">${w}</span>`).join('');
 
-      const tbody = document.getElementById('quizBody');
-      tbody.innerHTML = quizData.map((q, idx) => `
-        <tr>
-          <td style="text-align: center; font-weight: 700;">${q.id}</td>
-          <td>${q.desc}</td>
-          <td><input type="text" class="quiz-input" id="ans_${idx}" placeholder="용어 입력" /></td>
-          <td style="text-align: center;" id="res_${idx}">-</td>
-        </tr>
+      const grid = document.getElementById('quizGrid');
+      grid.innerHTML = activeQuizList.map((q, idx) => `
+        <div class="q-card" id="card_${idx}">
+          <div class="q-top">
+            <span class="q-num">Q${idx + 1}</span>
+            <span>${q.desc}</span>
+          </div>
+          <div class="q-input-row">
+            <input type="text" class="quiz-input" id="ans_${idx}" placeholder="용어 입력" onkeydown="if(event.key==='Enter') checkAnswers()" />
+            <span class="status-badge badge-wait" id="res_${idx}">대기</span>
+          </div>
+        </div>
       `).join('');
-
-      fetchLeaderboard();
     }
 
     function startQuiz() {
@@ -491,10 +516,13 @@
         return;
       }
 
-      document.getElementById('playerLabel').textContent = `도전자: ${nick}`;
+      renderBoard(true);
+
       document.getElementById('nicknameInput').disabled = true;
       document.getElementById('startBtn').disabled = true;
       document.getElementById('quizSection').classList.remove('locked-overlay');
+      document.getElementById('resultInline').style.color = 'var(--text-sub)';
+      document.getElementById('resultInline').textContent = `${nick}님 도전 중! (입력 후 Enter를 눌러도 바로 채점됩니다)`;
 
       isRunning = true;
       isCompleted = false;
@@ -512,7 +540,8 @@
       if (!isRunning || isCompleted) return;
 
       let correctCount = 0;
-      quizData.forEach((q, idx) => {
+      activeQuizList.forEach((q, idx) => {
+        const cardEl = document.getElementById(`card_${idx}`);
         const inputEl = document.getElementById(`ans_${idx}`);
         const resEl = document.getElementById(`res_${idx}`);
         const userVal = normalize(inputEl.value);
@@ -520,18 +549,27 @@
         const isRight = q.answers.some(ans => normalize(ans) === userVal);
         if (isRight) {
           correctCount++;
+          cardEl.classList.remove('card-wrong');
+          cardEl.classList.add('card-correct');
           inputEl.classList.remove('wrong');
           inputEl.classList.add('correct');
           inputEl.disabled = true;
-          resEl.innerHTML = `<span class="status-badge badge-ok">정답</span>`;
+          resEl.className = 'status-badge badge-ok';
+          resEl.textContent = '정답';
         } else {
+          cardEl.classList.remove('card-correct');
+          cardEl.classList.add('card-wrong');
           inputEl.classList.remove('correct');
           inputEl.classList.add('wrong');
-          resEl.innerHTML = `<span class="status-badge badge-err">오답</span>`;
+          resEl.className = 'status-badge badge-err';
+          resEl.textContent = '오답';
         }
       });
 
-      if (correctCount === quizData.length) {
+      const nick = document.getElementById('nicknameInput').value.trim();
+      const resultEl = document.getElementById('resultInline');
+
+      if (correctCount === activeQuizList.length) {
         clearInterval(timerInterval);
         isRunning = false;
         isCompleted = true;
@@ -539,34 +577,24 @@
         const finalSec = Number(((performance.now() - startTime) / 1000).toFixed(2));
         document.getElementById('timerDisplay').textContent = `${finalSec}초`;
 
-        const nick = document.getElementById('nicknameInput').value.trim();
-        const banner = document.getElementById('resultBanner');
-        banner.classList.add('show');
-        banner.innerHTML = `
-          <div style="font-size: 18px; font-weight: 700; color: var(--success); margin-bottom: 4px;">
-            축하합니다! ${nick}님, 9문제 전부 정답 (100점) 완료!
-          </div>
-          <div style="font-size: 16px;">최종 기록: <strong>${finalSec}초</strong> — 우측 실시간 순위표에 자동 등록됩니다.</div>
-        `;
+        resultEl.style.color = 'var(--success)';
+        resultEl.textContent = `완주 성공! ${nick}님 최종 기록: ${finalSec}초 (실시간 순위 반영 완료)`;
 
         await submitScore(nick, 100, finalSec);
       } else {
-        alert(`총 ${quizData.length}문제 중 ${correctCount}문제 정답입니다. 빨간색 오답 칸을 수정해서 다시 제출하세요! (타이머는 계속 흐릅니다)`);
+        resultEl.style.color = 'var(--danger)';
+        resultEl.textContent = `현재 ${activeQuizList.length}문제 중 ${correctCount}문제 정답! 빨간색 칸을 고쳐서 다시 제출하세요.`;
       }
     }
 
     async function submitScore(nickname, score, elapsedSec) {
-      if (!supabaseClient) {
-        console.warn('Supabase 키가 설정되지 않아 로컬 테스트 모드로 동작합니다.');
-        return;
-      }
+      if (!supabaseClient) return;
 
       const { error } = await supabaseClient
         .from('db_quiz_ranking')
         .insert([{ nickname, score, elapsed_sec: elapsedSec }]);
 
       if (error) {
-        console.error('기록 저장 오류:', error);
         alert('순위 등록 중 오류가 발생했습니다: ' + error.message);
       } else {
         await fetchLeaderboard();
@@ -576,13 +604,13 @@
     async function fetchLeaderboard() {
       const listEl = document.getElementById('rankList');
       if (!supabaseClient) {
-        listEl.innerHTML = `<li class="rank-item" style="color: var(--text-muted); font-size: 14px;">HTML 코드 상단의 SUPABASE_URL과 ANON_KEY를 입력하면 실시간 순위가 표시됩니다.</li>`;
+        listEl.innerHTML = `<li class="rank-item" style="color: var(--text-muted); font-size: 13.5px;">SUPABASE_URL과 ANON_KEY를 입력하면 실시간 순위가 표시됩니다.</li>`;
         return;
       }
 
       const { data, error } = await supabaseClient
         .from('db_quiz_ranking')
-        .select('nickname, elapsed_sec, created_at')
+        .select('nickname, elapsed_sec')
         .order('elapsed_sec', { ascending: true })
         .limit(10);
 
@@ -592,7 +620,7 @@
       }
 
       if (!data || data.length === 0) {
-        listEl.innerHTML = `<li class="rank-item" style="color: var(--text-muted);">아직 등록된 기록이 없습니다. 첫 번째 1등에 도전하세요!</li>`;
+        listEl.innerHTML = `<li class="rank-item" style="color: var(--text-muted); font-size: 14px;">아직 등록된 기록이 없습니다. 첫 번째 1등에 도전하세요!</li>`;
         return;
       }
 
@@ -615,8 +643,9 @@
       document.getElementById('nicknameInput').disabled = false;
       document.getElementById('startBtn').disabled = false;
       document.getElementById('quizSection').classList.add('locked-overlay');
-      document.getElementById('resultBanner').classList.remove('show');
-      initRender();
+      document.getElementById('resultInline').style.color = 'var(--text-sub)';
+      document.getElementById('resultInline').textContent = '문제가 새로 섞였습니다. [퀴즈 시작]을 눌러 다시 도전하세요!';
+      renderBoard(true);
     }
 
     function escapeHtml(str) {
@@ -626,7 +655,8 @@
         .replace(/>/g, '&gt;');
     }
 
-    initRender();
+    renderBoard(true);
+    fetchLeaderboard();
   </script>
 </body>
 </html>

@@ -3,62 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI 홈 재활 서비스 데이터베이스 모델링 실습</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>CH 02-1 AI 홈 재활 서비스 데이터베이스 모델링 실습</title>
+  <link rel="stylesheet" href="../assets/css/common.css" />
   <style>
-    :root {
-      --bg-page: #FFFFFF;
-      --bg-subtle: #F8FAFC;
-      --bg-callout: #EFF6FF;
-      --bg-warn: #FFFBEB;
-      --text-main: #0F172A;
-      --text-sub: #334155;
-      --text-muted: #64748B;
-      --border-light: #CBD5E1;
-      --border-dark: #1E293B;
-      --border-warn: #F59E0B;
-      --primary: #1D4ED8;
-      --primary-hover: #1E40AF;
-      --danger: #DC2626;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 17px;
-      line-height: 1.65;
-      color: var(--text-main);
-      background-color: var(--bg-page);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* Sticky Top Navigation */
-    .top-nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background-color: #FFFFFF;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .nav-inner {
-      width: 100%;
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
     .nav-utility {
       display: flex;
       justify-content: space-between;
@@ -68,26 +15,10 @@
       font-size: 14px;
     }
 
-    .back-link {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-    }
-
     .status-controls {
       display: flex;
       align-items: center;
       gap: 16px;
-    }
-
-    .save-status {
-      color: var(--primary);
-      font-weight: 600;
-      font-size: 13.5px;
     }
 
     .btn-reset {
@@ -100,9 +31,7 @@
       cursor: pointer;
     }
 
-    .btn-reset:hover {
-      color: var(--danger);
-    }
+    .btn-reset:hover { color: var(--danger); }
 
     .step-tabs {
       display: flex;
@@ -120,19 +49,9 @@
       transition: background-color 0.15s;
     }
 
-    .step-tab:last-child {
-      border-right: none;
-    }
-
-    .step-tab:hover {
-      background-color: var(--bg-subtle);
-      color: var(--text-main);
-    }
-
-    .step-tab.active {
-      border-bottom-color: var(--primary);
-      background-color: #F8FAFC;
-    }
+    .step-tab:last-child { border-right: none; }
+    .step-tab:hover { background-color: var(--bg-subtle); color: var(--text-main); }
+    .step-tab.active { border-bottom-color: var(--primary); background-color: #F8FAFC; }
 
     .tab-num {
       display: block;
@@ -150,37 +69,6 @@
       margin-top: 2px;
     }
 
-    /* Main Container */
-    .page-container {
-      width: 100%;
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 32px 24px 80px;
-    }
-
-    /* Slim Help Header */
-    .doc-header {
-      margin-bottom: 36px;
-    }
-
-    .doc-title {
-      font-size: 23px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 12px;
-      letter-spacing: -0.02em;
-    }
-
-    .help-callout {
-      background-color: var(--bg-subtle);
-      border: 1px solid var(--border-light);
-      border-left: 4px solid var(--primary);
-      padding: 14px 18px;
-      font-size: 15.5px;
-      color: var(--text-sub);
-    }
-
-    /* Step Section Blocks */
     .step-block {
       border: 1px solid var(--border-light);
       border-top: 3px solid var(--border-dark);
@@ -223,16 +111,9 @@
       color: #1E3A8A;
     }
 
-    .must-do-bar strong {
-      font-weight: 700;
-      color: var(--primary);
-    }
+    .must-do-bar strong { font-weight: 700; color: var(--primary); }
+    .step-body { padding: 24px 22px; }
 
-    .step-body {
-      padding: 24px 22px;
-    }
-
-    /* Scenario Box */
     .scenario-box {
       border: 1px solid var(--border-light);
       background-color: #FAFAFA;
@@ -270,7 +151,6 @@
       border-left: 3px solid #94A3B8;
     }
 
-    /* Tables */
     .table-wrap {
       width: 100%;
       overflow-x: auto;
@@ -297,33 +177,14 @@
       white-space: nowrap;
     }
 
-    /* Form Controls inside Tables */
-    input[type="text"], select, textarea {
+    .table-wrap input[type="text"],
+    .table-wrap select,
+    .q-block textarea {
       width: 100%;
-      font-family: inherit;
-      font-size: 15.5px;
-      color: var(--text-main);
-      background-color: #FFFFFF;
-      border: 1px solid #CBD5E1;
-      padding: 8px 10px;
       border-radius: 0;
-      transition: border-color 0.15s;
     }
 
-    input[type="text"]:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      background-color: #F8FAFC;
-    }
-
-    input[type="text"]::placeholder, textarea::placeholder {
-      color: #94A3B8;
-      font-size: 14.5px;
-    }
-
-    .center-cell {
-      text-align: center;
-    }
+    .center-cell { text-align: center; }
 
     input[type="checkbox"] {
       width: 18px;
@@ -332,15 +193,12 @@
       cursor: pointer;
     }
 
-    /* Sub-table Containers in STEP 02 & 03 */
     .entity-box {
       border: 1px solid var(--border-light);
       margin-bottom: 26px;
     }
 
-    .entity-box:last-child {
-      margin-bottom: 0;
-    }
+    .entity-box:last-child { margin-bottom: 0; }
 
     .entity-header {
       display: flex;
@@ -353,37 +211,9 @@
       border-bottom: 1px solid var(--border-light);
     }
 
-    .entity-title {
-      font-size: 16.5px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    .entity-origin {
-      font-size: 14px;
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .entity-body {
-      padding: 16px;
-    }
-
-    .btn-small {
-      background-color: #FFFFFF;
-      border: 1px solid var(--border-light);
-      color: var(--text-sub);
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-
-    .btn-small:hover {
-      background-color: #F1F5F9;
-      color: var(--text-main);
-    }
+    .entity-title { font-size: 16.5px; font-weight: 700; color: var(--text-main); }
+    .entity-origin { font-size: 14px; color: var(--primary); font-weight: 600; }
+    .entity-body { padding: 16px; }
 
     .btn-del {
       background: none;
@@ -394,11 +224,8 @@
       padding: 4px 8px;
     }
 
-    .btn-del:hover {
-      color: var(--danger);
-    }
+    .btn-del:hover { color: var(--danger); }
 
-    /* Warning Box for Workbench Pitfalls */
     .warn-box {
       background-color: var(--bg-warn);
       border: 1px solid #FDE68A;
@@ -407,26 +234,10 @@
       margin: 20px 0;
     }
 
-    .warn-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #92400E;
-      margin-bottom: 10px;
-    }
-
-    .warn-list {
-      padding-left: 20px;
-      font-size: 15px;
-      color: #78350F;
-    }
-
-    .warn-list li {
-      margin-bottom: 8px;
-    }
-
-    .warn-list li:last-child {
-      margin-bottom: 0;
-    }
+    .warn-title { font-size: 16px; font-weight: 700; color: #92400E; margin-bottom: 10px; }
+    .warn-list { padding-left: 20px; font-size: 15px; color: #78350F; }
+    .warn-list li { margin-bottom: 8px; }
+    .warn-list li:last-child { margin-bottom: 0; }
 
     code {
       font-family: 'Consolas', 'Monaco', monospace;
@@ -436,7 +247,6 @@
       color: #0F172A;
     }
 
-    /* Checklist in STEP 04 */
     .checklist {
       list-style: none;
       border: 1px solid var(--border-light);
@@ -451,33 +261,13 @@
       font-size: 15.5px;
     }
 
-    .checklist li:last-child {
-      border-bottom: none;
-    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist label { cursor: pointer; flex: 1; }
 
-    .checklist label {
-      cursor: pointer;
-      flex: 1;
-    }
+    .q-block { margin-bottom: 22px; }
+    .q-block:last-child { margin-bottom: 0; }
+    .q-label { display: block; font-weight: 700; font-size: 16px; margin-bottom: 8px; color: var(--text-main); }
 
-    /* Reflection Questions in STEP 05 */
-    .q-block {
-      margin-bottom: 22px;
-    }
-
-    .q-block:last-child {
-      margin-bottom: 0;
-    }
-
-    .q-label {
-      display: block;
-      font-weight: 700;
-      font-size: 16px;
-      margin-bottom: 8px;
-      color: var(--text-main);
-    }
-
-    /* Bottom Non-Fixed Action Area */
     .bottom-actions {
       margin-top: 36px;
       padding: 24px;
@@ -490,43 +280,9 @@
       gap: 16px;
     }
 
-    .action-desc {
-      font-size: 15px;
-      color: var(--text-sub);
-    }
+    .action-desc { font-size: 15px; color: var(--text-sub); }
+    .btn-group { display: flex; flex-wrap: wrap; gap: 10px; }
 
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .btn-action {
-      font-family: inherit;
-      font-size: 15.5px;
-      font-weight: 600;
-      padding: 11px 18px;
-      border: 1px solid var(--border-dark);
-      background-color: #FFFFFF;
-      color: var(--text-main);
-      cursor: pointer;
-    }
-
-    .btn-action:hover {
-      background-color: #F1F5F9;
-    }
-
-    .btn-primary {
-      background-color: var(--primary);
-      border-color: var(--primary);
-      color: #FFFFFF;
-    }
-
-    .btn-primary:hover {
-      background-color: var(--primary-hover);
-    }
-
-    /* Toast Notification */
     .toast {
       position: fixed;
       bottom: 24px;
@@ -542,30 +298,22 @@
       z-index: 200;
     }
 
-    .toast.show {
-      opacity: 1;
-    }
+    .toast.show { opacity: 1; }
 
     @media print {
-      .top-nav, .bottom-actions, .btn-small, .btn-del {
-        display: none !important;
-      }
-      .step-block {
-        break-inside: avoid;
-        margin-bottom: 24px;
-      }
+      .top-nav, .bottom-actions, .btn-sm, .btn-del { display: none !important; }
+      .step-block { break-inside: avoid; margin-bottom: 24px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Sticky Top Navigation -->
   <nav class="top-nav">
-    <div class="nav-inner">
+    <div class="nav-inner" style="display: block; padding: 0 24px;">
       <div class="nav-utility">
         <a href="../index.html" class="back-link">&larr; 실습 아카이브 목록</a>
         <div class="status-controls">
-          <span class="save-status" id="saveStatus">자동 저장됨</span>
+          <span class="save-status" id="saveStatus" style="color: var(--primary); font-weight: 600;">자동 저장됨</span>
           <button type="button" class="btn-reset" onclick="resetWorksheet()">초기화</button>
         </div>
       </div>
@@ -595,15 +343,13 @@
   </nav>
 
   <main class="page-container">
-    <!-- Slim Help Header -->
     <header class="doc-header">
-      <h1 class="doc-title">AI 홈 재활 서비스 데이터베이스 모델링 실습</h1>
+      <h1 class="doc-title">2. AI 홈 재활 서비스 데이터베이스 모델링 실습</h1>
       <div class="help-callout">
         현실의 재활 의료 업무를 분석해 논리적 데이터 표(Table)와 기본 키(PK)를 설계하고, MySQL Workbench에서 EER 다이어그램으로 구축하는 5단계 실습 워크시트입니다. 입력한 내용은 브라우저에 자동 저장됩니다.
       </div>
     </header>
 
-    <!-- STEP 01 -->
     <section id="step01" class="step-block">
       <div class="step-header-band">
         <span class="step-badge">STEP 01</span>
@@ -643,7 +389,6 @@
       </div>
     </section>
 
-    <!-- STEP 02 -->
     <section id="step02" class="step-block">
       <div class="step-header-band">
         <span class="step-badge">STEP 02</span>
@@ -655,7 +400,6 @@
       <div class="step-body" id="step2Container"></div>
     </section>
 
-    <!-- STEP 03 -->
     <section id="step03" class="step-block">
       <div class="step-header-band">
         <span class="step-badge">STEP 03</span>
@@ -667,7 +411,6 @@
       <div class="step-body" id="step3Container"></div>
     </section>
 
-    <!-- STEP 04 -->
     <section id="step04" class="step-block">
       <div class="step-header-band">
         <span class="step-badge">STEP 04</span>
@@ -727,7 +470,6 @@
       </div>
     </section>
 
-    <!-- STEP 05 -->
     <section id="step05" class="step-block">
       <div class="step-header-band">
         <span class="step-badge">STEP 05</span>
@@ -748,15 +490,14 @@
       </div>
     </section>
 
-    <!-- Bottom Non-Fixed Actions -->
     <div class="bottom-actions">
       <div class="action-desc">
         실습을 마쳤다면 AI 리뷰 프롬프트로 설계를 점검하거나 마크다운(.md) 파일로 내려받아 노트에 보관하세요.
       </div>
       <div class="btn-group">
-        <button type="button" class="btn-action" onclick="copyAiReviewPrompt()">작성 내용 AI 리뷰 요청하기</button>
-        <button type="button" class="btn-action" onclick="window.print()">인쇄 / PDF 저장</button>
-        <button type="button" class="btn-action btn-primary" onclick="downloadMarkdown()">마크다운(.md) 다운로드</button>
+        <button type="button" class="btn" onclick="copyAiReviewPrompt()">작성 내용 AI 리뷰 요청하기</button>
+        <button type="button" class="btn" onclick="window.print()">인쇄 / PDF 저장</button>
+        <button type="button" class="btn btn-primary" onclick="downloadMarkdown()">마크다운(.md) 다운로드</button>
       </div>
     </div>
   </main>
@@ -836,13 +577,8 @@
           ['', '', '', '', '', '']
         ]
       },
-      step4Checks: [
-        false, false, false, false, false
-      ],
-      step5: {
-        q1: '',
-        q2: ''
-      }
+      step4Checks: [false, false, false, false, false],
+      step5: { q1: '', q2: '' }
     };
 
     const checklistItems = [
@@ -858,9 +594,7 @@
     function loadState() {
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          return JSON.parse(saved);
-        }
+        if (saved) return JSON.parse(saved);
       } catch (e) {}
       return JSON.parse(JSON.stringify(defaultState));
     }
@@ -870,9 +604,7 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         const statusEl = document.getElementById('saveStatus');
         statusEl.textContent = '저장 중...';
-        setTimeout(() => {
-          statusEl.textContent = '자동 저장됨';
-        }, 400);
+        setTimeout(() => { statusEl.textContent = '자동 저장됨'; }, 400);
       } catch (e) {}
     }
 
@@ -880,9 +612,7 @@
       const toast = document.getElementById('toast');
       toast.textContent = msg;
       toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2800);
+      setTimeout(() => { toast.classList.remove('show'); }, 2800);
     }
 
     function resetWorksheet() {
@@ -959,7 +689,7 @@
                 <tbody id="s2-tbody-${tid}"></tbody>
               </table>
             </div>
-            <button type="button" class="btn-small" onclick="addColumn('${tid}')">+ 열(Column) 추가</button>
+            <button type="button" class="btn btn-sm" onclick="addColumn('${tid}')">+ 열(Column) 추가</button>
           </div>
         `;
         container.appendChild(box);
@@ -993,9 +723,7 @@
             const f = target.dataset.field;
             state.step2[t][c][f] = target.type === 'checkbox' ? target.checked : target.value;
             saveState();
-            if (f === 'engCol' || f === 'korCol' || f === 'pk') {
-              renderStep3();
-            }
+            if (f === 'engCol' || f === 'korCol' || f === 'pk') renderStep3();
           });
         });
       });
@@ -1114,14 +842,8 @@
       q1.value = state.step5.q1 || '';
       q2.value = state.step5.q2 || '';
 
-      q1.oninput = (e) => {
-        state.step5.q1 = e.target.value;
-        saveState();
-      };
-      q2.oninput = (e) => {
-        state.step5.q2 = e.target.value;
-        saveState();
-      };
+      q1.oninput = (e) => { state.step5.q1 = e.target.value; saveState(); };
+      q2.oninput = (e) => { state.step5.q2 = e.target.value; saveState(); };
     }
 
     function buildMarkdownSummary() {
@@ -1130,7 +852,6 @@
 - 작성일: ${today}
 
 `;
-
       md += `## STEP 01. 업무 분석 및 테이블 도출
 
 `;
@@ -1170,8 +891,7 @@
 `;
         const headers = cols.map(c => c.engCol || c.korCol || '열');
         md += `| ${headers.join(' | ')} |
-`;
-        md += `| ${headers.map(() => ':---').join(' | ')} |
+| ${headers.map(() => ':---').join(' | ')} |
 `;
         rows.forEach(r => {
           const vals = cols.map((_, cIdx) => r[cIdx] || '-');
@@ -1192,7 +912,6 @@
       md += `- **Q2. 운동기록 테이블에 환자 상세정보 대신 patient_id만 적는 장점:**
   ${state.step5.q2 || '(미작성)'}
 `;
-
       return md;
     }
 
@@ -1234,11 +953,7 @@ ${summary}
 
     function escapeHtml(str) {
       if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     function setupScrollSpy() {
@@ -1248,13 +963,9 @@ ${summary}
         let currentId = 'step01';
         sections.forEach(sec => {
           const rect = sec.getBoundingClientRect();
-          if (rect.top <= 160) {
-            currentId = sec.id;
-          }
+          if (rect.top <= 160) currentId = sec.id;
         });
-        tabs.forEach(tab => {
-          tab.classList.toggle('active', tab.dataset.target === currentId);
-        });
+        tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.target === currentId));
       });
     }
 

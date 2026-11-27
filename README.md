@@ -5,15 +5,25 @@
 ## 📁 저장소 폴더 구조
 
 ```text
-├── index.html                      # 전체 실습 목차 허브 페이지 (메인 진입점)
-├── ch02-db-modeling/
-│   └── index.html                  # [Ch 02] AI 홈 재활 서비스 데이터베이스 모델링 워크시트
-├── ch03-select-practice/           # [Ch 03] 기본 SQL 문법 (SELECT ~ FROM ~ WHERE) 실습 (예정)
-├── ch04-join-practice/             # [Ch 04] 고급 SQL 문법 (데이터 형식, JOIN) 실습 (예정)
-└── ch05-table-constraints/         # [Ch 05] 테이블과 제약조건 (PK/FK, DDL 구축) 실습 (예정)
+├── index.html                      # 전체 실습 목차 카드 허브 및 관리자 랭킹 초기화 이스터에그
+├── supabase-config.js              # [사용자 보관] Supabase URL 및 ANON_KEY 설정 파일 (window.APP_CONFIG)
+├── assets/
+│   ├── css/
+│   │   └── common.css              # 전체 페이지 공통 스타일시트
+│   └── js/
+│       └── supabase-service.js     # 통합 랭킹 조회/등록/초기화 공통 모듈
+├── ch02-db-terms/                  # [CH 02-1] 데이터베이스 핵심 용어 스피드 퀴즈
+├── ch02-db-modeling/               # [CH 02-1] AI 홈 재활 서비스 데이터베이스 모델링 실습
+├── ch02-2-quiz/                    # [CH 02-2] 실전 용어 & 데이터 형식 스피드 퀴즈
+├── ch02-2-debug/                   # [CH 02-2] SQL 에러 5대장 트러블슈팅 실습
+├── ch03-1-select/                  # [CH 03-1] SELECT ~ FROM ~ WHERE 실전 조회 미션
+├── ch03-2-speed/                   # [CH 03-2] 정렬 · 그룹화 · 집계 핵심 문법 스피드 퀴즈
+├── ch03-2-quiz/                    # [CH 03-2] SQL 쿼리 파이프라인 디펜스 게임
+└── ch03-2-group/                   # [CH 03-2] 정렬 · 그룹화 · 집계 14단계 실전 워크시트
 ```
 
-## 🚀 GitHub Pages 배포 및 새 실습 추가 방법
+## 🔐 강사용 이스터에그 (랭킹 초기화) 사용법
 
-1. 저장소의 **Settings → Pages** 메뉴에서 `Source`를 `Deploy from a branch`로, `Branch`를 `main`(`/root`)으로 설정합니다.
-2. 추후 새로운 챕터의 실습 파일을 추가할 때는 해당 챕터 폴더(예: `ch03-select-practice/index.html`)를 생성해 업로드한 뒤, 최상단 `index.html`의 주석 가이드를 참고해 카드를 활성화합니다.
+1. 메인 화면(`index.html`)에서 실시간 순위표가 연동된 퀴즈/게임 카드 좌측 상단의 **`CH 02-1`**, **`CH 02-2`**, **`CH 03-2`** 배지를 클릭합니다.
+2. 비밀번호 입력 팝업이 나타나면 설정된 4자리 비밀번호(`3817`)를 입력합니다.
+3. 해당 실습의 Supabase `sql_course_rankings` 데이터만 즉시 삭제·초기화됩니다.

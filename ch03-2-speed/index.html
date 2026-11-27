@@ -16,6 +16,7 @@
       :root {
         --bg-page: #ffffff;
         --bg-subtle: #f8fafc;
+        --bg-callout: #eff6ff;
         --text-main: #0f172a;
         --text-sub: #334155;
         --text-muted: #64748b;
@@ -25,7 +26,7 @@
         --primary-hover: #1e40af;
         --success: #15803d;
         --success-bg: #f0fdf4;
-        --danger: #b91c1c;
+        --danger: #dc2626;
         --danger-bg: #fef2f2;
       }
 
@@ -41,43 +42,47 @@
           -apple-system,
           BlinkMacSystemFont,
           sans-serif;
-        font-size: 17px;
-        line-height: 1.65;
+        font-size: 15px;
+        line-height: 1.4;
         color: var(--text-main);
         background-color: var(--bg-page);
         -webkit-font-smoothing: antialiased;
       }
 
-      .top-nav {
+      .top-bar {
         position: sticky;
         top: 0;
         z-index: 100;
         background-color: #ffffff;
-        border-bottom: 1px solid var(--border-light);
+        border-bottom: 2px solid var(--border-dark);
       }
 
-      .nav-inner {
-        max-width: 1080px;
+      .top-inner {
+        max-width: 1320px;
         margin: 0 auto;
-        padding: 12px 24px;
+        padding: 7px 20px;
+      }
+
+      .control-strip {
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 8px 14px;
       }
 
-      .nav-left {
+      .title-group {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 10px;
       }
 
       .back-link {
         color: var(--primary);
         text-decoration: none;
         font-weight: 700;
-        font-size: 14.5px;
+        font-size: 13.5px;
+        white-space: nowrap;
       }
 
       .back-link:hover {
@@ -87,86 +92,49 @@
       .chapter-badge {
         background-color: #dbeafe;
         color: var(--primary);
+        font-size: 12.5px;
+        font-weight: 700;
+        padding: 2px 7px;
         font-family: 'Consolas', monospace;
-        font-size: 13.5px;
+      }
+
+      .page-title {
+        font-size: 17.5px;
         font-weight: 700;
-        padding: 2px 8px;
-      }
-
-      .timer-badge {
-        font-family: 'Consolas', monospace;
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--primary);
-        background-color: #eff6ff;
-        border: 1px solid #bfdbfe;
-        padding: 4px 12px;
-      }
-
-      .page-container {
-        max-width: 1080px;
-        margin: 0 auto;
-        padding: 32px 24px 80px;
-      }
-
-      .doc-header {
-        margin-bottom: 24px;
-      }
-
-      .doc-title {
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 10px;
         letter-spacing: -0.02em;
       }
 
-      .help-callout {
-        background-color: var(--bg-subtle);
-        border: 1px solid var(--border-light);
-        border-left: 4px solid var(--primary);
-        padding: 14px 18px;
-        font-size: 15.5px;
-        color: var(--text-sub);
-      }
-
-      .start-bar {
+      .player-controls {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 7px;
         flex-wrap: wrap;
-        background-color: var(--bg-subtle);
-        border: 1px solid var(--border-light);
-        padding: 16px 20px;
-        margin-bottom: 28px;
       }
 
-      .start-bar label {
-        font-weight: 700;
-        font-size: 15.5px;
-      }
-
-      .start-bar input {
+      input[type='text'] {
         font-family: inherit;
-        font-size: 16px;
-        padding: 8px 12px;
+        font-size: 14.5px;
+        padding: 5px 10px;
         border: 1px solid var(--border-light);
-        width: 220px;
+        color: var(--text-main);
+        background-color: #ffffff;
       }
 
-      .start-bar input:focus {
+      input[type='text']:focus {
         outline: none;
         border-color: var(--primary);
       }
 
       .btn {
         font-family: inherit;
-        font-size: 15.5px;
-        font-weight: 700;
-        padding: 9px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 5px 12px;
         border: 1px solid var(--border-dark);
         background-color: #ffffff;
         color: var(--text-main);
         cursor: pointer;
+        white-space: nowrap;
       }
 
       .btn:hover {
@@ -183,239 +151,346 @@
         background-color: var(--primary-hover);
       }
 
+      .btn-submit-lg {
+        width: 100%;
+        padding: 11px 14px;
+        font-size: 15.5px;
+        font-weight: 700;
+      }
+
+      .timer-display {
+        background-color: var(--border-dark);
+        color: #ffffff;
+        padding: 4px 11px;
+        font-family: 'Consolas', monospace;
+        font-size: 15px;
+        font-weight: 700;
+        min-width: 74px;
+        text-align: center;
+      }
+
+      .word-bank-strip {
+        margin-top: 6px;
+        padding: 5px 10px;
+        background-color: var(--bg-callout);
+        border: 1px solid #bfdbfe;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      .bank-label {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-right: 4px;
+      }
+
+      .word-chip {
+        background-color: #ffffff;
+        border: 1px solid #93c5fd;
+        color: #1e3a8a;
+        font-size: 12.5px;
+        font-weight: 600;
+        padding: 1px 7px;
+        font-family: 'Consolas', 'Noto Sans KR', monospace;
+      }
+
+      .main-container {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 10px 20px 18px;
+        display: grid;
+        grid-template-columns: 1fr 285px;
+        gap: 16px;
+        align-items: start;
+      }
+
+      @media (max-width: 980px) {
+        .main-container {
+          grid-template-columns: 1fr;
+        }
+      }
+
       .quiz-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 18px;
-        margin-bottom: 28px;
+        gap: 7px;
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: 680px) {
         .quiz-grid {
           grid-template-columns: 1fr;
         }
       }
 
-      .quiz-card {
+      .q-card {
         border: 1px solid var(--border-light);
-        border-top: 3px solid var(--border-dark);
-        padding: 16px 18px;
         background-color: #ffffff;
+        padding: 7px 11px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 12px;
+        gap: 5px;
       }
 
-      .quiz-card.correct {
-        border-top-color: var(--success);
+      .q-card.card-correct {
+        border-color: var(--success);
         background-color: var(--success-bg);
       }
 
-      .quiz-card.wrong {
-        border-top-color: var(--danger);
+      .q-card.card-wrong {
+        border-color: var(--danger);
         background-color: var(--danger-bg);
       }
 
-      .q-num {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--primary);
-        margin-bottom: 4px;
-      }
-
-      .q-desc {
-        font-size: 15.5px;
+      .q-top {
+        display: flex;
+        gap: 6px;
+        align-items: flex-start;
+        font-size: 13.5px;
+        line-height: 1.38;
         color: var(--text-main);
-        word-break: keep-all;
       }
 
-      .q-desc code {
+      .q-top code {
         background-color: #e2e8f0;
-        padding: 1px 5px;
+        padding: 0 4px;
         font-family: 'Consolas', monospace;
-        font-size: 14px;
+        font-size: 12.5px;
       }
 
-      .q-input {
-        width: 100%;
-        font-family: 'Consolas', 'Noto Sans KR', monospace;
-        font-size: 16px;
-        font-weight: 600;
-        padding: 8px 12px;
+      .q-num {
+        display: inline-block;
+        background-color: var(--bg-subtle);
         border: 1px solid var(--border-light);
+        font-weight: 700;
+        font-size: 11.5px;
+        padding: 0 5px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      .q-input-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .quiz-input {
+        flex: 1;
+        width: 100%;
+        font-size: 14px !important;
+        padding: 4px 8px !important;
+        font-family: 'Consolas', 'Noto Sans KR', monospace !important;
+      }
+
+      .quiz-input.correct {
+        border-color: var(--success);
+        background-color: #ffffff;
+        color: var(--success);
+        font-weight: 700;
+      }
+
+      .quiz-input.wrong {
+        border-color: var(--danger);
         background-color: #ffffff;
       }
 
-      .q-input:focus {
-        outline: none;
-        border-color: var(--primary);
-      }
-
-      .feedback {
-        font-size: 14px;
+      .status-badge {
+        font-size: 11.5px;
         font-weight: 700;
-        display: none;
+        padding: 2px 6px;
+        white-space: nowrap;
+        border: 1px solid transparent;
       }
 
-      .feedback.show {
-        display: block;
+      .badge-wait {
+        color: var(--text-muted);
+        border-color: #e2e8f0;
+        background: var(--bg-subtle);
       }
-      .feedback.ok {
-        color: var(--success);
+      .badge-ok {
+        background-color: var(--success);
+        color: #ffffff;
       }
-      .feedback.no {
-        color: var(--danger);
+      .badge-err {
+        background-color: var(--danger);
+        color: #ffffff;
       }
 
-      .submit-area {
+      .locked-overlay {
+        opacity: 0.45;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .side-column {
         display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-bottom: 36px;
+        flex-direction: column;
+        gap: 10px;
       }
 
-      .result-panel {
-        display: none;
-        border: 2px solid var(--border-dark);
-        padding: 22px;
-        margin-bottom: 36px;
+      .submit-box {
+        border: 1px solid var(--border-light);
         background-color: var(--bg-subtle);
+        padding: 10px;
       }
 
-      .result-panel.show {
+      .result-feedback {
+        margin-top: 7px;
+        font-size: 13.5px;
+        font-weight: 700;
+        line-height: 1.38;
+        display: none;
+      }
+
+      .result-feedback.show {
         display: block;
       }
 
-      .result-title {
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 8px;
+      .rank-panel {
+        border: 1px solid var(--border-light);
+        border-top: 3px solid var(--border-dark);
+        background-color: #ffffff;
       }
 
-      .leaderboard-section {
-        border-top: 2px solid var(--border-dark);
-        padding-top: 24px;
-      }
-
-      .lb-header {
+      .rank-header {
+        padding: 8px 12px;
+        background-color: var(--bg-subtle);
+        border-bottom: 1px solid var(--border-light);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 14px;
       }
 
-      .lb-title {
-        font-size: 19px;
+      .rank-title {
+        font-size: 15px;
         font-weight: 700;
       }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 15.5px;
-      }
-
-      th,
-      td {
+      .btn-refresh {
+        font-size: 12px;
+        padding: 2px 7px;
         border: 1px solid var(--border-light);
-        padding: 10px 14px;
-        text-align: left;
+        background: #ffffff;
+        cursor: pointer;
       }
 
-      th {
-        background-color: var(--bg-subtle);
+      .rank-list {
+        list-style: none;
+        padding: 4px 10px;
+      }
+
+      .rank-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 4px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 13.5px;
+      }
+
+      .rank-item:last-child {
+        border-bottom: none;
+      }
+      .rank-top {
+        background-color: #fffbeb;
         font-weight: 700;
+      }
+
+      .rank-num {
+        display: inline-block;
+        width: 32px;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .rank-time {
+        font-family: 'Consolas', monospace;
+        font-weight: 700;
+        color: var(--text-sub);
       }
     </style>
   </head>
   <body>
-    <nav class="top-nav">
-      <div class="nav-inner">
-        <div class="nav-left">
-          <a href="../index.html" class="back-link"
-            >&larr; 실습 아카이브 목록</a
+    <header class="top-bar">
+      <div class="top-inner">
+        <div class="control-strip">
+          <div class="title-group">
+            <a href="../index.html" class="back-link">&larr; 목록</a>
+            <span class="chapter-badge">CH 03-2</span>
+            <h1 class="page-title">정렬 · 그룹화 · 집계 핵심 문법 스피드 퀴즈</h1>
+          </div>
+
+          <div class="player-controls">
+            <input
+              type="text"
+              id="nicknameInput"
+              placeholder="별명 입력 (예: SQL마스터)"
+              style="width: 175px"
+            />
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="startBtn"
+              onclick="startQuiz()"
+            >
+              퀴즈 시작
+            </button>
+            <button type="button" class="btn" onclick="resetQuiz()">
+              다시 풀기 (섞기)
+            </button>
+            <span class="timer-display" id="timerDisplay">00.0초</span>
+          </div>
+        </div>
+
+        <div class="word-bank-strip">
+          <span class="bank-label">[보기]</span>
+          <div
+            id="wordBank"
+            style="display: flex; flex-wrap: wrap; gap: 4px"
+          ></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-container">
+      <section id="quizSection" class="locked-overlay">
+        <div class="quiz-grid" id="quizGrid"></div>
+      </section>
+
+      <aside class="side-column">
+        <div class="submit-box locked-overlay" id="submitSection">
+          <button
+            type="button"
+            class="btn btn-primary btn-submit-lg"
+            onclick="checkAnswers()"
           >
-          <span class="chapter-badge">CH 03-2 SPEED</span>
-        </div>
-        <div class="timer-badge" id="timerDisplay">00:00</div>
-      </div>
-    </nav>
-
-    <main class="page-container">
-      <header class="doc-header">
-        <h1 class="doc-title">
-          정렬 · 그룹화 · 집계 함수 및 작성 순서 스피드 퀴즈
-        </h1>
-        <div class="help-callout">
-          이름을 입력하고 <strong>[퀴즈 시작]</strong>을 누르면 타이머가
-          작동합니다. 영문 SQL 예약어 및 함수는 대소문자를 구분하지 않습니다.
-          (괄호 포함 여부는 안내를 참고하세요.)
-        </div>
-      </header>
-
-      <div class="start-bar">
-        <label for="studentName">교육생 이름</label>
-        <input type="text" id="studentName" placeholder="예: 홍길동" />
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="startBtn"
-          onclick="startQuiz()"
-        >
-          퀴즈 시작
-        </button>
-        <button type="button" class="btn" onclick="resetQuiz()">
-          다시 풀기
-        </button>
-      </div>
-
-      <div class="quiz-grid" id="quizGrid"></div>
-
-      <div class="submit-area">
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="submitBtn"
-          onclick="submitQuiz()"
-          disabled
-        >
-          채점 및 기록 제출
-        </button>
-      </div>
-
-      <section class="result-panel" id="resultPanel">
-        <div class="result-title" id="resultSummary"></div>
-        <div
-          id="saveMessage"
-          style="font-size: 15px; color: var(--text-sub)"
-        ></div>
-      </section>
-
-      <section class="leaderboard-section">
-        <div class="lb-header">
-          <h2 class="lb-title">실시간 명예의 전당 (TOP 15)</h2>
-          <button type="button" class="btn" onclick="loadLeaderboard()">
-            새로고침
+            채점 및 기록 제출하기
           </button>
+          <div id="resultFeedback" class="result-feedback"></div>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 70px">순위</th>
-              <th>이름</th>
-              <th style="width: 120px">점수</th>
-              <th style="width: 120px">소요 시간</th>
-              <th style="width: 180px">제출 시각</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboardBody">
-            <tr>
-              <td colspan="5">순위 데이터를 불러오는 중...</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+
+        <div class="rank-panel">
+          <div class="rank-header">
+            <h2 class="rank-title">실시간 Top 10 순위</h2>
+            <button
+              type="button"
+              class="btn-refresh"
+              onclick="fetchLeaderboard()"
+            >
+              새로고침
+            </button>
+          </div>
+          <ul class="rank-list" id="rankList">
+            <li class="rank-item" style="color: var(--text-muted)">
+              순위 데이터를 불러오는 중...
+            </li>
+          </ul>
+        </div>
+      </aside>
     </main>
 
     <script>
@@ -431,105 +506,130 @@
         );
       }
 
-      const questions = [
+      const baseQuizData = [
         {
           id: 1,
-          desc: '조회 결과의 데이터 값에는 영향을 주지 않고, 출력되는 행의 정렬 순서를 지정할 때 사용하는 절은?',
-          answers: ['ORDER BY'],
-          displayAns: 'ORDER BY',
+          desc: '조회 결과의 데이터 값에는 영향을 주지 않고, 출력되는 행의 정렬 순서를 지정할 때 사용하는 절',
+          answers: ['orderby', '정렬orderby'],
         },
         {
           id: 2,
-          desc: '정렬 시 큰 값부터 작은 값 순서(내림차순)로 출력하기 위해 열 이름 뒤에 붙이는 키워드는?',
-          answers: ['DESC'],
-          displayAns: 'DESC',
+          desc: '정렬 시 큰 값부터 작은 값 순서(내림차순)로 출력하기 위해 열 이름 뒤에 붙이는 키워드',
+          answers: ['desc', '내림차순desc'],
         },
         {
           id: 3,
-          desc: '정렬 시 오름차순을 의미하며, 생략 시 기본값으로 적용되는 키워드는?',
-          answers: ['ASC'],
-          displayAns: 'ASC',
+          desc: '정렬 시 오름차순을 의미하며, 생략 시 기본값으로 적용되는 키워드',
+          answers: ['asc', '오름차순asc'],
         },
         {
           id: 4,
-          desc: '조회 결과 중 위에서부터 원하는 개수만큼만 잘라서 출력 개수를 제한할 때 사용하는 절은?',
-          answers: ['LIMIT'],
-          displayAns: 'LIMIT',
+          desc: '조회 결과 중 위에서부터 원하는 개수만큼만 잘라서 출력 개수를 제한할 때 사용하는 절',
+          answers: ['limit', '개수제한limit'],
         },
         {
           id: 5,
-          desc: '조회 결과에서 중복된 데이터를 제거하고 고유한 값만 1개씩 남길 때 열 이름 앞에 붙이는 예약어는?',
-          answers: ['DISTINCT'],
-          displayAns: 'DISTINCT',
+          desc: '조회 결과에서 중복된 데이터를 제거하고 고유한 값만 1개씩 남길 때 열 이름 앞에 붙이는 예약어',
+          answers: ['distinct', '중복제거distinct'],
         },
         {
           id: 6,
-          desc: '특정 열의 공통된 값끼리 데이터를 그룹으로 묶어 요약 통계를 낼 때 사용하는 절은?',
-          answers: ['GROUP BY'],
-          displayAns: 'GROUP BY',
+          desc: '특정 열의 공통된 값끼리 데이터를 그룹으로 묶어 요약 통계를 낼 때 사용하는 절',
+          answers: ['groupby', '그룹화groupby'],
         },
         {
           id: 7,
-          desc: '그룹화된 열의 합계를 계산할 때 사용하는 집계 함수 이름은? (괄호 제외)',
-          answers: ['SUM'],
-          displayAns: 'SUM',
+          desc: '그룹화된 열의 합계를 계산할 때 사용하는 집계 함수 이름 (괄호 제외)',
+          answers: ['sum', '합계sum'],
         },
         {
           id: 8,
-          desc: '그룹화된 열의 평균값을 계산할 때 사용하는 집계 함수 이름은? (괄호 제외)',
-          answers: ['AVG'],
-          displayAns: 'AVG',
+          desc: '그룹화된 열의 평균값을 계산할 때 사용하는 집계 함수 이름 (괄호 제외)',
+          answers: ['avg', '평균avg'],
         },
         {
           id: 9,
-          desc: "<code>NULL</code> 값을 제외하고 실제 데이터가 들어 있는 행의 개수만 셀 때 사용하는 함수 작성 형식은? (예: 열 이름을 '열'로 표기)",
-          answers: [
-            'COUNT(열)',
-            'COUNT(열이름)',
-            'COUNT(열_이름)',
-            'COUNT(COLUMN)',
-          ],
-          displayAns: 'COUNT(열이름)',
+          desc: '<code>NULL</code> 값을 제외하고 실제 데이터가 들어 있는 행의 개수만 셀 때 사용하는 함수 형식',
+          answers: ['count열', 'count열이름', 'countcolumn'],
         },
         {
           id: 10,
-          desc: '집계 함수(<code>SUM</code>, <code>AVG</code> 등)를 조건식에 사용할 때 <code>WHERE</code> 대신 <code>GROUP BY</code> 뒤에 작성하는 조건절은?',
-          answers: ['HAVING'],
-          displayAns: 'HAVING',
+          desc: '집계 함수(<code>SUM</code>, <code>AVG</code> 등)를 조건식에 사용할 때 <code>WHERE</code> 대신 <code>GROUP BY</code> 뒤에 쓰는 조건절',
+          answers: ['having', '그룹조건having'],
         },
         {
           id: 11,
-          desc: '[작성 순서] <code>SELECT ~ FROM ~ WHERE</code> 다음에 오며, <code>HAVING</code>보다 반드시 먼저 작성해야 하는 절은?',
-          answers: ['GROUP BY'],
-          displayAns: 'GROUP BY',
+          desc: '그룹 내 가장 작은 값(최솟값)을 구할 때 사용하는 집계 함수 이름 (괄호 제외)',
+          answers: ['min', '최솟값min'],
         },
         {
           id: 12,
-          desc: '[작성 순서] <code>SELECT ~ FROM ~ WHERE ~ GROUP BY ~ HAVING ~ ORDER BY</code> 중 항상 맨 마지막에 위치하는 절은?',
-          answers: ['LIMIT'],
-          displayAns: 'LIMIT',
+          desc: '그룹 내 가장 큰 값(최댓값)을 구할 때 사용하는 집계 함수 이름 (괄호 제외)',
+          answers: ['max', '최댓값max'],
         },
       ];
 
-      let timerInterval = null;
-      let startTime = null;
-      let elapsedSeconds = 0;
-      let isStarted = false;
-      let isSubmitted = false;
+      const wordBankItems = [
+        'ORDER BY',
+        'DESC',
+        'ASC',
+        'LIMIT',
+        'DISTINCT',
+        'GROUP BY',
+        'SUM',
+        'AVG',
+        'COUNT(열)',
+        'HAVING',
+        'MIN',
+        'MAX',
+      ];
 
-      function renderQuiz() {
+      let activeQuizList = [];
+      let startTime = null;
+      let timerInterval = null;
+      let isRunning = false;
+      let isCompleted = false;
+
+      function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function normalize(str) {
+        return String(str || '')
+          .toLowerCase()
+          .replace(/[\s\(\)\-_]/g, '');
+      }
+
+      function renderBoard(shouldShuffle = true) {
+        activeQuizList = shouldShuffle
+          ? shuffleArray(baseQuizData)
+          : [...baseQuizData];
+        const shuffledBank = shouldShuffle
+          ? shuffleArray(wordBankItems)
+          : [...wordBankItems];
+
+        const bankEl = document.getElementById('wordBank');
+        bankEl.innerHTML = shuffledBank
+          .map((w) => `<span class="word-chip">${w}</span>`)
+          .join('');
+
         const grid = document.getElementById('quizGrid');
-        grid.innerHTML = questions
+        grid.innerHTML = activeQuizList
           .map(
-            (q) => `
-        <div class="quiz-card" id="card_${q.id}">
-          <div>
-            <div class="q-num">Q${q.id}.</div>
-            <div class="q-desc">${q.desc}</div>
+            (q, idx) => `
+        <div class="q-card" id="card_${idx}">
+          <div class="q-top">
+            <span class="q-num">Q${idx + 1}</span>
+            <span>${q.desc}</span>
           </div>
-          <div>
-            <input type="text" class="q-input" id="ans_${q.id}" placeholder="정답 입력..." disabled autocomplete="off" />
-            <div class="feedback" id="fb_${q.id}"></div>
+          <div class="q-input-row">
+            <input type="text" class="quiz-input" id="ans_${idx}" placeholder="SQL 예약어 또는 함수 입력" onkeydown="if(event.key==='Enter') checkAnswers()" />
+            <span class="status-badge badge-wait" id="res_${idx}">대기</span>
           </div>
         </div>
       `
@@ -537,156 +637,180 @@
           .join('');
       }
 
-      function normalize(str) {
-        return str.trim().toUpperCase().replace(/\s+/g, ' ');
-      }
-
       function startQuiz() {
-        const name = document.getElementById('studentName').value.trim();
-        if (!name) {
-          alert('교육생 이름을 먼저 입력해 주세요.');
-          document.getElementById('studentName').focus();
+        const nick = document.getElementById('nicknameInput').value.trim();
+        if (!nick) {
+          alert('먼저 본인의 별명을 입력해 주세요!');
+          document.getElementById('nicknameInput').focus();
           return;
         }
-        if (isStarted) return;
 
-        isStarted = true;
-        isSubmitted = false;
-        document.getElementById('studentName').disabled = true;
+        renderBoard(true);
+
+        document.getElementById('nicknameInput').disabled = true;
         document.getElementById('startBtn').disabled = true;
-        document.getElementById('submitBtn').disabled = false;
+        document
+          .getElementById('quizSection')
+          .classList.remove('locked-overlay');
+        document
+          .getElementById('submitSection')
+          .classList.remove('locked-overlay');
 
-        questions.forEach((q) => {
-          document.getElementById(`ans_${q.id}`).disabled = false;
-        });
-        document.getElementById('ans_1').focus();
+        const fb = document.getElementById('resultFeedback');
+        fb.classList.remove('show');
+        fb.textContent = '';
 
-        startTime = Date.now();
+        isRunning = true;
+        isCompleted = false;
+        startTime = performance.now();
+
         timerInterval = setInterval(() => {
-          elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
-          const mins = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
-          const secs = String(elapsedSeconds % 60).padStart(2, '0');
-          document.getElementById('timerDisplay').textContent =
-            `${mins}:${secs}`;
-        }, 250);
+          const elapsed = ((performance.now() - startTime) / 1000).toFixed(1);
+          document.getElementById('timerDisplay').textContent = `${elapsed}초`;
+        }, 100);
+
+        document.getElementById('ans_0').focus();
       }
 
-      async function submitQuiz() {
-        if (!isStarted || isSubmitted) return;
-        clearInterval(timerInterval);
-        isSubmitted = true;
-        document.getElementById('submitBtn').disabled = true;
+      async function checkAnswers() {
+        if (!isRunning || isCompleted) return;
 
-        let score = 0;
-        questions.forEach((q) => {
-          const inputEl = document.getElementById(`ans_${q.id}`);
-          const cardEl = document.getElementById(`card_${q.id}`);
-          const fbEl = document.getElementById(`fb_${q.id}`);
-          inputEl.disabled = true;
-
+        let correctCount = 0;
+        activeQuizList.forEach((q, idx) => {
+          const cardEl = document.getElementById(`card_${idx}`);
+          const inputEl = document.getElementById(`ans_${idx}`);
+          const resEl = document.getElementById(`res_${idx}`);
           const userVal = normalize(inputEl.value);
-          const isCorrect = q.answers.some((a) => normalize(a) === userVal);
 
-          if (isCorrect) {
-            score++;
-            cardEl.classList.add('correct');
-            fbEl.textContent = `정답입니다! (${q.displayAns})`;
-            fbEl.className = 'feedback show ok';
+          const isRight = q.answers.some((ans) => normalize(ans) === userVal);
+          if (isRight) {
+            correctCount++;
+            cardEl.classList.remove('card-wrong');
+            cardEl.classList.add('card-correct');
+            inputEl.classList.remove('wrong');
+            inputEl.classList.add('correct');
+            inputEl.disabled = true;
+            resEl.className = 'status-badge badge-ok';
+            resEl.textContent = '정답';
           } else {
-            cardEl.classList.add('wrong');
-            fbEl.textContent = `오답 — 정답: ${q.displayAns}`;
-            fbEl.className = 'feedback show no';
+            cardEl.classList.remove('card-correct');
+            cardEl.classList.add('card-wrong');
+            inputEl.classList.remove('correct');
+            inputEl.classList.add('wrong');
+            resEl.className = 'status-badge badge-err';
+            resEl.textContent = '오답';
           }
         });
 
-        const name = document.getElementById('studentName').value.trim();
-        const mins = Math.floor(elapsedSeconds / 60);
-        const secs = elapsedSeconds % 60;
-        document.getElementById('resultSummary').textContent =
-          `${name}님의 결과: ${questions.length}문제 중 ${score}문제 정답 (소요 시간: ${mins}분 ${secs}초)`;
-        document.getElementById('resultPanel').classList.add('show');
+        const nick = document.getElementById('nicknameInput').value.trim();
+        const fb = document.getElementById('resultFeedback');
+        fb.classList.add('show');
 
-        if (supabaseClient) {
-          const { error } = await supabaseClient.from(TABLE_NAME).insert([
-            {
-              student_name: name,
-              score: score,
-              total_questions: questions.length,
-              elapsed_seconds: elapsedSeconds,
-            },
-          ]);
-          document.getElementById('saveMessage').textContent = error
-            ? '점수 저장 중 오류가 발생했습니다: ' + error.message
-            : '실시간 순위표에 기록이 등록되었습니다.';
-          loadLeaderboard();
+        if (correctCount === activeQuizList.length) {
+          clearInterval(timerInterval);
+          isRunning = false;
+          isCompleted = true;
+
+          const exactSec = Number(
+            ((performance.now() - startTime) / 1000).toFixed(2)
+          );
+          document.getElementById('timerDisplay').textContent = `${exactSec}초`;
+
+          fb.style.color = 'var(--success)';
+          fb.textContent = `완주 성공! ${nick}님 기록: ${exactSec}초`;
+
+          await submitScore(nick, activeQuizList.length, exactSec);
         } else {
-          document.getElementById('saveMessage').textContent =
-            'Supabase 설정이 연결되지 않아 로컬 채점만 완료되었습니다.';
+          fb.style.color = 'var(--danger)';
+          fb.textContent = `${activeQuizList.length}문제 중 ${correctCount}문제 정답 (오답 수정 후 재제출)`;
         }
       }
 
-      function resetQuiz() {
-        clearInterval(timerInterval);
-        isStarted = false;
-        isSubmitted = false;
-        elapsedSeconds = 0;
-        document.getElementById('timerDisplay').textContent = '00:00';
-        document.getElementById('studentName').disabled = false;
-        document.getElementById('startBtn').disabled = false;
-        document.getElementById('submitBtn').disabled = true;
-        document.getElementById('resultPanel').classList.remove('show');
-        renderQuiz();
+      async function submitScore(nickname, score, elapsedSec) {
+        if (!supabaseClient) return;
+
+        const { error } = await supabaseClient.from(TABLE_NAME).insert([
+          {
+            student_name: nickname,
+            score: score,
+            total_questions: activeQuizList.length,
+            elapsed_seconds: Math.round(elapsedSec),
+          },
+        ]);
+
+        if (error) {
+          alert('순위 등록 중 오류가 발생했습니다: ' + error.message);
+        } else {
+          await fetchLeaderboard();
+        }
       }
 
-      async function loadLeaderboard() {
-        const tbody = document.getElementById('leaderboardBody');
+      async function fetchLeaderboard() {
+        const listEl = document.getElementById('rankList');
         if (!supabaseClient) {
-          tbody.innerHTML =
-            '<tr><td colspan="5">supabase-config.js 설정을 확인해 주세요.</td></tr>';
+          listEl.innerHTML = `<li class="rank-item" style="color: var(--text-muted); font-size: 13px;">루트 폴더의 supabase-config.js에 키를 입력하면 실시간 순위가 표시됩니다.</li>`;
           return;
         }
 
         const { data, error } = await supabaseClient
           .from(TABLE_NAME)
-          .select('*')
-          .order('score', { ascending: false })
+          .select('student_name, elapsed_seconds')
           .order('elapsed_seconds', { ascending: true })
-          .limit(15);
+          .limit(10);
 
-        if (error || !data || data.length === 0) {
-          tbody.innerHTML =
-            '<tr><td colspan="5">아직 등록된 기록이 없습니다. 첫 번째 주인공이 되어 보세요!</td></tr>';
+        if (error) {
+          listEl.innerHTML = `<li class="rank-item" style="color: var(--danger);">순위 조회 실패</li>`;
           return;
         }
 
-        tbody.innerHTML = data
-          .map((row, idx) => {
-            const m = String(Math.floor(row.elapsed_seconds / 60)).padStart(
-              2,
-              '0'
-            );
-            const s = String(row.elapsed_seconds % 60).padStart(2, '0');
-            const dateStr = new Date(row.created_at).toLocaleString('ko-KR', {
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-            });
-            return `
-          <tr>
-            <td><strong>${idx + 1}위</strong></td>
-            <td>${row.student_name}</td>
-            <td><strong>${row.score} / ${row.total_questions}</strong></td>
-            <td>${m}:${s}</td>
-            <td>${dateStr}</td>
-          </tr>
-        `;
-          })
+        if (!data || data.length === 0) {
+          listEl.innerHTML = `<li class="rank-item" style="color: var(--text-muted); font-size: 13px;">아직 등록된 기록이 없습니다. 첫 번째 1등에 도전하세요!</li>`;
+          return;
+        }
+
+        listEl.innerHTML = data
+          .map(
+            (row, idx) => `
+        <li class="rank-item ${idx === 0 ? 'rank-top' : ''}">
+          <div>
+            <span class="rank-num">${idx + 1}위</span>
+            <span>${escapeHtml(row.student_name)}</span>
+          </div>
+          <span class="rank-time">${row.elapsed_seconds}초</span>
+        </li>
+      `
+          )
           .join('');
       }
 
-      renderQuiz();
-      loadLeaderboard();
+      function resetQuiz() {
+        clearInterval(timerInterval);
+        isRunning = false;
+        isCompleted = false;
+        document.getElementById('timerDisplay').textContent = '00.0초';
+        document.getElementById('nicknameInput').disabled = false;
+        document.getElementById('startBtn').disabled = false;
+        document.getElementById('quizSection').classList.add('locked-overlay');
+        document
+          .getElementById('submitSection')
+          .classList.add('locked-overlay');
+
+        const fb = document.getElementById('resultFeedback');
+        fb.classList.remove('show');
+        fb.textContent = '';
+
+        renderBoard(true);
+      }
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
+      renderBoard(true);
+      fetchLeaderboard();
     </script>
   </body>
 </html>

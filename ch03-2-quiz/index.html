@@ -422,33 +422,6 @@
     }
 
     .lb-title { font-size: 19px; font-weight: 700; }
-
-    .config-box {
-      display: none;
-      background-color: #FFFBEB;
-      border: 1px solid #F59E0B;
-      padding: 14px 16px;
-      margin-bottom: 16px;
-      font-size: 14.5px;
-    }
-
-    .config-box.show { display: block; }
-
-    .config-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-
-    .config-row input {
-      font-family: 'Consolas', monospace;
-      font-size: 13.5px;
-      padding: 6px 10px;
-      border: 1px solid var(--border-light);
-      flex: 1;
-      min-width: 220px;
-    }
   </style>
 </head>
 <body>
@@ -535,19 +508,7 @@
     <section class="leaderboard-section">
       <div class="lb-header">
         <h2 class="lb-title">실시간 명예의 전당 (TOP 15)</h2>
-        <div>
-          <button type="button" class="btn" style="font-size: 13.5px; padding: 6px 12px;" onclick="toggleConfigBox()">DB 연결 설정</button>
-          <button type="button" class="btn" style="font-size: 13.5px; padding: 6px 12px;" onclick="loadLeaderboard()">새로고침</button>
-        </div>
-      </div>
-
-      <div class="config-box" id="configBox">
-        <strong>Supabase 수동 연결 (로컬 실행 또는 config 파일 인식 실패 시 1회 입력):</strong>
-        <div class="config-row">
-          <input type="text" id="manualUrl" placeholder="SUPABASE_URL (https://xxx.supabase.co)" />
-          <input type="text" id="manualKey" placeholder="SUPABASE_ANON_KEY (eyJ...)" />
-          <button type="button" class="btn btn-primary" style="padding: 6px 14px;" onclick="saveManualConfig()">연결 및 저장</button>
-        </div>
+        <button type="button" class="btn" style="font-size: 13.5px; padding: 6px 12px;" onclick="loadLeaderboard()">새로고침</button>
       </div>
 
       <table>
@@ -763,42 +724,7 @@
     let elapsedSeconds = 0;
 
     const TABLE_NAME = 'ch03_2_quiz_results';
-    let supabaseClient = null;
-
-    function getSupabaseClient() {
-      if (supabaseClient) return supabaseClient;
-      let url = '';
-      let key = '';
-
-      try { if (typeof SUPABASE_URL !== 'undefined') url = SUPABASE_URL; } catch (e) {}
-      try { if (typeof SUPABASE_ANON_KEY !== 'undefined') key = SUPABASE_ANON_KEY; } catch (e) {}
-
-      if (!url) url = localStorage.getItem('sb_url') || '';
-      if (!key) key = localStorage.getItem('sb_key') || '';
-
-      if (window.supabase && url && key) {
-        supabaseClient = window.supabase.createClient(url, key);
-      }
-      return supabaseClient;
-    }
-
-    function toggleConfigBox() {
-      document.getElementById('configBox').classList.toggle('show');
-    }
-
-    function saveManualConfig() {
-      const u = document.getElementById('manualUrl').value.trim();
-      const k = document.getElementById('manualKey').value.trim();
-      if (!u || !k) {
-        alert('URL과 ANON KEY를 모두 입력해 주세요.');
-        return;
-      }
-      localStorage.setItem('sb_url', u);
-      localStorage.setItem('sb_key', k);
-      supabaseClient = null;
-      document.getElementById('configBox').classList.remove('show');
-      loadLeaderboard();
-    }
+    const sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function updateHud() {
       document.getElementById('hudHearts').textContent = '♥'.repeat(hearts) + '♡'.repeat(3 - hearts);
@@ -988,33 +914,23 @@
       document.getElementById('gameoverDesc').textContent =
         `클리어 스테이지: ${clearedCount} / ${stages.length} | 최종 점수: ${score} PTS (스피드·라이프 보너스 +${speedBonus + lifeBonus} PTS) | 소요 시간: ${elapsedSeconds}초`;
 
-      const client = getSupabaseClient();
-      if (client) {
-        const { error } = await client.from(TABLE_NAME).insert([{
-          student_name: playerName,
-          score: score,
-          total_questions: clearedCount,
-          elapsed_seconds: elapsedSeconds
-        }]);
-        document.getElementById('dbSaveStatus').textContent = error
-          ? '순위표 기록 저장 중 오류: ' + error.message
-          : '명예의 전당 순위표에 최종 점수가 등록되었습니다.';
-        loadLeaderboard();
-      } else {
-        document.getElementById('dbSaveStatus').textContent = 'Supabase 설정이 연결되지 않아 로컬 플레이만 완료되었습니다.';
-      }
+      const { error } = await sbClient.from(TABLE_NAME).insert([{
+        student_name: playerName,
+        score: score,
+        total_questions: clearedCount,
+        elapsed_seconds: elapsedSeconds
+      }]);
+
+      document.getElementById('dbSaveStatus').textContent = error
+        ? '순위표 기록 저장 중 오류: ' + error.message
+        : '명예의 전당 순위표에 최종 점수가 등록되었습니다.';
+
+      loadLeaderboard();
     }
 
     async function loadLeaderboard() {
       const tbody = document.getElementById('leaderboardBody');
-      const client = getSupabaseClient();
-      if (!client) {
-        tbody.innerHTML = '<tr><td colspan="5">supabase-config.js를 불러오지 못했습니다. 우측 상단 [DB 연결 설정] 버튼을 눌러 URL과 KEY를 입력해 주세요.</td></tr>';
-        document.getElementById('configBox').classList.add('show');
-        return;
-      }
-
-      const { data, error } = await client
+      const { data, error } = await sbClient
         .from(TABLE_NAME)
         .select('*')
         .order('score', { ascending: false })
@@ -1022,7 +938,7 @@
         .limit(15);
 
       if (error) {
-        tbody.innerHTML = `<tr><td colspan="5" style="color:#B91C1C;">DB 오류: ${error.message} (Supabase SQL Editor에서 ch03_2_quiz_results 테이블을 생성했는지 확인해 주세요)</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="color:#B91C1C;">DB 오류: ${error.message} (Supabase SQL Editor에서 ch03_2_quiz_results 테이블이 생성되었는지 확인해 주세요)</td></tr>`;
         return;
       }
 
@@ -1046,7 +962,7 @@
       }).join('');
     }
 
-    window.addEventListener('DOMContentLoaded', loadLeaderboard);
+    loadLeaderboard();
   </script>
 </body>
 </html>

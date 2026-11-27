@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CH 03-2 정렬·그룹화·집계 14단계 실전 워크시트</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #FFFFFF;
+      --bg-subtle: #F8FAFC;
+      --bg-code: #0F172A;
+      --text-main: #0F172A;
+      --text-sub: #334155;
+      --text-muted: #64748B;
+      --border-light: #CBD5E1;
+      --border-dark: #1E293B;
+      --primary: #1D4ED8;
+      --primary-hover: #1E40AF;
+      --success: #15803D;
+      --success-bg: #F0FDF4;
+      --danger: #B91C1C;
+      --danger-bg: #FEF2F2;
+      --amber: #B45309;
+      --amber-bg: #FFFBEB;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16.5px;
+      line-height: 1.65;
+      color: var(--text-main);
+      background-color: var(--bg-page);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 상단 네비게이션 */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .back-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14.5px;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
+    .chapter-badge {
+      background-color: #DBEAFE;
+      color: var(--primary);
+      font-family: 'Consolas', monospace;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .progress-pill {
+      font-family: 'Consolas', 'Noto Sans KR', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      background-color: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: var(--primary);
+      padding: 4px 12px;
+    }
+
+    .btn {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border: 1px solid var(--border-dark);
+      background-color: #FFFFFF;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .btn:hover { background-color: #F1F5F9; }
+
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover { background-color: var(--primary-hover); }
+
+    .btn-success {
+      background-color: var(--success);
+      border-color: var(--success);
+      color: #FFFFFF;
+    }
+
+    .btn-success:hover { background-color: #166534; }
+
+    .page-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 24px 90px;
+    }
+
+    .doc-header { margin-bottom: 24px; }
+
+    .doc-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .help-callout {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-left: 4px solid var(--primary);
+      padding: 14px 18px;
+      font-size: 15px;
+      color: var(--text-sub);
+    }
+
+    /* 스키마 레퍼런스 박스 */
+    .schema-panel {
+      border: 1px solid var(--border-light);
+      background-color: var(--bg-subtle);
+      padding: 16px 20px;
+      margin-bottom: 32px;
+    }
+
+    .schema-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15.5px;
+    }
+
+    .schema-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    @media (max-width: 768px) {
+      .schema-grid { grid-template-columns: 1fr; }
+    }
+
+    .schema-card {
+      background-color: #FFFFFF;
+      border: 1px solid var(--border-light);
+      padding: 12px 14px;
+    }
+
+    .schema-card h4 {
+      font-family: 'Consolas', monospace;
+      font-size: 15px;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .schema-card p {
+      font-family: 'Consolas', 'Noto Sans KR', monospace;
+      font-size: 13.5px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    /* 섹션 구분 */
+    .part-title {
+      font-size: 19px;
+      font-weight: 700;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border-dark);
+      margin: 36px 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .part-badge {
+      background-color: var(--border-dark);
+      color: #FFFFFF;
+      font-size: 12.5px;
+      padding: 2px 8px;
+      font-family: 'Consolas', monospace;
+    }
+
+    /* 미션 카드 */
+    .mission-card {
+      border: 1px solid var(--border-light);
+      border-left: 4px solid var(--border-dark);
+      background-color: #FFFFFF;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+    }
+
+    .mission-card.solved {
+      border-left-color: var(--success);
+      background-color: #FAFFFC;
+    }
+
+    .mission-card.debug-card {
+      border-left-color: var(--danger);
+    }
+
+    .mission-card.debug-card.solved {
+      border-left-color: var(--success);
+    }
+
+    .mission-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .step-label {
+      font-family: 'Consolas', monospace;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .debug-card .step-label { color: var(--danger); }
+    .mission-card.solved .step-label { color: var(--success); }
+
+    .mission-desc {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      word-break: keep-all;
+    }
+
+    .mission-desc code {
+      background-color: #E2E8F0;
+      padding: 1px 6px;
+      font-family: 'Consolas', monospace;
+      font-size: 14.5px;
+    }
+
+    .buggy-box {
+      background-color: var(--danger-bg);
+      border: 1px solid #FCA5A5;
+      padding: 10px 14px;
+      font-family: 'Consolas', monospace;
+      font-size: 14.5px;
+      color: var(--danger);
+      margin-bottom: 12px;
+      white-space: pre-wrap;
+    }
+
+    .sql-editor {
+      width: 100%;
+      min-height: 92px;
+      background-color: var(--bg-code);
+      color: #F8FAFC;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 15px;
+      line-height: 1.5;
+      padding: 12px 14px;
+      border: 1px solid var(--border-dark);
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    .sql-editor:focus {
+      outline: 2px solid var(--primary);
+    }
+
+    .card-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tool-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-sm {
+      font-size: 13.5px;
+      padding: 6px 12px;
+    }
+
+    .feedback-box {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 14px;
+      font-size: 14.5px;
+      font-weight: 600;
+    }
+
+    .feedback-box.show { display: block; }
+    .feedback-box.ok {
+      background-color: var(--success-bg);
+      border: 1px solid #86EFAC;
+      color: var(--success);
+    }
+    .feedback-box.err {
+      background-color: var(--danger-bg);
+      border: 1px solid #FCA5A5;
+      color: var(--danger);
+    }
+
+    .hint-box, .solution-box {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 14px;
+      font-size: 14.5px;
+    }
+
+    .hint-box.show {
+      display: block;
+      background-color: var(--amber-bg);
+      border: 1px solid #FDE68A;
+      color: var(--amber);
+    }
+
+    .solution-box.show {
+      display: block;
+      background-color: #F1F5F9;
+      border: 1px solid var(--border-light);
+      font-family: 'Consolas', monospace;
+      color: var(--text-main);
+      white-space: pre-wrap;
+    }
+
+    .export-footer {
+      margin-top: 40px;
+      padding: 20px;
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="../index.html" class="back-link">&larr; 실습 아카이브 목록</a>
+        <span class="chapter-badge">CH 03-2 WORKSHEET</span>
+      </div>
+      <div class="nav-actions">
+        <span class="progress-pill" id="progressPill">완료: 0 / 14</span>
+        <button type="button" class="btn" onclick="resetAll()">전체 초기화</button>
+        <button type="button" class="btn btn-primary" onclick="exportMarkdown()">마크다운(.md) 내보내기</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <header class="doc-header">
+      <h1 class="doc-title">CH 03-2 정렬 · 그룹화 · 집계 함수 14단계 실전 워크시트</h1>
+      <div class="help-callout">
+        교재(<code>market_db</code>) 표준 문법에 맞춰 별칭(<code>AS</code>) 없이 쿼리를 작성하고 <strong>[쿼리 채점]</strong> 버튼을 눌러보세요. 막힐 때는 <strong>[힌트]</strong>나 <strong>[정답 보기]</strong>를 활용할 수 있으며, 실습이 끝나면 상단 버튼으로 내 답안을 마크다운 파일로 저장할 수 있습니다.
+      </div>
+    </header>
+
+    <section class="schema-panel">
+      <div class="schema-header" onclick="toggleSchema()">
+        <span>[참고] market_db 테이블 및 열(Column) 구조 펼쳐보기 / 접기</span>
+        <span id="schemaToggleText">접기 ▲</span>
+      </div>
+      <div class="schema-grid" id="schemaGrid">
+        <div class="schema-card">
+          <h4>member (회원 테이블 · 10건)</h4>
+          <p>
+            mem_id (아이디), mem_name (이름), mem_number (인원수),<br>
+            addr (지역), phone1 (국번 · NULL 2건 포함), phone2 (전화번호),<br>
+            height (키), mem_weight (몸무게), birth_date (생년월일), debut_date (가입일자)
+          </p>
+        </div>
+        <div class="schema-card">
+          <h4>buy (구매 테이블 · 12건)</h4>
+          <p>
+            num (순번), mem_id (아이디), prod_name (제품명),<br>
+            group_name (분류 · NULL 포함), price (단가), amount (수량)
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div id="worksheetContainer"></div>
+
+    <div class="export-footer">
+      <div>
+        <strong>실습 기록 보관하기</strong>
+        <p style="font-size: 14px; color: var(--text-sub);">작성한 14개 쿼리와 채점 결과를 Notion이나 학습 노트에 바로 붙여넣을 수 있는 <code>.md</code> 파일로 내려받습니다.</p>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="exportMarkdown()">작성 쿼리 마크다운(.md) 다운로드</button>
+    </div>
+  </main>
+
+  <script>
+    const missions = [
+      // PART 1: ORDER BY, LIMIT, DISTINCT
+      {
+        part: "PART 1 · 결과 정렬(ORDER BY), 개수 제한(LIMIT), 중복 제거(DISTINCT)",
+        step: "STEP 01",
+        isDebug: false,
+        desc: "회원(<code>member</code>) 테이블에서 아이디(<code>mem_id</code>), 이름(<code>mem_name</code>), 가입일자(<code>debut_date</code>)를 가입일자가 빠른 순서(오름차순)대로 조회하세요.",
+        hint: "SELECT mem_id, mem_name, debut_date FROM member ORDER BY debut_date; (ASC는 생략 가능)",
+        solution: "SELECT mem_id, mem_name, debut_date\nFROM member\nORDER BY debut_date;",
+        validate: (sql) => /SELECT\s+mem_id\s*,\s*mem_name\s*,\s*debut_date\s+FROM\s+member\s+ORDER\s+BY\s+debut_date(\s+ASC)?\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 02",
+        isDebug: false,
+        desc: "회원(<code>member</code>) 테이블에서 키(<code>height</code>)가 164 이상인 회원의 이름(<code>mem_name</code>), 키(<code>height</code>), 몸무게(<code>mem_weight</code>)를 키가 큰 순서(내림차순)로 조회하되, 키가 같다면 몸무게가 가벼운 순서(오름차순)로 정렬하세요.",
+        hint: "WHERE 절 뒤에 ORDER BY height DESC, mem_weight ASC 순으로 다중 정렬 조건을 쉼표(,)로 연결합니다.",
+        solution: "SELECT mem_name, height, mem_weight\nFROM member\nWHERE height >= 164\nORDER BY height DESC, mem_weight ASC;",
+        validate: (sql) => /SELECT\s+mem_name\s*,\s*height\s*,\s*mem_weight\s+FROM\s+member\s+WHERE\s+height\s*>=\s*164\s+ORDER\s+BY\s+height\s+DESC\s*,\s*mem_weight(\s+ASC)?\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 03",
+        isDebug: false,
+        desc: "회원(<code>member</code>) 테이블에서 생년월일(<code>birth_date</code>)이 가장 빠른 상위 3명의 이름(<code>mem_name</code>)과 생년월일(<code>birth_date</code>)만 조회하세요.",
+        hint: "생년월일이 빠르다는 것은 날짜 값이 작다는 의미이므로 오름차순(ASC 또는 생략) 정렬 후 LIMIT 3을 붙입니다.",
+        solution: "SELECT mem_name, birth_date\nFROM member\nORDER BY birth_date ASC\nLIMIT 3;",
+        validate: (sql) => /SELECT\s+mem_name\s*,\s*birth_date\s+FROM\s+member\s+ORDER\s+BY\s+birth_date(\s+ASC)?\s+LIMIT\s+3\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 04",
+        isDebug: false,
+        desc: "회원(<code>member</code>) 테이블에서 중복을 제거한 고유한 거주 지역(<code>addr</code>) 목록만 조회하세요.",
+        hint: "SELECT 바로 뒤에 DISTINCT 키워드를 붙입니다.",
+        solution: "SELECT DISTINCT addr\nFROM member;",
+        validate: (sql) => /SELECT\s+DISTINCT\s+addr\s+FROM\s+member\s*;?$/i.test(sql)
+      },
+
+      // PART 2: GROUP BY & 집계 함수
+      {
+        part: "PART 2 · 그룹화(GROUP BY)와 집계 함수(SUM, AVG, COUNT)",
+        step: "STEP 05",
+        isDebug: false,
+        desc: "구매(<code>buy</code>) 테이블에서 회원 아이디(<code>mem_id</code>)별로 구매한 수량(<code>amount</code>)의 총합을 조회하세요. (별칭 생략)",
+        hint: "SELECT mem_id, SUM(amount) FROM buy GROUP BY mem_id;",
+        solution: "SELECT mem_id, SUM(amount)\nFROM buy\nGROUP BY mem_id;",
+        validate: (sql) => /SELECT\s+mem_id\s*,\s*SUM\s*\(\s*amount\s*\)\s+FROM\s+buy\s+GROUP\s+BY\s+mem_id\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 06",
+        isDebug: false,
+        desc: "구매(<code>buy</code>) 테이블에서 제품명(<code>prod_name</code>)별 총 판매 금액(<code>price * amount</code>의 합계)을 구해 판매 금액이 큰 순서로 정렬하세요.",
+        hint: "합계 함수는 SUM(price * amount)를 사용하며, ORDER BY 절에서도 똑같이 SUM(price * amount) DESC를 사용합니다.",
+        solution: "SELECT prod_name, SUM(price * amount)\nFROM buy\nGROUP BY prod_name\nORDER BY SUM(price * amount) DESC;",
+        validate: (sql) => /SELECT\s+prod_name\s*,\s*SUM\s*\(\s*(price\s*\*\s*amount|amount\s*\*\s*price)\s*\)\s+FROM\s+buy\s+GROUP\s+BY\s+prod_name\s+ORDER\s+BY\s+SUM\s*\(\s*(price\s*\*\s*amount|amount\s*\*\s*price)\s*\)\s+DESC\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 07",
+        isDebug: false,
+        desc: "회원(<code>member</code>) 테이블에서 거주 지역(<code>addr</code>)별 평균 키(<code>height</code>)와 최대 몸무게(<code>mem_weight</code>)를 함께 조회하세요.",
+        hint: "평균은 AVG(height), 최댓값은 MAX(mem_weight) 함수를 사용합니다.",
+        solution: "SELECT addr, AVG(height), MAX(mem_weight)\nFROM member\nGROUP BY addr;",
+        validate: (sql) => /SELECT\s+addr\s*,\s*AVG\s*\(\s*height\s*\)\s*,\s*MAX\s*\(\s*mem_weight\s*\)\s+FROM\s+member\s+GROUP\s+BY\s+addr\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 08",
+        isDebug: false,
+        desc: "회원(<code>member</code>) 테이블에서 전체 회원 수와 연락처 국번(<code>phone1</code>)이 NULL이 아닌 회원 수를 한 번에 조회하세요.",
+        hint: "전체 행 개수는 COUNT(*), NULL을 제외한 특정 열 개수는 COUNT(phone1)을 사용합니다.",
+        solution: "SELECT COUNT(*), COUNT(phone1)\nFROM member;",
+        validate: (sql) => /SELECT\s+COUNT\s*\(\s*\*\s*\)\s*,\s*COUNT\s*\(\s*phone1\s*\)\s+FROM\s+member\s*;?$/i.test(sql)
+      },
+
+      // PART 3: HAVING & 7단계 작성 순서 종합
+      {
+        part: "PART 3 · 그룹 조건절(HAVING) 및 7단계 작성 순서 완전 정복",
+        step: "STEP 09",
+        isDebug: false,
+        desc: "구매(<code>buy</code>) 테이블에서 회원 아이디(<code>mem_id</code>)별 총 구매 금액(<code>price * amount</code>의 합계)이 1,000을 초과하는 회원과 총 구매 금액만 조회하세요.",
+        hint: "집계 함수 조건은 WHERE가 아니라 GROUP BY 뒤의 HAVING SUM(price * amount) > 1000으로 작성합니다.",
+        solution: "SELECT mem_id, SUM(price * amount)\nFROM buy\nGROUP BY mem_id\nHAVING SUM(price * amount) > 1000;",
+        validate: (sql) => /SELECT\s+mem_id\s*,\s*SUM\s*\(\s*(price\s*\*\s*amount|amount\s*\*\s*price)\s*\)\s+FROM\s+buy\s+GROUP\s+BY\s+mem_id\s+HAVING\s+SUM\s*\(\s*(price\s*\*\s*amount|amount\s*\*\s*price)\s*\)\s*>\s*1000\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 10",
+        isDebug: false,
+        desc: "구매(<code>buy</code>) 테이블에서 상품 분류(<code>group_name</code>)가 <code>'디지털'</code>인 주문만 대상으로, 회원 아이디(<code>mem_id</code>)별 총 구매 수량(<code>amount</code> 합계)이 5개 이상인 회원을 조회하세요.",
+        hint: "개별 행 필터링(WHERE group_name = '디지털')을 GROUP BY 앞에 먼저 두고, 합계 조건(HAVING SUM(amount) >= 5)을 뒤에 배치합니다.",
+        solution: "SELECT mem_id, SUM(amount)\nFROM buy\nWHERE group_name = '디지털'\nGROUP BY mem_id\nHAVING SUM(amount) >= 5;",
+        validate: (sql) => /SELECT\s+mem_id\s*,\s*SUM\s*\(\s*amount\s*\)\s+FROM\s+buy\s+WHERE\s+group_name\s*=\s*'디지털'\s+GROUP\s+BY\s+mem_id\s+HAVING\s+SUM\s*\(\s*amount\s*\)\s*>=\s*5\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 11",
+        isDebug: false,
+        desc: "[7단계 종합] 구매(<code>buy</code>) 테이블에서 수량(<code>amount</code>)이 2개 이상인 주문만 모아 회원 아이디(<code>mem_id</code>)별 총 구매 금액을 구하고, 총 구매 금액이 200 이상인 회원 중 금액이 가장 큰 1등 회원 1명만 내림차순으로 출력하세요.",
+        hint: "SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT 순서대로 7개 절을 모두 작성합니다.",
+        solution: "SELECT mem_id, SUM(price * amount)\nFROM buy\nWHERE amount >= 2\nGROUP BY mem_id\nHAVING SUM(price * amount) >= 200\nORDER BY SUM(price * amount) DESC\nLIMIT 1;",
+        validate: (sql) => /SELECT\s+mem_id\s*,\s*SUM\s*\(\s*(price\s*\*\s*amount|amount\s*\*\s*price)\s*\)\s+FROM\s+buy\s+WHERE\s+amount\s*>=\s*2\s+GROUP\s+BY\s+mem_id\s+HAVING\s+SUM\s*\(\s*(price\s*\*\s*amount|amount\s*\*\s*price)\s*\)\s*>=\s*200\s+ORDER\s+BY\s+SUM\s*\(\s*(price\s*\*\s*amount|amount\s*\*\s*price)\s*\)\s+DESC\s+LIMIT\s+1\s*;?$/i.test(sql)
+      },
+
+      // PART 4: 디버깅 미션
+      {
+        part: "PART 4 · 실전 쿼리 디버깅 (오류 원인 찾아 수정하기)",
+        step: "DEBUG 12",
+        isDebug: true,
+        desc: "아래 쿼리는 회원별 총 구매 금액이 1,000 이상인 회원을 조회하려다 구문 오류가 발생했습니다. 올바르게 고쳐주세요.",
+        buggySql: "SELECT mem_id, SUM(price * amount)\nFROM buy\nWHERE SUM(price * amount) >= 1000\nGROUP BY mem_id;",
+        hint: "집계 함수(SUM)는 WHERE 절에 사용할 수 없으며, GROUP BY 절 뒤에 오는 HAVING 절로 옮겨야 합니다.",
+        solution: "SELECT mem_id, SUM(price * amount)\nFROM buy\nGROUP BY mem_id\nHAVING SUM(price * amount) >= 1000;",
+        validate: (sql) => /SELECT\s+mem_id\s*,\s*SUM\s*\(\s*(price\s*\*\s*amount|amount\s*\*\s*price)\s*\)\s+FROM\s+buy\s+GROUP\s+BY\s+mem_id\s+HAVING\s+SUM\s*\(\s*(price\s*\*\s*amount|amount\s*\*\s*price)\s*\)\s*>=\s*1000\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "DEBUG 13",
+        isDebug: true,
+        desc: "아래 쿼리는 키(<code>height</code>)가 165 이상인 회원을 키 내림차순으로 정렬하려다 절 순서 오류로 실행되지 않습니다. 올바르게 수정하세요.",
+        buggySql: "SELECT mem_name, height\nFROM member\nORDER BY height DESC\nWHERE height >= 165;",
+        hint: "WHERE 조건절은 반드시 ORDER BY 정렬절보다 먼저 작성해야 합니다.",
+        solution: "SELECT mem_name, height\nFROM member\nWHERE height >= 165\nORDER BY height DESC;",
+        validate: (sql) => /SELECT\s+mem_name\s*,\s*height\s+FROM\s+member\s+WHERE\s+height\s*>=\s*165\s+ORDER\s+BY\s+height\s+DESC\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "DEBUG 14",
+        isDebug: true,
+        desc: "아래 쿼리는 구매 테이블에서 중복을 제거한 고유한 제품명(<code>prod_name</code>)을 조회하려다 에러가 발생했습니다. 올바르게 수정하세요.",
+        buggySql: "SELECT prod_name DISTINCT\nFROM buy;",
+        hint: "DISTINCT 예약어는 열 이름 뒤가 아니라 SELECT 바로 뒤에 위치해야 합니다.",
+        solution: "SELECT DISTINCT prod_name\nFROM buy;",
+        validate: (sql) => /SELECT\s+DISTINCT\s+prod_name\s+FROM\s+buy\s*;?$/i.test(sql)
+      }
+    ];
+
+    const solvedState = new Array(missions.length).fill(false);
+
+    function renderWorksheet() {
+      const container = document.getElementById('worksheetContainer');
+      container.innerHTML = missions.map((m, idx) => `
+        ${m.part ? `<h2 class="part-title"><span class="part-badge">SECTION</span>${m.part}</h2>` : ''}
+        <article class="mission-card ${m.isDebug ? 'debug-card' : ''}" id="card_${idx}">
+          <div class="mission-top">
+            <span class="step-label">${m.step}</span>
+            <span id="status_${idx}" style="font-size: 13px; font-weight: 700; color: var(--text-muted);">미완료</span>
+          </div>
+          <div class="mission-desc">${m.desc}</div>
+          ${m.isDebug ? `<div class="buggy-box">[오류 발생 쿼리]\n${m.buggySql}</div>` : ''}
+          <textarea class="sql-editor" id="input_${idx}" placeholder="여기에 SQL 쿼리를 작성하세요...">${m.isDebug ? m.buggySql : ''}</textarea>
+          <div class="card-toolbar">
+            <div class="tool-group">
+              <button type="button" class="btn btn-primary btn-sm" onclick="checkQuery(${idx})">쿼리 채점</button>
+              <button type="button" class="btn btn-sm" onclick="toggleBox('hint_${idx}')">힌트</button>
+              <button type="button" class="btn btn-sm" onclick="toggleBox('sol_${idx}')">정답 보기</button>
+            </div>
+            <button type="button" class="btn btn-sm" onclick="clearInput(${idx})">지우기</button>
+          </div>
+          <div class="feedback-box" id="fb_${idx}"></div>
+          <div class="hint-box" id="hint_${idx}"><strong>[힌트]</strong> ${m.hint}</div>
+          <div class="solution-box" id="sol_${idx}"><strong>[모범 답안]</strong>\n${m.solution}</div>
+        </article>
+      `).join('');
+    }
+
+    function normalizeSql(raw) {
+      return raw
+        .replace(/--.*$/gm, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function checkQuery(idx) {
+      const raw = document.getElementById(`input_${idx}`).value;
+      const normalized = normalizeSql(raw);
+      const fb = document.getElementById(`fb_${idx}`);
+      const card = document.getElementById(`card_${idx}`);
+      const status = document.getElementById(`status_${idx}`);
+
+      if (!normalized) {
+        fb.className = 'feedback-box show err';
+        fb.textContent = '쿼리를 먼저 입력해 주세요.';
+        return;
+      }
+
+      if (missions[idx].validate(normalized)) {
+        solvedState[idx] = true;
+        card.classList.add('solved');
+        status.textContent = '통과 ✔';
+        status.style.color = 'var(--success)';
+        fb.className = 'feedback-box show ok';
+        fb.textContent = '정확합니다! SQL 구문과 절 작성 순서가 완벽합니다.';
+      } else {
+        solvedState[idx] = false;
+        card.classList.remove('solved');
+        status.textContent = '재확인 필요';
+        status.style.color = 'var(--danger)';
+        fb.className = 'feedback-box show err';
+        fb.textContent = '구문, 열 이름, 조건 또는 절 작성 순서(SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT)를 다시 확인해 보세요.';
+      }
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const count = solvedState.filter(Boolean).length;
+      document.getElementById('progressPill').textContent = `완료: ${count} / ${missions.length}`;
+    }
+
+    function toggleBox(id) {
+      document.getElementById(id).classList.toggle('show');
+    }
+
+    function clearInput(idx) {
+      document.getElementById(`input_${idx}`).value = '';
+      document.getElementById(`fb_${idx}`).classList.remove('show');
+      document.getElementById(`card_${idx}`).classList.remove('solved');
+      document.getElementById(`status_${idx}`).textContent = '미완료';
+      document.getElementById(`status_${idx}`).style.color = 'var(--text-muted)';
+      solvedState[idx] = false;
+      updateProgress();
+    }
+
+    function resetAll() {
+      if (!confirm('작성한 모든 쿼리와 진행 상태를 초기화할까요?')) return;
+      solvedState.fill(false);
+      updateProgress();
+      renderWorksheet();
+    }
+
+    function toggleSchema() {
+      const grid = document.getElementById('schemaGrid');
+      const label = document.getElementById('schemaToggleText');
+      if (grid.style.display === 'none') {
+        grid.style.display = 'grid';
+        label.textContent = '접기 ▲';
+      } else {
+        grid.style.display = 'none';
+        label.textContent = '펼치기 ▼';
+      }
+    }
+
+    function exportMarkdown() {
+      const now = new Date().toLocaleString('ko-KR');
+      const count = solvedState.filter(Boolean).length;
+      let md = `# CH 03-2 정렬 · 그룹화 · 집계 함수 실전 워크시트 기록\n\n`;
+      md += `- **작성 일시:** ${now}\n`;
+      md += `- **달성 현황:** ${count} / ${missions.length} 완료\n\n---\n\n`;
+
+      missions.forEach((m, idx) => {
+        const userSql = document.getElementById(`input_${idx}`).value.trim() || '(미작성)';
+        const plainDesc = m.desc.replace(/<[^>]*>/g, '`');
+        const stateText = solvedState[idx] ? '✅ 완료' : '⬜ 미완료';
+        md += `### ${m.step} (${stateText})\n`;
+        md += `- **문제:** ${plainDesc}\n\n`;
+        md += `\`\`\`sql\n${userSql}\n\`\`\`\n\n`;
+      });
+
+      const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `CH03-2_SQL_실습워크시트_${new Date().toISOString().slice(0, 10)}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    renderWorksheet();
+  </script>
+</body>
+</html>

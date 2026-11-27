@@ -840,16 +840,7 @@
       let elapsedSeconds = 0;
 
       const TABLE_NAME = 'ch03_2_quiz_results';
-      let supabaseClient = null;
-      if (
-        typeof SUPABASE_URL !== 'undefined' &&
-        typeof SUPABASE_ANON_KEY !== 'undefined'
-      ) {
-        supabaseClient = window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_ANON_KEY
-        );
-      }
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
       function updateHud() {
         document.getElementById('hudHearts').textContent =

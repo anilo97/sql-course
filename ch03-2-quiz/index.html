@@ -529,6 +529,15 @@
   </main>
 
   <script>
+    const SUPABASE_URL = window.APP_CONFIG?.SUPABASE_URL || '';
+    const SUPABASE_ANON_KEY = window.APP_CONFIG?.SUPABASE_ANON_KEY || '';
+    const TABLE_NAME = 'ch03_2_quiz_results';
+
+    let supabaseClient = null;
+    if (SUPABASE_URL.startsWith('http') && window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
     const stages = [
       {
         stage: 1,
@@ -723,9 +732,6 @@
     let timerInterval = null;
     let elapsedSeconds = 0;
 
-    const TABLE_NAME = 'ch03_2_quiz_results';
-    const sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     function updateHud() {
       document.getElementById('hudHearts').textContent = '♥'.repeat(hearts) + '♡'.repeat(3 - hearts);
       document.getElementById('hudScore').textContent = `${score} PTS`;
@@ -914,7 +920,12 @@
       document.getElementById('gameoverDesc').textContent =
         `클리어 스테이지: ${clearedCount} / ${stages.length} | 최종 점수: ${score} PTS (스피드·라이프 보너스 +${speedBonus + lifeBonus} PTS) | 소요 시간: ${elapsedSeconds}초`;
 
-      const { error } = await sbClient.from(TABLE_NAME).insert([{
+      if (!supabaseClient) {
+        document.getElementById('dbSaveStatus').textContent = 'Supabase 설정이 연결되지 않아 로컬 플레이만 완료되었습니다.';
+        return;
+      }
+
+      const { error } = await supabaseClient.from(TABLE_NAME).insert([{
         student_name: playerName,
         score: score,
         total_questions: clearedCount,
@@ -930,7 +941,12 @@
 
     async function loadLeaderboard() {
       const tbody = document.getElementById('leaderboardBody');
-      const { data, error } = await sbClient
+      if (!supabaseClient) {
+        tbody.innerHTML = '<tr><td colspan="5">루트 폴더의 supabase-config.js 설정을 확인해 주세요.</td></tr>';
+        return;
+      }
+
+      const { data, error } = await supabaseClient
         .from(TABLE_NAME)
         .select('*')
         .order('score', { ascending: false })

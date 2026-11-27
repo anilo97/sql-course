@@ -734,7 +734,7 @@
             student_name: nickname,
             score: score,
             total_questions: activeQuizList.length,
-            elapsed_seconds: Math.round(elapsedSec),
+            elapsed_seconds: elapsedSec,
           },
         ]);
 
@@ -776,7 +776,7 @@
             <span class="rank-num">${idx + 1}위</span>
             <span>${escapeHtml(row.student_name)}</span>
           </div>
-          <span class="rank-time">${row.elapsed_seconds}초</span>
+          <span class="rank-time">${Number(row.elapsed_seconds).toFixed(2)}초</span>
         </li>
       `
           )

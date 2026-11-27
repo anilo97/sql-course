@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CH 03-2 정렬·그룹화·집계 핵심 문법 스피드 퀴즈</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabase-config.js"></script>
+    <style>
+      :root {
+        --bg-page: #ffffff;
+        --bg-subtle: #f8fafc;
+        --text-main: #0f172a;
+        --text-sub: #334155;
+        --text-muted: #64748b;
+        --border-light: #cbd5e1;
+        --border-dark: #1e293b;
+        --primary: #1d4ed8;
+        --primary-hover: #1e40af;
+        --success: #15803d;
+        --success-bg: #f0fdf4;
+        --danger: #b91c1c;
+        --danger-bg: #fef2f2;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          'Noto Sans KR',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        font-size: 17px;
+        line-height: 1.65;
+        color: var(--text-main);
+        background-color: var(--bg-page);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background-color: #ffffff;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .nav-inner {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .back-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14.5px;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .chapter-badge {
+        background-color: #dbeafe;
+        color: var(--primary);
+        font-family: 'Consolas', monospace;
+        font-size: 13.5px;
+        font-weight: 700;
+        padding: 2px 8px;
+      }
+
+      .timer-badge {
+        font-family: 'Consolas', monospace;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--primary);
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+        padding: 4px 12px;
+      }
+
+      .page-container {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 32px 24px 80px;
+      }
+
+      .doc-header {
+        margin-bottom: 24px;
+      }
+
+      .doc-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: -0.02em;
+      }
+
+      .help-callout {
+        background-color: var(--bg-subtle);
+        border: 1px solid var(--border-light);
+        border-left: 4px solid var(--primary);
+        padding: 14px 18px;
+        font-size: 15.5px;
+        color: var(--text-sub);
+      }
+
+      .start-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        background-color: var(--bg-subtle);
+        border: 1px solid var(--border-light);
+        padding: 16px 20px;
+        margin-bottom: 28px;
+      }
+
+      .start-bar label {
+        font-weight: 700;
+        font-size: 15.5px;
+      }
+
+      .start-bar input {
+        font-family: inherit;
+        font-size: 16px;
+        padding: 8px 12px;
+        border: 1px solid var(--border-light);
+        width: 220px;
+      }
+
+      .start-bar input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      .btn {
+        font-family: inherit;
+        font-size: 15.5px;
+        font-weight: 700;
+        padding: 9px 18px;
+        border: 1px solid var(--border-dark);
+        background-color: #ffffff;
+        color: var(--text-main);
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background-color: #f1f5f9;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: #ffffff;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .quiz-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        margin-bottom: 28px;
+      }
+
+      @media (max-width: 768px) {
+        .quiz-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .quiz-card {
+        border: 1px solid var(--border-light);
+        border-top: 3px solid var(--border-dark);
+        padding: 16px 18px;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .quiz-card.correct {
+        border-top-color: var(--success);
+        background-color: var(--success-bg);
+      }
+
+      .quiz-card.wrong {
+        border-top-color: var(--danger);
+        background-color: var(--danger-bg);
+      }
+
+      .q-num {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 4px;
+      }
+
+      .q-desc {
+        font-size: 15.5px;
+        color: var(--text-main);
+        word-break: keep-all;
+      }
+
+      .q-desc code {
+        background-color: #e2e8f0;
+        padding: 1px 5px;
+        font-family: 'Consolas', monospace;
+        font-size: 14px;
+      }
+
+      .q-input {
+        width: 100%;
+        font-family: 'Consolas', 'Noto Sans KR', monospace;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 8px 12px;
+        border: 1px solid var(--border-light);
+        background-color: #ffffff;
+      }
+
+      .q-input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      .feedback {
+        font-size: 14px;
+        font-weight: 700;
+        display: none;
+      }
+
+      .feedback.show {
+        display: block;
+      }
+      .feedback.ok {
+        color: var(--success);
+      }
+      .feedback.no {
+        color: var(--danger);
+      }
+
+      .submit-area {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-bottom: 36px;
+      }
+
+      .result-panel {
+        display: none;
+        border: 2px solid var(--border-dark);
+        padding: 22px;
+        margin-bottom: 36px;
+        background-color: var(--bg-subtle);
+      }
+
+      .result-panel.show {
+        display: block;
+      }
+
+      .result-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .leaderboard-section {
+        border-top: 2px solid var(--border-dark);
+        padding-top: 24px;
+      }
+
+      .lb-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .lb-title {
+        font-size: 19px;
+        font-weight: 700;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 15.5px;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--border-light);
+        padding: 10px 14px;
+        text-align: left;
+      }
+
+      th {
+        background-color: var(--bg-subtle);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div class="nav-inner">
+        <div class="nav-left">
+          <a href="../index.html" class="back-link"
+            >&larr; 실습 아카이브 목록</a
+          >
+          <span class="chapter-badge">CH 03-2 SPEED</span>
+        </div>
+        <div class="timer-badge" id="timerDisplay">00:00</div>
+      </div>
+    </nav>
+
+    <main class="page-container">
+      <header class="doc-header">
+        <h1 class="doc-title">
+          정렬 · 그룹화 · 집계 함수 및 작성 순서 스피드 퀴즈
+        </h1>
+        <div class="help-callout">
+          이름을 입력하고 <strong>[퀴즈 시작]</strong>을 누르면 타이머가
+          작동합니다. 영문 SQL 예약어 및 함수는 대소문자를 구분하지 않습니다.
+          (괄호 포함 여부는 안내를 참고하세요.)
+        </div>
+      </header>
+
+      <div class="start-bar">
+        <label for="studentName">교육생 이름</label>
+        <input type="text" id="studentName" placeholder="예: 홍길동" />
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="startBtn"
+          onclick="startQuiz()"
+        >
+          퀴즈 시작
+        </button>
+        <button type="button" class="btn" onclick="resetQuiz()">
+          다시 풀기
+        </button>
+      </div>
+
+      <div class="quiz-grid" id="quizGrid"></div>
+
+      <div class="submit-area">
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="submitBtn"
+          onclick="submitQuiz()"
+          disabled
+        >
+          채점 및 기록 제출
+        </button>
+      </div>
+
+      <section class="result-panel" id="resultPanel">
+        <div class="result-title" id="resultSummary"></div>
+        <div
+          id="saveMessage"
+          style="font-size: 15px; color: var(--text-sub)"
+        ></div>
+      </section>
+
+      <section class="leaderboard-section">
+        <div class="lb-header">
+          <h2 class="lb-title">실시간 명예의 전당 (TOP 15)</h2>
+          <button type="button" class="btn" onclick="loadLeaderboard()">
+            새로고침
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 70px">순위</th>
+              <th>이름</th>
+              <th style="width: 120px">점수</th>
+              <th style="width: 120px">소요 시간</th>
+              <th style="width: 180px">제출 시각</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <tr>
+              <td colspan="5">순위 데이터를 불러오는 중...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      const SUPABASE_URL = window.APP_CONFIG?.SUPABASE_URL || '';
+      const SUPABASE_ANON_KEY = window.APP_CONFIG?.SUPABASE_ANON_KEY || '';
+      const TABLE_NAME = 'ch03_2_speed_quiz_results';
+
+      let supabaseClient = null;
+      if (SUPABASE_URL.startsWith('http') && window.supabase) {
+        supabaseClient = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_ANON_KEY
+        );
+      }
+
+      const questions = [
+        {
+          id: 1,
+          desc: '조회 결과의 데이터 값에는 영향을 주지 않고, 출력되는 행의 정렬 순서를 지정할 때 사용하는 절은?',
+          answers: ['ORDER BY'],
+          displayAns: 'ORDER BY',
+        },
+        {
+          id: 2,
+          desc: '정렬 시 큰 값부터 작은 값 순서(내림차순)로 출력하기 위해 열 이름 뒤에 붙이는 키워드는?',
+          answers: ['DESC'],
+          displayAns: 'DESC',
+        },
+        {
+          id: 3,
+          desc: '정렬 시 오름차순을 의미하며, 생략 시 기본값으로 적용되는 키워드는?',
+          answers: ['ASC'],
+          displayAns: 'ASC',
+        },
+        {
+          id: 4,
+          desc: '조회 결과 중 위에서부터 원하는 개수만큼만 잘라서 출력 개수를 제한할 때 사용하는 절은?',
+          answers: ['LIMIT'],
+          displayAns: 'LIMIT',
+        },
+        {
+          id: 5,
+          desc: '조회 결과에서 중복된 데이터를 제거하고 고유한 값만 1개씩 남길 때 열 이름 앞에 붙이는 예약어는?',
+          answers: ['DISTINCT'],
+          displayAns: 'DISTINCT',
+        },
+        {
+          id: 6,
+          desc: '특정 열의 공통된 값끼리 데이터를 그룹으로 묶어 요약 통계를 낼 때 사용하는 절은?',
+          answers: ['GROUP BY'],
+          displayAns: 'GROUP BY',
+        },
+        {
+          id: 7,
+          desc: '그룹화된 열의 합계를 계산할 때 사용하는 집계 함수 이름은? (괄호 제외)',
+          answers: ['SUM'],
+          displayAns: 'SUM',
+        },
+        {
+          id: 8,
+          desc: '그룹화된 열의 평균값을 계산할 때 사용하는 집계 함수 이름은? (괄호 제외)',
+          answers: ['AVG'],
+          displayAns: 'AVG',
+        },
+        {
+          id: 9,
+          desc: "<code>NULL</code> 값을 제외하고 실제 데이터가 들어 있는 행의 개수만 셀 때 사용하는 함수 작성 형식은? (예: 열 이름을 '열'로 표기)",
+          answers: [
+            'COUNT(열)',
+            'COUNT(열이름)',
+            'COUNT(열_이름)',
+            'COUNT(COLUMN)',
+          ],
+          displayAns: 'COUNT(열이름)',
+        },
+        {
+          id: 10,
+          desc: '집계 함수(<code>SUM</code>, <code>AVG</code> 등)를 조건식에 사용할 때 <code>WHERE</code> 대신 <code>GROUP BY</code> 뒤에 작성하는 조건절은?',
+          answers: ['HAVING'],
+          displayAns: 'HAVING',
+        },
+        {
+          id: 11,
+          desc: '[작성 순서] <code>SELECT ~ FROM ~ WHERE</code> 다음에 오며, <code>HAVING</code>보다 반드시 먼저 작성해야 하는 절은?',
+          answers: ['GROUP BY'],
+          displayAns: 'GROUP BY',
+        },
+        {
+          id: 12,
+          desc: '[작성 순서] <code>SELECT ~ FROM ~ WHERE ~ GROUP BY ~ HAVING ~ ORDER BY</code> 중 항상 맨 마지막에 위치하는 절은?',
+          answers: ['LIMIT'],
+          displayAns: 'LIMIT',
+        },
+      ];
+
+      let timerInterval = null;
+      let startTime = null;
+      let elapsedSeconds = 0;
+      let isStarted = false;
+      let isSubmitted = false;
+
+      function renderQuiz() {
+        const grid = document.getElementById('quizGrid');
+        grid.innerHTML = questions
+          .map(
+            (q) => `
+        <div class="quiz-card" id="card_${q.id}">
+          <div>
+            <div class="q-num">Q${q.id}.</div>
+            <div class="q-desc">${q.desc}</div>
+          </div>
+          <div>
+            <input type="text" class="q-input" id="ans_${q.id}" placeholder="정답 입력..." disabled autocomplete="off" />
+            <div class="feedback" id="fb_${q.id}"></div>
+          </div>
+        </div>
+      `
+          )
+          .join('');
+      }
+
+      function normalize(str) {
+        return str.trim().toUpperCase().replace(/\s+/g, ' ');
+      }
+
+      function startQuiz() {
+        const name = document.getElementById('studentName').value.trim();
+        if (!name) {
+          alert('교육생 이름을 먼저 입력해 주세요.');
+          document.getElementById('studentName').focus();
+          return;
+        }
+        if (isStarted) return;
+
+        isStarted = true;
+        isSubmitted = false;
+        document.getElementById('studentName').disabled = true;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('submitBtn').disabled = false;
+
+        questions.forEach((q) => {
+          document.getElementById(`ans_${q.id}`).disabled = false;
+        });
+        document.getElementById('ans_1').focus();
+
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+          elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+          const mins = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+          const secs = String(elapsedSeconds % 60).padStart(2, '0');
+          document.getElementById('timerDisplay').textContent =
+            `${mins}:${secs}`;
+        }, 250);
+      }
+
+      async function submitQuiz() {
+        if (!isStarted || isSubmitted) return;
+        clearInterval(timerInterval);
+        isSubmitted = true;
+        document.getElementById('submitBtn').disabled = true;
+
+        let score = 0;
+        questions.forEach((q) => {
+          const inputEl = document.getElementById(`ans_${q.id}`);
+          const cardEl = document.getElementById(`card_${q.id}`);
+          const fbEl = document.getElementById(`fb_${q.id}`);
+          inputEl.disabled = true;
+
+          const userVal = normalize(inputEl.value);
+          const isCorrect = q.answers.some((a) => normalize(a) === userVal);
+
+          if (isCorrect) {
+            score++;
+            cardEl.classList.add('correct');
+            fbEl.textContent = `정답입니다! (${q.displayAns})`;
+            fbEl.className = 'feedback show ok';
+          } else {
+            cardEl.classList.add('wrong');
+            fbEl.textContent = `오답 — 정답: ${q.displayAns}`;
+            fbEl.className = 'feedback show no';
+          }
+        });
+
+        const name = document.getElementById('studentName').value.trim();
+        const mins = Math.floor(elapsedSeconds / 60);
+        const secs = elapsedSeconds % 60;
+        document.getElementById('resultSummary').textContent =
+          `${name}님의 결과: ${questions.length}문제 중 ${score}문제 정답 (소요 시간: ${mins}분 ${secs}초)`;
+        document.getElementById('resultPanel').classList.add('show');
+
+        if (supabaseClient) {
+          const { error } = await supabaseClient.from(TABLE_NAME).insert([
+            {
+              student_name: name,
+              score: score,
+              total_questions: questions.length,
+              elapsed_seconds: elapsedSeconds,
+            },
+          ]);
+          document.getElementById('saveMessage').textContent = error
+            ? '점수 저장 중 오류가 발생했습니다: ' + error.message
+            : '실시간 순위표에 기록이 등록되었습니다.';
+          loadLeaderboard();
+        } else {
+          document.getElementById('saveMessage').textContent =
+            'Supabase 설정이 연결되지 않아 로컬 채점만 완료되었습니다.';
+        }
+      }
+
+      function resetQuiz() {
+        clearInterval(timerInterval);
+        isStarted = false;
+        isSubmitted = false;
+        elapsedSeconds = 0;
+        document.getElementById('timerDisplay').textContent = '00:00';
+        document.getElementById('studentName').disabled = false;
+        document.getElementById('startBtn').disabled = false;
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('resultPanel').classList.remove('show');
+        renderQuiz();
+      }
+
+      async function loadLeaderboard() {
+        const tbody = document.getElementById('leaderboardBody');
+        if (!supabaseClient) {
+          tbody.innerHTML =
+            '<tr><td colspan="5">supabase-config.js 설정을 확인해 주세요.</td></tr>';
+          return;
+        }
+
+        const { data, error } = await supabaseClient
+          .from(TABLE_NAME)
+          .select('*')
+          .order('score', { ascending: false })
+          .order('elapsed_seconds', { ascending: true })
+          .limit(15);
+
+        if (error || !data || data.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="5">아직 등록된 기록이 없습니다. 첫 번째 주인공이 되어 보세요!</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data
+          .map((row, idx) => {
+            const m = String(Math.floor(row.elapsed_seconds / 60)).padStart(
+              2,
+              '0'
+            );
+            const s = String(row.elapsed_seconds % 60).padStart(2, '0');
+            const dateStr = new Date(row.created_at).toLocaleString('ko-KR', {
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            });
+            return `
+          <tr>
+            <td><strong>${idx + 1}위</strong></td>
+            <td>${row.student_name}</td>
+            <td><strong>${row.score} / ${row.total_questions}</strong></td>
+            <td>${m}:${s}</td>
+            <td>${dateStr}</td>
+          </tr>
+        `;
+          })
+          .join('');
+      }
+
+      renderQuiz();
+      loadLeaderboard();
+    </script>
+  </body>
+</html>

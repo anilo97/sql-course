@@ -110,7 +110,14 @@
       cursor: pointer;
     }
 
-    .btn:hover { background-color: #F1F5F9; }
+    .btn:hover:not(:disabled) { background-color: #F1F5F9; }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      border-color: var(--border-light);
+      color: var(--text-muted);
+    }
 
     .btn-primary {
       background-color: var(--primary);
@@ -118,7 +125,7 @@
       color: #FFFFFF;
     }
 
-    .btn-primary:hover { background-color: var(--primary-hover); }
+    .btn-primary:hover:not(:disabled) { background-color: var(--primary-hover); }
 
     .page-container {
       max-width: 1080px;
@@ -359,7 +366,6 @@
       color: var(--text-main);
       white-space: pre-wrap;
     }
-
   </style>
 </head>
 <body>
@@ -373,7 +379,6 @@
       <div class="nav-actions">
         <span class="progress-pill" id="progressPill">완료: 0 / 14</span>
         <button type="button" class="btn" onclick="resetAll()">전체 초기화</button>
-        <button type="button" class="btn btn-primary" onclick="exportMarkdown()">마크다운(.md) 내보내기</button>
       </div>
     </div>
   </nav>
@@ -382,7 +387,7 @@
     <header class="doc-header">
       <h1 class="doc-title">CH 03-2 정렬 · 그룹화 · 집계 함수 14단계 실전 워크시트</h1>
       <div class="help-callout">
-        교재(<code>market_db</code>) 표준 문법에 맞춰 별칭(<code>AS</code>) 없이 쿼리를 작성하고 <strong>[쿼리 채점]</strong> 버튼을 눌러보세요. 막힐 때는 <strong>[힌트]</strong>나 <strong>[정답 보기]</strong>를 활용할 수 있으며, 실습이 끝나면 상단 버튼으로 내 답안을 마크다운 파일로 저장할 수 있습니다.
+        교재(<code>market_db</code>) 표준 문법에 맞춰 별칭(<code>AS</code>) 없이 쿼리를 작성하고 <strong>[쿼리 채점]</strong> 버튼을 눌러보세요. 막힐 때는 <strong>[힌트]</strong>를 먼저 확인해 보시고, 직접 채점을 <strong>2회 이상 시도(오답)</strong>하면 <strong>[정답 보기]</strong> 버튼이 자동으로 열립니다.
       </div>
     </header>
 
@@ -411,7 +416,6 @@
     </section>
 
     <div id="worksheetContainer"></div>
-
   </main>
 
   <script>
@@ -555,6 +559,8 @@
     ];
 
     const solvedState = new Array(missions.length).fill(false);
+    const attemptCount = new Array(missions.length).fill(0);
+    const REQUIRED_ATTEMPTS = 2;
 
     function renderWorksheet() {
       const container = document.getElementById('worksheetContainer');
@@ -572,7 +578,7 @@
             <div class="tool-group">
               <button type="button" class="btn btn-primary btn-sm" onclick="checkQuery(${idx})">쿼리 채점</button>
               <button type="button" class="btn btn-sm" onclick="toggleBox('hint_${idx}')">힌트</button>
-              <button type="button" class="btn btn-sm" onclick="toggleBox('sol_${idx}')">정답 보기</button>
+              <button type="button" class="btn btn-sm" id="solBtn_${idx}" disabled onclick="toggleBox('sol_${idx}')">정답 보기 (${REQUIRED_ATTEMPTS}회 오답 후 열림)</button>
             </div>
             <button type="button" class="btn btn-sm" onclick="clearInput(${idx})">지우기</button>
           </div>
@@ -590,12 +596,19 @@
         .trim();
     }
 
+    function unlockSolutionButton(idx) {
+      const solBtn = document.getElementById(`solBtn_${idx}`);
+      solBtn.disabled = false;
+      solBtn.textContent = '정답 보기';
+    }
+
     function checkQuery(idx) {
       const raw = document.getElementById(`input_${idx}`).value;
       const normalized = normalizeSql(raw);
       const fb = document.getElementById(`fb_${idx}`);
       const card = document.getElementById(`card_${idx}`);
       const status = document.getElementById(`status_${idx}`);
+      const solBtn = document.getElementById(`solBtn_${idx}`);
 
       if (!normalized) {
         fb.className = 'feedback-box show err';
@@ -610,13 +623,24 @@
         status.style.color = 'var(--success)';
         fb.className = 'feedback-box show ok';
         fb.textContent = '정확합니다! SQL 구문과 절 작성 순서가 완벽합니다.';
+        unlockSolutionButton(idx);
       } else {
         solvedState[idx] = false;
+        attemptCount[idx]++;
         card.classList.remove('solved');
         status.textContent = '재확인 필요';
         status.style.color = 'var(--danger)';
-        fb.className = 'feedback-box show err';
-        fb.textContent = '구문, 열 이름, 조건 또는 절 작성 순서(SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT)를 다시 확인해 보세요.';
+
+        const remaining = REQUIRED_ATTEMPTS - attemptCount[idx];
+        if (remaining <= 0) {
+          unlockSolutionButton(idx);
+          fb.className = 'feedback-box show err';
+          fb.textContent = '구문이나 절 순서를 다시 확인해 보세요. (2회 시도가 완료되어 [정답 보기] 버튼이 열렸습니다.)';
+        } else {
+          solBtn.textContent = `정답 보기 (${remaining}회 남음)`;
+          fb.className = 'feedback-box show err';
+          fb.textContent = `구문, 열 이름, 조건 또는 절 작성 순서를 다시 확인해 보세요. (${remaining}회 더 시도하면 정답 보기가 열립니다.)`;
+        }
       }
       updateProgress();
     }
@@ -643,6 +667,7 @@
     function resetAll() {
       if (!confirm('작성한 모든 쿼리와 진행 상태를 초기화할까요?')) return;
       solvedState.fill(false);
+      attemptCount.fill(0);
       updateProgress();
       renderWorksheet();
     }
@@ -657,31 +682,6 @@
         grid.style.display = 'none';
         label.textContent = '펼치기 ▼';
       }
-    }
-
-    function exportMarkdown() {
-      const now = new Date().toLocaleString('ko-KR');
-      const count = solvedState.filter(Boolean).length;
-      let md = `# CH 03-2 정렬 · 그룹화 · 집계 함수 실전 워크시트 기록\n\n`;
-      md += `- **작성 일시:** ${now}\n`;
-      md += `- **달성 현황:** ${count} / ${missions.length} 완료\n\n---\n\n`;
-
-      missions.forEach((m, idx) => {
-        const userSql = document.getElementById(`input_${idx}`).value.trim() || '(미작성)';
-        const plainDesc = m.desc.replace(/<[^>]*>/g, '`');
-        const stateText = solvedState[idx] ? '✅ 완료' : '⬜ 미완료';
-        md += `### ${m.step} (${stateText})\n`;
-        md += `- **문제:** ${plainDesc}\n\n`;
-        md += `\`\`\`sql\n${userSql}\n\`\`\`\n\n`;
-      });
-
-      const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `CH03-2_SQL_실습워크시트_${new Date().toISOString().slice(0, 10)}.md`;
-      a.click();
-      URL.revokeObjectURL(url);
     }
 
     renderWorksheet();

@@ -635,11 +635,11 @@
         if (remaining <= 0) {
           unlockSolutionButton(idx);
           fb.className = 'feedback-box show err';
-          fb.textContent = '구문이나 절 순서를 다시 확인해 보세요. (2회 시도가 완료되어 [정답 보기] 버튼이 열렸습니다.)';
+          fb.textContent = '구문이나 절 순서를 다시 확인해 보세요.';
         } else {
           solBtn.textContent = `정답 보기 (${remaining}회 남음)`;
           fb.className = 'feedback-box show err';
-          fb.textContent = `구문, 열 이름, 조건 또는 절 작성 순서를 다시 확인해 보세요. (${remaining}회 더 시도하면 정답 보기가 열립니다.)`;
+          fb.textContent = `구문, 열 이름, 조건 또는 절 작성 순서를 다시 확인해 보세요. `;
         }
       }
       updateProgress();

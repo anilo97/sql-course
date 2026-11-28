@@ -1,581 +1,598 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CH 03-1 SELECT ~ FROM ~ WHERE 실전 조회 미션</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg-page: #ffffff;
-        --bg-subtle: #f8fafc;
-        --bg-code: #0f172a;
-        --text-main: #0f172a;
-        --text-sub: #334155;
-        --text-muted: #64748b;
-        --border-light: #cbd5e1;
-        --border-dark: #1e293b;
-        --primary: #1d4ed8;
-        --primary-hover: #1e40af;
-        --success: #15803d;
-        --success-bg: #f0fdf4;
-        --hint-bg: #eff6ff;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CH 03-1 기본 조회(SELECT · WHERE) SQL 실습</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #FFFFFF;
+      --bg-subtle: #F8FAFC;
+      --bg-code: #0F172A;
+      --text-main: #0F172A;
+      --text-sub: #334155;
+      --text-muted: #64748B;
+      --border-light: #CBD5E1;
+      --border-dark: #1E293B;
+      --primary: #1D4ED8;
+      --primary-hover: #1E40AF;
+      --success: #15803D;
+      --success-bg: #F0FDF4;
+      --danger: #B91C1C;
+      --danger-bg: #FEF2F2;
+      --amber: #B45309;
+      --amber-bg: #FFFBEB;
+    }
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-      body {
-        font-family:
-          'Noto Sans KR',
-          -apple-system,
-          BlinkMacSystemFont,
-          sans-serif;
-        font-size: 17px;
-        line-height: 1.65;
-        color: var(--text-main);
-        background-color: var(--bg-page);
-        -webkit-font-smoothing: antialiased;
-      }
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16.5px;
+      line-height: 1.65;
+      color: var(--text-main);
+      background-color: var(--bg-page);
+      -webkit-font-smoothing: antialiased;
+    }
 
-      .top-nav {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background-color: #ffffff;
-        border-bottom: 1px solid var(--border-light);
-      }
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid var(--border-light);
+    }
 
-      .nav-inner {
-        max-width: 1040px;
-        margin: 0 auto;
-        padding: 12px 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
 
-      .nav-left {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-      }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
 
-      .back-link {
-        color: var(--primary);
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 14.5px;
-      }
+    .back-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14.5px;
+    }
 
-      .back-link:hover {
-        text-decoration: underline;
-      }
+    .back-link:hover { text-decoration: underline; }
 
-      .chapter-badge {
-        background-color: #dbeafe;
-        color: var(--primary);
-        font-family: 'Consolas', monospace;
-        font-size: 13.5px;
-        font-weight: 700;
-        padding: 2px 8px;
-      }
+    .chapter-badge {
+      background-color: #DBEAFE;
+      color: var(--primary);
+      font-family: 'Consolas', monospace;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+    }
 
-      .nav-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-      .save-status {
-        font-size: 13.5px;
-        color: var(--text-muted);
-      }
+    .progress-pill {
+      font-family: 'Consolas', 'Noto Sans KR', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      background-color: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: var(--primary);
+      padding: 4px 12px;
+    }
 
-      .btn {
-        font-family: inherit;
-        font-size: 15px;
-        font-weight: 600;
-        padding: 8px 16px;
-        border: 1px solid var(--border-dark);
-        background-color: #ffffff;
-        color: var(--text-main);
-        cursor: pointer;
-      }
+    .btn {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border: 1px solid var(--border-dark);
+      background-color: #FFFFFF;
+      color: var(--text-main);
+      cursor: pointer;
+    }
 
-      .btn:hover {
-        background-color: #f1f5f9;
-      }
+    .btn:hover:not(:disabled) { background-color: #F1F5F9; }
 
-      .btn-primary {
-        background-color: var(--primary);
-        border-color: var(--primary);
-        color: #ffffff;
-      }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      border-color: var(--border-light);
+      color: var(--text-muted);
+    }
 
-      .btn-primary:hover {
-        background-color: var(--primary-hover);
-      }
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+    }
 
-      .page-container {
-        max-width: 1040px;
-        margin: 0 auto;
-        padding: 32px 24px 80px;
-      }
+    .btn-primary:hover:not(:disabled) { background-color: var(--primary-hover); }
 
-      .doc-header {
-        margin-bottom: 24px;
-      }
+    .page-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 24px 90px;
+    }
 
-      .doc-title {
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 10px;
-        letter-spacing: -0.02em;
-      }
+    .doc-header { margin-bottom: 24px; }
 
-      .help-callout {
-        background-color: var(--bg-subtle);
-        border: 1px solid var(--border-light);
-        border-left: 4px solid var(--primary);
-        padding: 14px 18px;
-        font-size: 15.5px;
-        color: var(--text-sub);
-      }
+    .doc-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
 
-      .schema-box {
-        border: 1px solid var(--border-light);
-        background-color: var(--bg-subtle);
-        padding: 14px 18px;
-        margin-bottom: 28px;
-        font-size: 14.5px;
-      }
+    .help-callout {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-left: 4px solid var(--primary);
+      padding: 14px 18px;
+      font-size: 15px;
+      color: var(--text-sub);
+    }
 
-      .schema-title {
-        font-weight: 700;
-        color: var(--text-main);
-        margin-bottom: 8px;
-      }
+    .schema-panel {
+      border: 1px solid var(--border-light);
+      background-color: var(--bg-subtle);
+      padding: 16px 20px;
+      margin-bottom: 32px;
+    }
 
-      .schema-list {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        color: var(--text-sub);
-      }
+    .schema-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15.5px;
+    }
 
-      .schema-list code {
-        background-color: #e2e8f0;
-        padding: 1px 5px;
-        font-family: 'Consolas', monospace;
-        font-size: 13.5px;
-        color: #0f172a;
-      }
+    .schema-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-light);
+    }
 
-      .mission-block {
-        border: 1px solid var(--border-light);
-        border-top: 3px solid var(--border-dark);
-        margin-bottom: 26px;
-        background-color: #ffffff;
-      }
+    @media (max-width: 768px) {
+      .schema-grid { grid-template-columns: 1fr; }
+    }
 
-      .mission-header {
-        padding: 13px 20px;
-        background-color: var(--bg-subtle);
-        border-bottom: 1px solid var(--border-light);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
+    .schema-card {
+      background-color: #FFFFFF;
+      border: 1px solid var(--border-light);
+      padding: 12px 14px;
+    }
 
-      .mission-title {
-        font-size: 17.5px;
-        font-weight: 700;
-      }
+    .schema-card h4 {
+      font-family: 'Consolas', monospace;
+      font-size: 15px;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
 
-      .mission-tag {
-        display: inline-block;
-        font-size: 12.5px;
-        font-weight: 700;
-        color: var(--primary);
-        background-color: #dbeafe;
-        padding: 1px 7px;
-        margin-right: 6px;
-        vertical-align: middle;
-      }
+    .schema-card p {
+      font-family: 'Consolas', 'Noto Sans KR', monospace;
+      font-size: 13.5px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
 
-      .check-label {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 15px;
-        font-weight: 700;
-        color: var(--success);
-        cursor: pointer;
-      }
+    .part-title {
+      font-size: 19px;
+      font-weight: 700;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border-dark);
+      margin: 36px 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-      .check-label input[type='checkbox'] {
-        width: 18px;
-        height: 18px;
-        accent-color: var(--success);
-      }
+    .part-badge {
+      background-color: var(--border-dark);
+      color: #FFFFFF;
+      font-size: 12.5px;
+      padding: 2px 8px;
+      font-family: 'Consolas', monospace;
+    }
 
-      .mission-body {
-        padding: 18px 20px;
-      }
+    .mission-card {
+      border: 1px solid var(--border-light);
+      border-left: 4px solid var(--border-dark);
+      background-color: #FFFFFF;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+    }
 
-      .step-desc {
-        margin-bottom: 14px;
-        color: var(--text-main);
-        font-size: 16px;
-      }
+    .mission-card.solved {
+      border-left-color: var(--success);
+      background-color: #FAFFFC;
+    }
 
-      .field-group label {
-        display: block;
-        font-size: 14.5px;
-        font-weight: 700;
-        margin-bottom: 6px;
-        color: var(--text-sub);
-      }
+    .mission-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
 
-      textarea {
-        width: 100%;
-        font-family: 'Consolas', 'Noto Sans KR', monospace;
-        font-size: 15.5px;
-        line-height: 1.55;
-        padding: 10px 12px;
-        border: 1px solid var(--border-light);
-        color: var(--text-main);
-        background-color: #ffffff;
-      }
+    .step-label {
+      font-family: 'Consolas', monospace;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--primary);
+    }
 
-      textarea:focus {
-        outline: none;
-        border-color: var(--primary);
-      }
+    .mission-card.solved .step-label { color: var(--success); }
 
-      .toggle-row {
-        margin-top: 12px;
-        display: flex;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
+    .mission-desc {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      word-break: keep-all;
+    }
 
-      .toggle-btn {
-        font-size: 14px;
-        color: var(--primary);
-        background: none;
-        border: none;
-        font-weight: 700;
-        cursor: pointer;
-        text-decoration: underline;
-      }
+    .mission-desc code {
+      background-color: #E2E8F0;
+      padding: 1px 6px;
+      font-family: 'Consolas', monospace;
+      font-size: 14.5px;
+    }
 
-      .toggle-btn.sol-btn {
-        color: var(--success);
-      }
+    .sql-editor {
+      width: 100%;
+      min-height: 92px;
+      background-color: var(--bg-code);
+      color: #F8FAFC;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 15px;
+      line-height: 1.5;
+      padding: 12px 14px;
+      border: 1px solid var(--border-dark);
+      resize: vertical;
+      margin-bottom: 10px;
+    }
 
-      .hint-box {
-        display: none;
-        margin-top: 10px;
-        padding: 12px 14px;
-        background-color: var(--hint-bg);
-        border: 1px solid #bfdbfe;
-        font-size: 15px;
-        color: var(--text-main);
-      }
+    .sql-editor:focus {
+      outline: 2px solid var(--primary);
+    }
 
-      .hint-box.show {
-        display: block;
-      }
+    .card-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-      .solution-box {
-        display: none;
-        margin-top: 10px;
-        background-color: var(--bg-code);
-        color: #f8fafc;
-        padding: 14px 16px;
-        font-family: 'Consolas', monospace;
-        font-size: 14.5px;
-        line-height: 1.55;
-        position: relative;
-        overflow-x: auto;
-      }
+    .tool-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
-      .solution-box.show {
-        display: block;
-      }
+    .btn-sm {
+      font-size: 13.5px;
+      padding: 6px 12px;
+    }
 
-      .btn-copy {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-family: 'Noto Sans KR', sans-serif;
-        font-size: 12.5px;
-        font-weight: 600;
-        padding: 4px 10px;
-        background-color: #334155;
-        color: #ffffff;
-        border: 1px solid #475569;
-        cursor: pointer;
-      }
+    .feedback-box {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 14px;
+      font-size: 14.5px;
+      font-weight: 600;
+    }
 
-      .btn-copy:hover {
-        background-color: #475569;
-      }
-    </style>
-  </head>
-  <body>
-    <nav class="top-nav">
-      <div class="nav-inner">
-        <div class="nav-left">
-          <a href="../index.html" class="back-link">&larr; 실습 아카이브 목록</a>
-          <span class="chapter-badge">CH 03-1</span>
+    .feedback-box.show { display: block; }
+    .feedback-box.ok {
+      background-color: var(--success-bg);
+      border: 1px solid #86EFAC;
+      color: var(--success);
+    }
+    .feedback-box.err {
+      background-color: var(--danger-bg);
+      border: 1px solid #FCA5A5;
+      color: var(--danger);
+    }
+
+    .hint-box, .solution-box {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 14px;
+      font-size: 14.5px;
+    }
+
+    .hint-box.show {
+      display: block;
+      background-color: var(--amber-bg);
+      border: 1px solid #FDE68A;
+      color: var(--amber);
+    }
+
+    .solution-box.show {
+      display: block;
+      background-color: #F1F5F9;
+      border: 1px solid var(--border-light);
+      font-family: 'Consolas', monospace;
+      color: var(--text-main);
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="../index.html" class="back-link">&larr; 실습 아카이브 목록</a>
+        <span class="chapter-badge">CH 03-1 SQL 실습</span>
+      </div>
+      <div class="nav-actions">
+        <span class="progress-pill" id="progressPill">완료: 0 / 8</span>
+        <button type="button" class="btn" onclick="resetAll()">전체 초기화</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <header class="doc-header">
+      <h1 class="doc-title">CH 03-1 기본 조회(SELECT · WHERE) SQL 실습</h1>
+      <div class="help-callout">
+        교재(<code>market_db</code>) 표준 문법에 맞춰 쿼리를 작성하고 <strong>[쿼리 채점]</strong> 버튼을 눌러보세요. 대소문자나 띄어쓰기, 줄바꿈은 채점에 영향을 주지 않으며, 막힐 때는 <strong>[힌트]</strong>를 먼저 확인해 보시고 직접 채점을 <strong>2회 이상 시도(오답)</strong>하면 <strong>[정답 보기]</strong> 버튼이 자동으로 열립니다.
+      </div>
+    </header>
+
+    <section class="schema-panel">
+      <div class="schema-header" onclick="toggleSchema()">
+        <span>[참고] market_db 테이블 및 열(Column) 구조 펼쳐보기 / 접기</span>
+        <span id="schemaToggleText">접기 ▲</span>
+      </div>
+      <div class="schema-grid" id="schemaGrid">
+        <div class="schema-card">
+          <h4>member (회원 테이블 · 10건)</h4>
+          <p>
+            mem_id (아이디), mem_name (이름), mem_weight (몸무게),<br>
+            addr (지역), phone1 (국번 · NULL 2건), phone2 (전화번호),<br>
+            height (키), birth_date (생년월일)
+          </p>
         </div>
-        <div class="nav-actions">
-          <span class="save-status" id="saveStatus">브라우저 자동 저장됨</span>
-          <button type="button" class="btn" onclick="resetWorksheet()">초기화</button>
-          <button type="button" class="btn btn-primary" onclick="downloadMarkdown()">
-            마크다운(.md) 다운로드
-          </button>
+        <div class="schema-card">
+          <h4>buy (구매 테이블 · 12건)</h4>
+          <p>
+            num (순번), mem_id (아이디), prod_name (제품명),<br>
+            group_name (분류 · NULL 3건), price (단가), amount (수량)
+          </p>
         </div>
       </div>
-    </nav>
+    </section>
 
-    <main class="page-container">
-      <header class="doc-header">
-        <h1 class="doc-title">SELECT ~ FROM ~ WHERE 실전 조회 미션</h1>
-        <div class="help-callout">
-          MySQL Workbench에서 <code>USE market_db;</code>를 먼저 실행한 뒤, 아래
-          7단계 요구사항에 맞는 SQL 조회 쿼리를 직접 작성해 실행해 보세요. 결과
-          확인 후 내가 작성한 쿼리를 아래 입력란에 기록하고 완료 체크를
-          진행합니다.
-        </div>
-      </header>
+    <div id="worksheetContainer"></div>
+  </main>
 
-      <section class="schema-box">
-        <div class="schema-title">[참고] market_db 테이블 및 열(Column) 구조</div>
-        <div class="schema-list">
-          <div>
-            <strong>회원 테이블 (<code>member</code>):</strong>
-            <code>mem_id</code>(아이디), <code>mem_name</code>(이름),
-            <code>mem_weight</code>(몸무게), <code>addr</code>(주소),
-            <code>phone1</code>(국번), <code>phone2</code>(전화번호),
-            <code>height</code>(키), <code>debut_date</code>(생년월일/가입일)
+  <script>
+    const missions = [
+      // PART 1: SELECT 기초 & 별칭
+      {
+        part: "PART 1 · 기본 열 선택과 한글 별칭(Alias) 지정",
+        step: "STEP 01",
+        desc: "회원(<code>member</code>) 테이블에서 모든 열 대신 <strong>이름(<code>mem_name</code>), 주소(<code>addr</code>), 키(<code>height</code>)</strong>만 조회하되, 결과 컬럼명이 각각 <code>\"회원명\"</code>, <code>\"거주지\"</code>, <code>\"신장\"</code>으로 출력되도록 작성하세요.",
+        hint: "열 이름 뒤에 별칭을 지정할 때는 mem_name \"회원명\" (또는 mem_name AS \"회원명\") 형식을 사용합니다. 따옴표는 큰따옴표(\"\")나 작은따옴표('') 모두 가능합니다.",
+        solution: "SELECT mem_name \"회원명\", addr \"거주지\", height \"신장\"\nFROM member;",
+        validate: (sql) => /SELECT\s+mem_name(\s+AS)?\s+["']회원명["']\s*,\s*addr(\s+AS)?\s+["']거주지["']\s*,\s*height(\s+AS)?\s+["']신장["']\s+FROM\s+member\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 02",
+        desc: "회원(<code>member</code>) 테이블에서 회원 이름(<code>mem_name</code>)이 <code>'지효'</code>인 회원의 모든 열(<code>*</code>) 정보를 조회하세요.",
+        hint: "문자열 조건은 작은따옴표로 감싸서 WHERE mem_name = '지효' 형태로 작성합니다.",
+        solution: "SELECT *\nFROM member\nWHERE mem_name = '지효';",
+        validate: (sql) => /SELECT\s+\*\s+FROM\s+member\s+WHERE\s+mem_name\s*=\s*'지효'\s*;?$/i.test(sql)
+      },
+
+      // PART 2: 관계 연산자 & 논리 연산자
+      {
+        part: "PART 2 · 관계 연산자와 논리 연산자(AND, OR)",
+        step: "STEP 03",
+        desc: "회원(<code>member</code>) 테이블에서 키(<code>height</code>)가 165 이상이면서 동시에 몸무게(<code>mem_weight</code>)가 50 이하인 회원의 아이디(<code>mem_id</code>), 이름(<code>mem_name</code>), 키(<code>height</code>), 몸무게(<code>mem_weight</code>)를 조회하세요.",
+        hint: "두 조건을 모두 만족해야 하므로 WHERE height >= 165 AND mem_weight <= 50 으로 연결합니다.",
+        solution: "SELECT mem_id, mem_name, height, mem_weight\nFROM member\nWHERE height >= 165 AND mem_weight <= 50;",
+        validate: (sql) => /SELECT\s+mem_id\s*,\s*mem_name\s*,\s*height\s*,\s*mem_weight\s+FROM\s+member\s+WHERE\s+(height\s*>=\s*165\s+AND\s+mem_weight\s*<=\s*50|mem_weight\s*<=\s*50\s+AND\s+height\s*>=\s*165)\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 04",
+        desc: "회원(<code>member</code>) 테이블에서 몸무게(<code>mem_weight</code>)가 70을 초과하거나 키(<code>height</code>)가 170 이상인 회원의 이름(<code>mem_name</code>), 키(<code>height</code>), 몸무게(<code>mem_weight</code>)를 조회하세요.",
+        hint: "둘 중 하나라도 만족하는 조건은 OR 연산자를 사용합니다.",
+        solution: "SELECT mem_name, height, mem_weight\nFROM member\nWHERE mem_weight > 70 OR height >= 170;",
+        validate: (sql) => /SELECT\s+mem_name\s*,\s*height\s*,\s*mem_weight\s+FROM\s+member\s+WHERE\s+(mem_weight\s*>\s*70\s+OR\s+height\s*>=\s*170|height\s*>=\s*170\s+OR\s+mem_weight\s*>\s*70)\s*;?$/i.test(sql)
+      },
+
+      // PART 3: BETWEEN, IN, LIKE
+      {
+        part: "PART 3 · 범위·목록·패턴 조건 (BETWEEN, IN, LIKE)",
+        step: "STEP 05",
+        desc: "<code>BETWEEN</code> 연산자를 사용하여 회원(<code>member</code>) 테이블에서 키(<code>height</code>)가 163부터 168 사이인 회원의 이름(<code>mem_name</code>)과 키(<code>height</code>)를 조회하세요.",
+        hint: "범위 조건은 WHERE height BETWEEN 163 AND 168 형식으로 작성합니다.",
+        solution: "SELECT mem_name, height\nFROM member\nWHERE height BETWEEN 163 AND 168;",
+        validate: (sql) => /SELECT\s+mem_name\s*,\s*height\s+FROM\s+member\s+WHERE\s+height\s+BETWEEN\s+163\s+AND\s+168\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 06",
+        desc: "<code>IN()</code> 연산자를 사용하여 회원(<code>member</code>) 테이블에서 거주 지역(<code>addr</code>)이 <code>'경기'</code>, <code>'경남'</code>, <code>'전남'</code> 중 하나인 회원의 이름(<code>mem_name</code>)과 주소(<code>addr</code>)를 조회하세요.",
+        hint: "여러 값 중 일치하는 데이터를 찾을 때는 WHERE addr IN ('경기', '경남', '전남') 을 사용합니다.",
+        solution: "SELECT mem_name, addr\nFROM member\nWHERE addr IN ('경기', '경남', '전남');",
+        validate: (sql) => /SELECT\s+mem_name\s*,\s*addr\s+FROM\s+member\s+WHERE\s+addr\s+IN\s*\(\s*'경기'\s*,\s*'경남'\s*,\s*'전남'\s*\)\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 07",
+        desc: "회원(<code>member</code>) 테이블에서 이름(<code>mem_name</code>)이 <code>'연'</code>으로 끝나는 두 글자 회원의 아이디(<code>mem_id</code>)와 이름(<code>mem_name</code>)을 조회하세요. (단일 문자 와일드카드 <code>_</code> 활용)",
+        hint: "한 글자를 대신하는 언더바(_)를 사용하여 WHERE mem_name LIKE '_연' 으로 작성합니다.",
+        solution: "SELECT mem_id, mem_name\nFROM member\nWHERE mem_name LIKE '_연';",
+        validate: (sql) => /SELECT\s+mem_id\s*,\s*mem_name\s+FROM\s+member\s+WHERE\s+mem_name\s+LIKE\s+'_연'\s*;?$/i.test(sql)
+      },
+      {
+        part: null,
+        step: "STEP 08",
+        desc: "구매(<code>buy</code>) 테이블에서 제품명(<code>prod_name</code>)에 <code>'폰'</code>이나 <code>'프로'</code>처럼 글자 수와 무관하게 <code>'폰'</code>이 포함된 주문의 회원 아이디(<code>mem_id</code>), 제품명(<code>prod_name</code>), 가격(<code>price</code>)을 조회하세요.",
+        hint: "앞뒤 글자 수에 제한이 없는 와일드카드 %를 사용해 WHERE prod_name LIKE '%폰%' 으로 작성합니다.",
+        solution: "SELECT mem_id, prod_name, price\nFROM buy\nWHERE prod_name LIKE '%폰%';",
+        validate: (sql) => /SELECT\s+mem_id\s*,\s*prod_name\s*,\s*price\s+FROM\s+buy\s+WHERE\s+prod_name\s+LIKE\s+'%폰%'\s*;?$/i.test(sql)
+      }
+    ];
+
+    const solvedState = new Array(missions.length).fill(false);
+    const attemptCount = new Array(missions.length).fill(0);
+    const REQUIRED_ATTEMPTS = 2;
+
+    function renderWorksheet() {
+      const container = document.getElementById('worksheetContainer');
+      container.innerHTML = missions.map((m, idx) => `
+        ${m.part ? `<h2 class="part-title"><span class="part-badge">SECTION</span>${m.part}</h2>` : ''}
+        <article class="mission-card" id="card_${idx}">
+          <div class="mission-top">
+            <span class="step-label">${m.step}</span>
+            <span id="status_${idx}" style="font-size: 13px; font-weight: 700; color: var(--text-muted);">미완료</span>
           </div>
-          <div>
-            <strong>구매 테이블 (<code>buy</code>):</strong>
-            <code>num</code>(순번), <code>mem_id</code>(회원 아이디),
-            <code>prod_name</code>(물품명), <code>group_name</code>(분류),
-            <code>price</code>(단가), <code>amount</code>(수량)
-          </div>
-        </div>
-      </section>
-
-      <div id="missionsContainer"></div>
-    </main>
-
-    <script>
-      const missions = [
-        {
-          id: 1,
-          tag: '열 선택 · 별칭 · 주석',
-          title: '미션 1. 필요한 열만 골라 한글 별칭(Alias)으로 출력하기',
-          desc: '회원(member) 테이블에서 모든 열(*) 대신 <strong>이름(mem_name), 주소(addr), 키(height)</strong>만 조회하되, 결과 컬럼명이 각각 <strong>"회원명", "거주지", "신장"</strong>으로 출력되도록 작성하세요. 쿼리 첫 줄에는 <code>-- 미션 1</code> 주석을 함께 적습니다.',
-          hint: '열 이름 뒤에 한 칸 띄우고 별칭을 바로 적습니다. 별칭에 공백이 있을 때는 큰따옴표(" ")로 감싸야 합니다.',
-          solution:
-            '-- 미션 1: 회원 이름, 주소, 키 조회\nUSE market_db;\nSELECT mem_name 회원명, addr 거주지, height 신장\nFROM member;',
-        },
-        {
-          id: 2,
-          tag: '관계 & 논리 연산자',
-          title: '미션 2. 두 가지 조건을 동시에 만족하는 회원 추출하기 (AND)',
-          desc: '회원(member) 테이블에서 <strong>키(height)가 165 이상</strong>이면서 동시에 <strong>몸무게(mem_weight)가 48 초과</strong>인 회원의 아이디, 이름, 키, 몸무게를 조회하세요.',
-          hint: '두 조건을 모두 만족해야 하므로 논리 연산자 AND를 사용합니다. 숫자형 데이터 비교 시에는 작은따옴표를 붙이지 않습니다.',
-          solution:
-            'SELECT mem_id, mem_name, height, mem_weight\nFROM member\nWHERE height >= 165 AND mem_weight > 48;',
-        },
-        {
-          id: 3,
-          tag: '범위 연산자',
-          title: '미션 3. 연속된 숫자 범위를 간결하게 조회하기 (BETWEEN ~ AND)',
-          desc: '회원(member) 테이블에서 <strong>키(height)가 163 이상 165 이하</strong>인 회원의 이름과 키를 <code>BETWEEN ~ AND</code> 연산자를 사용해 조회하세요.',
-          hint: 'WHERE 열_이름 BETWEEN 최소값 AND 최대값 형식을 사용하면 >= 와 <= 를 AND로 연결한 것과 동일한 결과를 얻습니다.',
-          solution:
-            'SELECT mem_name, height\nFROM member\nWHERE height BETWEEN 163 AND 165;',
-        },
-        {
-          id: 4,
-          tag: '포함 연산자',
-          title: '미션 4. 여러 지역 중 하나에 해당하는 회원 조회하기 (IN)',
-          desc: "회원(member) 테이블에서 주소(addr)가 <strong>'경기', '전남', '경남'</strong> 중 하나인 회원의 이름과 주소를 <code>IN()</code> 연산자로 조회하세요.",
-          hint: "문자형 데이터는 각각 작은따옴표(' ')로 감싸고 쉼표로 구분해 IN('값1', '값2', '값3') 안에 넣습니다.",
-          solution:
-            "SELECT mem_name, addr\nFROM member\nWHERE addr IN('경기', '전남', '경남');",
-        },
-        {
-          id: 5,
-          tag: '문자열 패턴 검색',
-          title: '미션 5. 글자 수와 시작·끝 글자로 회원 검색하기 (LIKE: % vs _)',
-          desc: "① 이름이 <strong>'나'로 시작하는 모든 회원</strong>을 조회하는 쿼리와, ② 이름 글자 수가 <strong>총 2글자이면서 끝 글자가 '연'인 회원</strong>을 조회하는 쿼리 2개를 각각 작성하세요.",
-          hint: '일부 글자 검색에는 = 대신 반드시 LIKE를 사용합니다. 여러 글자(0글자 이상) 와일드카드는 %, 정확히 한 글자 와일드카드는 언더바(_)입니다.',
-          solution:
-            "-- ① '나'로 시작하는 모든 회원\nSELECT * FROM member WHERE mem_name LIKE '나%';\n\n-- ② 앞 1글자 + '연'으로 끝나는 2글자 회원\nSELECT * FROM member WHERE mem_name LIKE '_연';",
-        },
-        {
-          id: 6,
-          tag: '단일 행 서브쿼리',
-          title: '미션 6. 특정 회원보다 키가 큰 회원 한 번에 찾기 (Subquery)',
-          desc: "<strong>'모모'</strong>의 키를 직접 숫자로 적지 않고, 괄호 안의 <strong>서브쿼리</strong>를 활용해 '모모'보다 키(height)가 큰 회원의 이름과 키를 조회하세요.",
-          hint: "먼저 '모모'의 키를 구하는 쿼리 (SELECT height FROM member WHERE mem_name = '모모')를 작성한 뒤, 바깥쪽 WHERE height > (...) 조건식에 넣습니다.",
-          solution:
-            "SELECT mem_name, height\nFROM member\nWHERE height > (SELECT height FROM member WHERE mem_name = '모모');",
-        },
-        {
-          id: 7,
-          tag: '응용 서브쿼리',
-          title: '미션 7. 구매 이력이 있는 회원만 골라내기 (buy 테이블 연동)',
-          desc: '구매(buy) 테이블에 1건이라도 구매 기록이 존재하는 회원의 <strong>아이디(mem_id)와 이름(mem_name)</strong>을 회원(member) 테이블에서 조회하세요.',
-          hint: '서브쿼리로 구매 테이블의 회원 아이디 목록 (SELECT DISTINCT mem_id FROM buy)을 뽑아낸 뒤, 바깥쪽 WHERE mem_id IN (...) 과 연결합니다.',
-          solution:
-            'SELECT mem_id, mem_name\nFROM member\nWHERE mem_id IN (SELECT DISTINCT mem_id FROM buy);',
-        },
-      ];
-
-      const STORAGE_KEY = 'ch03_1_select_worksheet_v1';
-
-      function renderMissions() {
-        const container = document.getElementById('missionsContainer');
-        if (!container) return;
-
-        container.innerHTML = missions
-          .map(
-            (m) => `
-        <section class="mission-block">
-          <div class="mission-header">
-            <h2 class="mission-title"><span class="mission-tag">${m.tag}</span>${m.title}</h2>
-            <label class="check-label">
-              <input type="checkbox" id="chk_${m.id}" onchange="saveData()" />
-              <span>실행 확인 완료</span>
-            </label>
-          </div>
-          <div class="mission-body">
-            <p class="step-desc">${m.desc}</p>
-
-            <div class="field-group">
-              <label for="user_sql_${m.id}">내가 작성한 SQL 쿼리 기록</label>
-              <textarea id="user_sql_${m.id}" rows="3" placeholder="SELECT ... FROM ... WHERE ...;" oninput="saveData()"></textarea>
+          <div class="mission-desc">${m.desc}</div>
+          <textarea class="sql-editor" id="input_${idx}" placeholder="여기에 SQL 쿼리를 작성하세요..."></textarea>
+          <div class="card-toolbar">
+            <div class="tool-group">
+              <button type="button" class="btn btn-primary btn-sm" onclick="checkQuery(${idx})">쿼리 채점</button>
+              <button type="button" class="btn btn-sm" onclick="toggleBox('hint_${idx}')">힌트</button>
+              <button type="button" class="btn btn-sm" id="solBtn_${idx}" disabled onclick="toggleBox('sol_${idx}')">정답 보기 (${REQUIRED_ATTEMPTS}회 오답 후 열림)</button>
             </div>
-
-            <div class="toggle-row">
-              <button type="button" class="toggle-btn" onclick="toggleBox('hint_${m.id}')">작성 힌트 보기 / 숨기기</button>
-              <button type="button" class="toggle-btn sol-btn" onclick="toggleBox('sol_${m.id}')">모범 정답 SQL 보기 / 숨기기</button>
-            </div>
-
-            <div class="hint-box" id="hint_${m.id}">${m.hint}</div>
-            <div class="solution-box" id="sol_${m.id}"><button type="button" class="btn-copy" onclick="copySql(${m.id})">정답 복사</button><pre id="sol_text_${m.id}">${m.solution}</pre></div>
+            <button type="button" class="btn btn-sm" onclick="clearInput(${idx})">지우기</button>
           </div>
-        </section>
-      `
-          )
-          .join('');
+          <div class="feedback-box" id="fb_${idx}"></div>
+          <div class="hint-box" id="hint_${idx}"><strong>[힌트]</strong> ${m.hint}</div>
+          <div class="solution-box" id="sol_${idx}"><strong>[모범 답안]</strong>\n${m.solution}</div>
+        </article>
+      `).join('');
+    }
+
+    function normalizeSql(raw) {
+      return raw
+        .replace(/--.*$/gm, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function unlockSolutionButton(idx) {
+      const solBtn = document.getElementById(`solBtn_${idx}`);
+      solBtn.disabled = false;
+      solBtn.textContent = '정답 보기';
+    }
+
+    function checkQuery(idx) {
+      const raw = document.getElementById(`input_${idx}`).value;
+      const normalized = normalizeSql(raw);
+      const fb = document.getElementById(`fb_${idx}`);
+      const card = document.getElementById(`card_${idx}`);
+      const status = document.getElementById(`status_${idx}`);
+      const solBtn = document.getElementById(`solBtn_${idx}`);
+
+      if (!normalized) {
+        fb.className = 'feedback-box show err';
+        fb.textContent = '쿼리를 먼저 입력해 주세요.';
+        return;
       }
 
-      function toggleBox(elementId) {
-        const el = document.getElementById(elementId);
-        if (el) el.classList.toggle('show');
-      }
+      if (missions[idx].validate(normalized)) {
+        solvedState[idx] = true;
+        card.classList.add('solved');
+        status.textContent = '통과 ✔';
+        status.style.color = 'var(--success)';
+        fb.className = 'feedback-box show ok';
+        fb.textContent = '정확합니다! SQL 구문과 조건식이 완벽합니다.';
+        unlockSolutionButton(idx);
+      } else {
+        solvedState[idx] = false;
+        attemptCount[idx]++;
+        card.classList.remove('solved');
+        status.textContent = '재확인 필요';
+        status.style.color = 'var(--danger)';
 
-      function copySql(id) {
-        const el = document.getElementById(`sol_text_${id}`);
-        if (!el) return;
-        navigator.clipboard.writeText(el.textContent).then(() => {
-          alert('모범 정답 SQL이 복사되었습니다.');
-        });
-      }
-
-      function saveData() {
-        const data = { items: {} };
-        missions.forEach((m) => {
-          const chk = document.getElementById(`chk_${m.id}`);
-          const sql = document.getElementById(`user_sql_${m.id}`);
-          if (chk && sql) {
-            data.items[m.id] = {
-              checked: chk.checked,
-              sql: sql.value,
-            };
-          }
-        });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        const statusEl = document.getElementById('saveStatus');
-        if (statusEl) {
-          statusEl.textContent = '저장 완료 (' + new Date().toLocaleTimeString() + ')';
+        const remaining = REQUIRED_ATTEMPTS - attemptCount[idx];
+        if (remaining <= 0) {
+          unlockSolutionButton(idx);
+          fb.className = 'feedback-box show err';
+          fb.textContent = '구문이나 조건식을 다시 확인해 보세요. (2회 시도가 완료되어 [정답 보기] 버튼이 열렸습니다.)';
+        } else {
+          solBtn.textContent = `정답 보기 (${remaining}회 남음)`;
+          fb.className = 'feedback-box show err';
+          fb.textContent = `구문, 열 이름 또는 조건식을 다시 확인해 보세요. (${remaining}회 더 시도하면 정답 보기가 열립니다.)`;
         }
       }
+      updateProgress();
+    }
 
-      function loadData() {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
-        try {
-          const data = JSON.parse(raw);
-          missions.forEach((m) => {
-            const item = data.items && data.items[m.id];
-            if (!item) return;
-            const chk = document.getElementById(`chk_${m.id}`);
-            const sql = document.getElementById(`user_sql_${m.id}`);
-            if (chk) chk.checked = !!item.checked;
-            if (sql) sql.value = item.sql || '';
-          });
-        } catch (e) {
-          console.error('Failed to load worksheet data:', e);
-        }
+    function updateProgress() {
+      const count = solvedState.filter(Boolean).length;
+      document.getElementById('progressPill').textContent = `완료: ${count} / ${missions.length}`;
+    }
+
+    function toggleBox(id) {
+      document.getElementById(id).classList.toggle('show');
+    }
+
+    function clearInput(idx) {
+      document.getElementById(`input_${idx}`).value = '';
+      document.getElementById(`fb_${idx}`).classList.remove('show');
+      document.getElementById(`card_${idx}`).classList.remove('solved');
+      document.getElementById(`status_${idx}`).textContent = '미완료';
+      document.getElementById(`status_${idx}`).style.color = 'var(--text-muted)';
+      solvedState[idx] = false;
+      updateProgress();
+    }
+
+    function resetAll() {
+      if (!confirm('작성한 모든 쿼리와 진행 상태를 초기화할까요?')) return;
+      solvedState.fill(false);
+      attemptCount.fill(0);
+      updateProgress();
+      renderWorksheet();
+    }
+
+    function toggleSchema() {
+      const grid = document.getElementById('schemaGrid');
+      const label = document.getElementById('schemaToggleText');
+      if (grid.style.display === 'none') {
+        grid.style.display = 'grid';
+        label.textContent = '접기 ▲';
+      } else {
+        grid.style.display = 'none';
+        label.textContent = '펼치기 ▼';
       }
+    }
 
-      function resetWorksheet() {
-        if (!confirm('작성한 SQL 실습 기록을 모두 초기화할까요?')) return;
-        localStorage.removeItem(STORAGE_KEY);
-        renderMissions();
-        const statusEl = document.getElementById('saveStatus');
-        if (statusEl) statusEl.textContent = '초기화됨';
-      }
-
-      function downloadMarkdown() {
-        let md = `# [CH 03-1] SELECT ~ FROM ~ WHERE 실전 조회 미션 결과\n\n---\n\n`;
-
-        missions.forEach((m) => {
-          const chk = document.getElementById(`chk_${m.id}`)?.checked ? '완료' : '미완료';
-          const userSql =
-            document.getElementById(`user_sql_${m.id}`)?.value.trim() ||
-            '-- 작성된 쿼리 없음';
-          md += `## ${m.title} (${chk})\n\n`;
-          md += `\`\`\`sql\n${userSql}\n\`\`\`\n\n`;
-        });
-
-        const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `CH03-1_SELECT_조회_미션_결과.md`;
-        a.click();
-        URL.revokeObjectURL(url);
-      }
-
-      document.addEventListener('DOMContentLoaded', () => {
-        renderMissions();
-        loadData();
-      });
-    </script>
-  </body>
+    renderWorksheet();
+  </script>
+</body>
 </html>

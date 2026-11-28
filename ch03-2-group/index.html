@@ -360,17 +360,6 @@
       white-space: pre-wrap;
     }
 
-    .export-footer {
-      margin-top: 40px;
-      padding: 20px;
-      background-color: var(--bg-subtle);
-      border: 1px solid var(--border-light);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
   </style>
 </head>
 <body>
@@ -423,13 +412,6 @@
 
     <div id="worksheetContainer"></div>
 
-    <div class="export-footer">
-      <div>
-        <strong>실습 기록 보관하기</strong>
-        <p style="font-size: 14px; color: var(--text-sub);">작성한 14개 쿼리와 채점 결과를 Notion이나 학습 노트에 바로 붙여넣을 수 있는 <code>.md</code> 파일로 내려받습니다.</p>
-      </div>
-      <button type="button" class="btn btn-primary" onclick="exportMarkdown()">작성 쿼리 마크다운(.md) 다운로드</button>
-    </div>
   </main>
 
   <script>
